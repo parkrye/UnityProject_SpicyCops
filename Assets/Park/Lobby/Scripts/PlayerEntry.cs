@@ -123,6 +123,10 @@ public class PlayerEntry : MonoBehaviour
         }
         player.SetAvatarNumber(avatarNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
+
+        avatarColorNum = 0;
+        player.SetAvatarColor(avatarColorNum);
+        characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
     }
 
     public void OnColorButtonClicked(bool isLeft)
@@ -131,17 +135,13 @@ public class PlayerEntry : MonoBehaviour
         {
             avatarColorNum--;
             if(avatarColorNum < 0)
-            {
                 avatarColorNum = GameData.AVATAR_COLOR_COUNT - 1;
-            }
         }
         else
         {
             avatarColorNum++;
             if (avatarColorNum > GameData.AVATAR_COLOR_COUNT - 1)
-            {
                 avatarColorNum = 0;
-            }
         }
         player.SetAvatarColor(avatarColorNum);
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
