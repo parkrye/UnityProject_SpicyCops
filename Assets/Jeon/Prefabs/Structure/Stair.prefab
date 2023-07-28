@@ -14,12 +14,12 @@ GameObject:
   - component: {fileID: 2120368100610590767}
   - component: {fileID: 2120368100610590766}
   - component: {fileID: 2120368100610590765}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2120368100610590762
 Transform:
@@ -2659,7 +2659,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 7255
+  m_VersionIndex: 7270
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
