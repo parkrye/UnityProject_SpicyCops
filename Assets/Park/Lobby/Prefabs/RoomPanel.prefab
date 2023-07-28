@@ -500,6 +500,7 @@ MonoBehaviour:
   - {fileID: 8400000, guid: 91602fb806dcb4748940a4e96ab0403e, type: 2}
   - {fileID: 8400000, guid: 836253d6f71d20d4b91d81f9bf005f3a, type: 2}
   - {fileID: 8400000, guid: be06d2c65c15a6440a36cd30425a0a85, type: 2}
+  avatarRoots: []
 --- !u!114 &7969576406569787124
 MonoBehaviour:
   m_ObjectHideFlags: 0

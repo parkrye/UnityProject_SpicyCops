@@ -644,6 +644,7 @@ MonoBehaviour:
   avatarCamera: {fileID: 0}
   avatarTexture: {fileID: 0}
   avatarImage: {fileID: 4509246596728491855}
+  characterSkinManagers: []
   ownerId: 0
 --- !u!1 &2824614945312266431
 GameObject:

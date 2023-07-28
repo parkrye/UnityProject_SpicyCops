@@ -366,7 +366,7 @@ MonoBehaviour:
   currentPlayer: {fileID: 2616448059591944038}
   joinRoomButton: {fileID: 5564003483403808042}
   lockText: {fileID: 5799842211486729202}
-  passwordInputField: {fileID: 0}
+  enterPrivateRoomPanel: {fileID: 0}
 --- !u!1 &1812641854389840327
 GameObject:
   m_ObjectHideFlags: 0
