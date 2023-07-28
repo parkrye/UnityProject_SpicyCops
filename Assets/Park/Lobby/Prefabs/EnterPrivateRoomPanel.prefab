@@ -1402,6 +1402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passwordInputField: {fileID: 4349003015385714986}
+  roomEntry: {fileID: 0}
 --- !u!1 &7640835651201471305
 GameObject:
   m_ObjectHideFlags: 0
