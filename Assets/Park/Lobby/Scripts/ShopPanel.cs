@@ -83,6 +83,7 @@ public class ShopPanel : MonoBehaviour
         {
             buyButton.interactable = false;
             costText.text = "-";
+            avatarList[avatarNum].localEulerAngles = Vector3.zero;
         }
         else
         {
