@@ -64,7 +64,6 @@ public static class GameData
 		"OldClassy_Male",
 		"Pirate_Female",
 		"Pirate_Male",
-		"Pug",
 		"Soldier_Female",
 		"Soldier_Male",
 		"Suit_Female",
