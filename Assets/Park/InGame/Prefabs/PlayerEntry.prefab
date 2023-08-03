@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa109f3c534b5db45abdd2f545bd9021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aggroImage: {fileID: 4365120240206750549}
   aggroValue: 0
 --- !u!1 &8300129571084131528
 GameObject:

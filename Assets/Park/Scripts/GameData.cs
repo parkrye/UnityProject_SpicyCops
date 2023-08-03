@@ -16,7 +16,7 @@ public static class GameData
 
 	public const int COUNTDOWN = 5;
 	public const int AVATA_RPRICE = 100;
-	public const int AVATAR_COLOR_COUNT = 9;
+	public const int AVATAR_COLOR_COUNT = 8;
 
 	public const string ACCOUNTCSVFILE = "Accounts";
 
@@ -26,57 +26,16 @@ public static class GameData
     // All Buyable Avatar Names
     public static readonly List<string> AVATAR = new()
 	{
-        "BaseCharacter",
-		"BlueSoldier_Female",
-		"BlueSoldier_Male",
-		"Casual_Bald",
-		"Casual_Female",
-		"Casual_Male",
-		"Casual2_Female",
-		"Casual2_Male",
-		"Casual3_Female",
-		"Casual3_Male",
-		"Chef_Female",
-		"Chef_Hat",
-		"Chef_Male",
-		"Cow",
-		"Cowboy_Female",
-		"Cowboy_Hair",
-		"Cowboy_Male",
-		"Doctor_Female_Old",
-		"Doctor_Female_Young",
-		"Doctor_Male_Old",
-		"Doctor_Male_Young",
-		"Elf",
-		"Goblin_Female",
-		"Goblin_Male",
-		"Kimono_Female",
-		"Kimono_Male",
-		"Knight_Golden_Female",
-		"Knight_Golden_Male",
-		"Knight_Male",
-		"Ninja_Female",
-		"Ninja_Male",
-		"Ninja_Male_Hair",
-		"Ninja_Sand",
-		"Ninja_Sand_Female",
-		"OldClassy_Female",
-		"OldClassy_Male",
-		"Pirate_Female",
-		"Pirate_Male",
-		"Soldier_Female",
-		"Soldier_Male",
-		"Suit_Female",
-		"Suit_Male",
-		"Viking_Female",
-		"Viking_Male",
-		"VikingHelmet",
-		"Witch",
-		"Wizard",
-		"Worker_Female",
-		"Worker_Male",
-		"Zombie_Female",
-		"Zombie_Male"
+        "Bandit",
+		"Boy",
+		"Cowboy",
+		"Crazy scientist",
+		"FBI",
+		"Girl",
+		"Mafia",
+		"Motocyclist",
+		"Policeman",
+		"Soldier"
 	};
 
 	public static Color GetColor(int playerNumber)

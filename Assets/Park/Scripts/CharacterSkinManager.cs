@@ -14,7 +14,6 @@ public class CharacterSkinManager : MonoBehaviour
 
     void Start()
     {
-        skinMaterials.Add(skinRenderer.materials[0].color);
         for(int i = 1; i < 9; i++)
         {
             skinMaterials.Add(Resources.Load<Material>($"Skin/Skin{i}").color);
