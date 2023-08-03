@@ -1,27 +1,24 @@
 using Photon.Pun;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class LoginPanel : MonoBehaviour
+public class LoginPanel : SceneUI
 {
 	static string playerID = null;
 
-	[SerializeField] TMP_InputField idInputField;
-
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
 		GameData.accounts = CSV_RW.ReadAccountsCSV();
     }
 
-    void OnEnable()
+    void OnDisable()
 	{
-		idInputField.text = "";
+        inputFields["IDInputField"].text = "";
 	}
 
 	public void OnLoginButtonClicked()
 	{
-		playerID = idInputField.text;
+		playerID = inputFields["IDInputField"].text;
 
         if (playerID == "")
 		{
