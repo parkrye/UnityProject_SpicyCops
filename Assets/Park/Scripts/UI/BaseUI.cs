@@ -8,6 +8,7 @@ public abstract class BaseUI : MonoBehaviour
     protected Dictionary<string, RectTransform> transforms;
     protected Dictionary<string, Button> buttons;
     protected Dictionary<string, TMP_Text> texts;
+    protected Dictionary<string, TMP_InputField> inputFields;
     protected Dictionary<string, Slider> sliders;
     protected Dictionary<string, Image> images;
     protected Dictionary<string, ToggleGroup> toggleGroups;
@@ -25,6 +26,7 @@ public abstract class BaseUI : MonoBehaviour
         transforms = new Dictionary<string, RectTransform>();
         buttons = new Dictionary<string, Button>();
         texts = new Dictionary<string, TMP_Text>();
+        inputFields = new Dictionary<string, TMP_InputField>();
         sliders = new Dictionary<string, Slider>();
         images = new Dictionary<string, Image>();
         toggleGroups = new Dictionary<string, ToggleGroup>();
@@ -50,6 +52,13 @@ public abstract class BaseUI : MonoBehaviour
                 {
                     if (!texts.ContainsKey(key))
                         texts[key] = txt;
+                }
+
+                TMP_InputField input = childrenRect[i].GetComponent<TMP_InputField>();
+                if (input)
+                {
+                    if (!texts.ContainsKey(key))
+                        inputFields[key] = input;
                 }
 
                 Slider sld = childrenRect[i].GetComponent<Slider>();

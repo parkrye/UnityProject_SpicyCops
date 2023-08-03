@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 5605462432341574008}
   - component: {fileID: 5289568975513931820}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: RoomInfoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,7 +518,6 @@ MonoBehaviour:
   content: {fileID: 5548959023848121037}
   chatPrefab: {fileID: 6154450020064360953, guid: 09102b30ec5e28b46bfc48727f386203,
     type: 3}
-  inputField: {fileID: 4461842142359022796}
   nowChatting: 0
 --- !u!114 &982276676805092943
 MonoBehaviour:
@@ -2634,7 +2633,7 @@ GameObject:
   - component: {fileID: 9135852161279093561}
   - component: {fileID: 4461842142359022796}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: ChatInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

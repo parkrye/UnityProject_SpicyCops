@@ -417,7 +417,7 @@ GameObject:
   - component: {fileID: 5671371281920179634}
   - component: {fileID: 7750925679364620605}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: CostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 4114524299204412161}
   - component: {fileID: 5167121274702415816}
   m_Layer: 5
-  m_Name: AvatarDesc
+  m_Name: AvatarDescText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -654,7 +654,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -150, y: -50}
-  m_SizeDelta: {x: 400, y: 300}
+  m_SizeDelta: {x: 500, y: 300}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &4114524299204412161
 CanvasRenderer:
@@ -1322,8 +1322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prevPanel: {fileID: 0}
-  avatarNameText: {fileID: 5167121274702415816}
-  moneyText: {fileID: 2056984198467935638}
   buyButton: {fileID: 9163521016867072684}
   costText: {fileID: 7750925679364620605}
   avatarCamera: {fileID: 0}

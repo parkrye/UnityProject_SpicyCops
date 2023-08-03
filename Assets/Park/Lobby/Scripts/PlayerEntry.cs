@@ -1,17 +1,13 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerEntry : MonoBehaviour
+public class PlayerEntry : SceneUI
 {
 	[SerializeField] public Player player;
-	[SerializeField] TMP_Text playerName;
-	[SerializeField] TMP_Text playerReady;
-	[SerializeField] public Button playerReadyButton, playerNameButton;
-    [SerializeField] Button leftAvatarButton, rightAvatarButton, leftColorButton, rightColorButton;
+	[SerializeField] public Button playerNameButton;
 
     [SerializeField] int avatarNum, avatarColorNum;
     [SerializeField] Camera avatarCamera;
@@ -27,14 +23,14 @@ public class PlayerEntry : MonoBehaviour
         ownerId = id;
         if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
         {
-            playerReadyButton.gameObject.SetActive(false);
-            leftAvatarButton.gameObject.SetActive(false);
-            rightAvatarButton.gameObject.SetActive(false);
-            leftColorButton.gameObject.SetActive(false);
-            rightColorButton.gameObject.SetActive(false);
+            buttons["PlayerReadyButton"].gameObject.SetActive(false);
+            buttons["LeftAvatarButton"].gameObject.SetActive(false);
+            buttons["RightAvatarButton"].gameObject.SetActive(false);
+            buttons["LefColorButton"].gameObject.SetActive(false);
+            buttons["RightColorButton"].gameObject.SetActive(false);
         }
-        playerName.text = name;
-        playerReady.text = "";
+        texts["PlayerNameText"].text = name;
+        texts["ReadyText"].text = "";
         avatarCamera = _avatarCamera;
         avatarTexture = _avatarTexture;
         avatarImage.texture = avatarTexture;
@@ -59,7 +55,7 @@ public class PlayerEntry : MonoBehaviour
 
 	public void SetPlayerReady(bool ready)
 	{
-		playerReady.text = ready ? "Ready" : "";
+        texts["ReadyText"].text = ready ? "Ready" : "";
 	}
 
 	public void OnReadyButtonClicked()
@@ -75,11 +71,11 @@ public class PlayerEntry : MonoBehaviour
         if (property.TryGetValue(GameData.PLAYER_READY, out object readyValue))
         {
             bool ready = (bool)readyValue;
-            playerReady.text = ready ? "Ready" : "";
+            texts["ReadyText"].text = ready ? "Ready" : "";
         }
         else
         {
-            playerReady.text = "";
+            texts["ReadyText"].text = "";
         }
 
         if (property.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
@@ -145,5 +141,10 @@ public class PlayerEntry : MonoBehaviour
         }
         player.SetAvatarColor(avatarColorNum);
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+    }
+
+    public override void Initialize()
+    {
+        throw new System.NotImplementedException();
     }
 }

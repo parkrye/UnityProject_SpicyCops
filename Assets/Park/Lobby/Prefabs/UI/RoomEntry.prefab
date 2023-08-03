@@ -362,7 +362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba29f9902b2d93043b674dc214dc1ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomName: {fileID: 357019294366316985}
   currentPlayer: {fileID: 2616448059591944038}
   joinRoomButton: {fileID: 5564003483403808042}
   lockText: {fileID: 5799842211486729202}
@@ -514,7 +513,7 @@ GameObject:
   - component: {fileID: 6710314324296569952}
   - component: {fileID: 5799842211486729202}
   m_Layer: 5
-  m_Name: PasswordIcon
+  m_Name: PasswordText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

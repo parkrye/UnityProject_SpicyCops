@@ -8,11 +8,11 @@ public class StatePanel : MonoBehaviour
 	public static StatePanel Instance { get; private set; }
 
 	[SerializeField] RectTransform content;
-	[SerializeField] TMP_Text textPrefab;
 	[SerializeField] GameObject panel;
 	[SerializeField] bool view;
+    TMP_Text textPrefab;
 
-	Photon.Realtime.ClientState state;
+    Photon.Realtime.ClientState state;
 
 	void Awake()
 	{
@@ -21,7 +21,9 @@ public class StatePanel : MonoBehaviour
         panel.SetActive(view);
         StartCoroutine(StateRoutine());
         StartCoroutine(ViewRoutine());
-	}
+		textPrefab = GameManager.Resource.Load<TMP_Text>("UI/Text");
+
+    }
 
 	IEnumerator StateRoutine()
 	{

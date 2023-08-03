@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 788518148}
   - component: {fileID: 788518147}
   m_Layer: 5
-  m_Name: Button
+  m_Name: PlayerReadyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -631,9 +631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7cde1df0997a3d46bde682ee75d5942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: {fileID: 7834879747445364068}
-  playerReady: {fileID: 577569469}
-  playerReadyButton: {fileID: 788518147}
   playerNameButton: {fileID: 1957032826471019279}
   leftAvatarButton: {fileID: 3141143200711932761}
   rightAvatarButton: {fileID: 7051272966461890327}
@@ -658,7 +655,7 @@ GameObject:
   - component: {fileID: 2355728906933261180}
   - component: {fileID: 7834879747445364068}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PlayerNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1305,7 +1302,7 @@ GameObject:
   - component: {fileID: 7723094914190697996}
   - component: {fileID: 1957032826471019279}
   m_Layer: 5
-  m_Name: PlayerText
+  m_Name: PlayerNameButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

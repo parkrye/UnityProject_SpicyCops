@@ -34,7 +34,6 @@ public static class GameData
 		"Girl",
 		"Mafia",
 		"Motocyclist",
-		"Policeman",
 		"Soldier"
 	};
 

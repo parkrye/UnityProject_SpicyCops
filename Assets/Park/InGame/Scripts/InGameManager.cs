@@ -10,10 +10,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] float clock;
     public float Clock { get { return clock; } set {  clock = value; } }
 
-    // 플레이어 스크립트?:어그로값 딕셔너리
+    // 플레이어 ID:어그로값 딕셔너리
     // 에너미 스크립트?
 
-    private void Start()
+    void Start()
     {
         // Normal game mode
         if (PhotonNetwork.InRoom)
@@ -95,13 +95,13 @@ public class InGameManager : MonoBehaviourPunCallbacks
         GameStart();
     }
 
-    private void GameStart()
+    void GameStart()
     {
         // 자기 캐릭터 생성
         // PhotonNetwork.Instantiate("Player", position, rotation, 0);
         // 플레이어 생성시 이 스크립트를 가져가도록
         // 이 스크립트에 플레이어 목록 저장
-        // 남의 캐릭터라면 자신의 플레이어 목록 UI에 추가
+        // UI에 플레이어 정보 저장
 
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
@@ -134,7 +134,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         DebugGameStart();
     }
 
-    private int PlayerLoadCount()
+    int PlayerLoadCount()
     {
         int loadCount = 0;
         foreach (Player player in PhotonNetwork.PlayerList)
