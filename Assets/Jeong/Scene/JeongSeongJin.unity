@@ -1148,7 +1148,7 @@ PrefabInstance:
     - target: {fileID: 972254289401513249, guid: 4c8b78cf2cc0c95489df8375b7ef3dca,
         type: 3}
       propertyPath: m_VersionIndex
-      value: 7264
+      value: 7267
       objectReference: {fileID: 0}
     - target: {fileID: 972254289401513250, guid: 4c8b78cf2cc0c95489df8375b7ef3dca,
         type: 3}
@@ -2489,13 +2489,19 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1430067374 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 763264028448811103, guid: 61717d0222d3aba469d0df527f71b1c5,
+    type: 3}
+  m_PrefabInstance: {fileID: 2605984385354910385}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1430067378 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3867471486490592155, guid: 61717d0222d3aba469d0df527f71b1c5,
     type: 3}
   m_PrefabInstance: {fileID: 2605984385354910385}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1430067374}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac2ff7dda7e776f409f25f4496466a7e, type: 3}
@@ -2507,6 +2513,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2605984385354910385}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1430067383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430067374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f2522a35ae72c4b9760d22891d6ace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1701629538
 GameObject:
   m_ObjectHideFlags: 3
@@ -3462,7 +3480,7 @@ PrefabInstance:
     - target: {fileID: 4381141863056317004, guid: 61717d0222d3aba469d0df527f71b1c5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4381141863056317004, guid: 61717d0222d3aba469d0df527f71b1c5,
         type: 3}
@@ -3580,7 +3598,7 @@ PrefabInstance:
     - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
         type: 3}
