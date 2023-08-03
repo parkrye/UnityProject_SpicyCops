@@ -1,15 +1,13 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class LobbyPanel : MonoBehaviour
+public class LobbyPanel : SceneUI
 {
 	[SerializeField] RoomEntry roomEntryPrefab;
 	[SerializeField] RectTransform roomContent;
     [SerializeField] List<RoomEntry> roomEntries;
-	[SerializeField] TMP_Text userCountText;
 
 	[SerializeField] GameObject lobbyPanel;
 	[SerializeField] GameObject createRoomPanel;
@@ -18,12 +16,13 @@ public class LobbyPanel : MonoBehaviour
 
     [SerializeField] GameObject shopPanel;
 
-    void Awake()
+    protected override void Awake()
 	{
+        base.Awake();
 		roomEntries = new List<RoomEntry>();
-	}
+    }
 
-	void OnEnable()
+    void OnEnable()
 	{
 		ClearRoomList();
     }
@@ -74,7 +73,7 @@ public class LobbyPanel : MonoBehaviour
         {
 			StatePanel.Instance.AddMessage(room.CustomProperties.ToString());
             RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-			entry.Initialize(room.Name, room.PlayerCount, (byte)room.MaxPlayers, room, enterPrivateRoomPanel);
+			entry.Initialize(room.Name, room.PlayerCount, room.MaxPlayers, room, enterPrivateRoomPanel);
             roomEntries.Add(entry);
 		}
     }
@@ -90,6 +89,6 @@ public class LobbyPanel : MonoBehaviour
 
 	public void OnLobbyCountChanged()
     {
-        userCountText.text = $"Lobby User : {PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms}";
+        texts["UserCountText"].text = $"Lobby User : {PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms}";
     }
 }

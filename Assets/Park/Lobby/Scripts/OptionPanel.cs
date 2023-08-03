@@ -1,42 +1,47 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class OptionPanel : MonoBehaviour
+public class OptionPanel : SceneUI
 {
-    [SerializeField] Slider masterVolumeSlider, bgmVolumeSlider, sfxVolumeSlider;
+    [SerializeField] float prevMasterVolume, prevBgmVolume, prevSfxVolume;
 
     void OnEnable()
     {
-        // 볼륨값을 오디오 값으로
-        // 슬라이더 값을 오디오 값으로
+        prevMasterVolume = GameManager.Audio.MasterVolume * 0.025f;
+        prevBgmVolume = GameManager.Audio.BGMVolume * 0.025f;
+        prevSfxVolume = GameManager.Audio.SFXVolume * 0.025f;
     }
 
     public void OnMasterVolumeSliderChanged()
     {
-        // 오디오 값을 볼륨값으로
+        GameManager.Audio.MasterVolume = sliders["MasterVolumeSlider"].value;
     }
 
     public void OnBGMVolumeSliderChanged()
     {
-        // 오디오 값을 볼륨값으로
+        GameManager.Audio.BGMVolume = sliders["BGMVolumeSlider"].value;
     }
 
     public void OnSFXolumeSliderChanged()
     {
-        // 오디오 값을 볼륨값으로
+        GameManager.Audio.SFXVolume = sliders["SFXVolumeSlider"].value;
     }
 
     public void OnCancelButtonClicked()
     {
-        // 볼륨값을 오디오 값으로 돌려주기
+        GameManager.Audio.MasterVolume = prevMasterVolume;
+        GameManager.Audio.BGMVolume = prevBgmVolume;
+        GameManager.Audio.SFXVolume = prevSfxVolume;
+
+        sliders["MasterVolumeSlider"].value = prevMasterVolume;
+        sliders["BGMVolumeSlider"].value = prevBgmVolume;
+        sliders["SFXVolumeSlider"].value = prevSfxVolume;
+
         gameObject.SetActive(false);
     }
 
     public void OnConfirmButtonClicked()
     {
-        // 오디오 값을 볼륨값으로
         gameObject.SetActive(false);
     }
 }

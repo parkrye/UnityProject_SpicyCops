@@ -44,7 +44,7 @@ namespace Photon.Realtime
         private Hashtable customProperties = new Hashtable();
 
         /// <summary>Backing field for property.</summary>
-        protected int maxPlayers = 0;
+        protected byte maxPlayers = 0;
 
         /// <summary>Backing field for property.</summary>
         protected int emptyRoomTtl = 0;
@@ -106,7 +106,7 @@ namespace Photon.Realtime
         /// As part of RoomInfo this can't be set.
         /// As part of a Room (which the player joined), the setter will update the server and all clients.
         /// </remarks>
-        public int MaxPlayers
+        public byte MaxPlayers
         {
             get
             {
@@ -220,7 +220,7 @@ namespace Photon.Realtime
             // fetch the "well known" properties of the room, if available
             if (propertiesToCache.ContainsKey(GamePropertyKey.MaxPlayers))
             {
-                this.maxPlayers = Convert.ToInt32(propertiesToCache[GamePropertyKey.MaxPlayers]);
+                this.maxPlayers = Convert.ToByte(propertiesToCache[GamePropertyKey.MaxPlayers]);
             }
 
             if (propertiesToCache.ContainsKey(GamePropertyKey.IsOpen))

@@ -1,14 +1,10 @@
 using Photon.Pun;
 using Photon.Realtime;
-using TMPro;
 using UnityEngine;
 
-public class CreateRoomPanel : MonoBehaviour
+public class CreateRoomPanel : SceneUI
 {
     [SerializeField] GameObject prevPanel;
-    [SerializeField] TMP_InputField roomNameInputField;
-    [SerializeField] TMP_InputField maxPlayerInputField;
-    [SerializeField] TMP_InputField passwordInputField;
 
     public void OnCreateRoomCancelButtonClicked()
     {
@@ -18,14 +14,14 @@ public class CreateRoomPanel : MonoBehaviour
 
     public void OnCreateRoomConfirmButtonClicked()
     {
-        string roomName = roomNameInputField.text;
+        string roomName = inputFields["RoomNameInputField"].text;
         if (roomName == "")
             roomName = string.Format("Room{0}", Random.Range(1000, 10000));
 
-        int maxPlayer = maxPlayerInputField.text == "" ? 4 : int.Parse(maxPlayerInputField.text);
+        int maxPlayer = inputFields["MaxPlayerInputField"].text == "" ? 4 : int.Parse(inputFields["MaxPlayerInputField"].text);
         maxPlayer = Mathf.Clamp(maxPlayer, 1, 4);
 
-        string password = passwordInputField.text;
+        string password = inputFields["PasswordInputField"].text;
 
         RoomOptions roomOptions = new()
         {
