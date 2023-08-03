@@ -3,73 +3,93 @@
     "maps": [
         {
             "name": "Player",
-            "id": "ea7744c4-488b-4308-a7c8-82d4db3facd7",
+            "id": "dfd6849f-2a61-478c-94be-18aaa889e2db",
             "actions": [
                 {
-                    "name": "move",
+                    "name": "Move",
                     "type": "Value",
-                    "id": "f8e5c24b-7578-4bb2-b3ef-309c3e58414e",
+                    "id": "74e7f352-45e3-4a18-9130-7d2a2cbdef32",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Pull",
+                    "type": "PassThrough",
+                    "id": "56656483-6c3c-4c2d-8f40-ebe8ea0b28a7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "2D Vector",
-                    "id": "43d071d9-114c-41f0-993f-d78c2a5b14b2",
+                    "id": "f7314494-2238-4173-96e1-704835eabde3",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "move",
+                    "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "up",
-                    "id": "f7561072-8136-4ee4-acc5-8d664266bc6c",
+                    "id": "ec8708d2-3d24-48ce-b5bf-36b04c054887",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "move",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "down",
-                    "id": "011b8d71-af04-41f6-a7a2-9fe8eb9ac441",
+                    "id": "a9c113ef-ee16-4bc7-b860-292a2475ad09",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "move",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "left",
-                    "id": "3c509d61-28e9-4cfb-9993-147106584b44",
+                    "id": "83fc1c19-329b-4dc3-8077-1cf7aaf3d45b",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "move",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "right",
-                    "id": "076fd1d0-6786-4ae7-b1bc-626bbe517e77",
+                    "id": "227946dc-5292-4d35-b8c7-03edc525b1bc",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "move",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "46e4b91a-d661-4498-9c02-af52744fe07c",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pull",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
