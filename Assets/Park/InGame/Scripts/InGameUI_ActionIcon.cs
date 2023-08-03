@@ -44,7 +44,7 @@ public class InGameUI_ActionIcon : SceneUI
             }
             else
             {
-                texts["ActionCoolText"].text = ((int)nowCoolTime).ToString();
+                texts["ActionCoolText"].text = ((int)(coolTime - nowCoolTime) + 1).ToString();
             }
         }
     }

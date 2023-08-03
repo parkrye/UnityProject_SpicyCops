@@ -20,16 +20,10 @@ public class AudioManager : MonoBehaviour
         }
         set
         {
-            if (value == 0f)
-            {
-                audioMixer.SetFloat("Master", -80f);
-            }
-            else
-            {
-                audioMixer.SetFloat("Master", -40f + value * 40f);
-            }
+            audioMixer.SetFloat("Master", value * 40f);
         }
     }
+
     public float BGMVolume
     {
         get
@@ -40,16 +34,10 @@ public class AudioManager : MonoBehaviour
         }
         set
         {
-            if (value == 0f)
-            {
-                audioMixer.SetFloat("BGM", -80f);
-            }
-            else
-            {
-                audioMixer.SetFloat("BGM", -40f + value * 40f);
-            }
+            audioMixer.SetFloat("BGM", value * 40f);
         }
     }
+
     public float SFXVolume
     {
         get
@@ -60,14 +48,7 @@ public class AudioManager : MonoBehaviour
         }
         set
         {
-            if (value == 0f)
-            {
-                audioMixer.SetFloat("SFX", -80f);
-            }
-            else
-            {
-                audioMixer.SetFloat("SFX", -40f + value * 40f);
-            }
+            audioMixer.SetFloat("SFX", value * 40f);
         }
     }
 }

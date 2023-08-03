@@ -11,7 +11,7 @@ public class LoginPanel : SceneUI
 		GameData.accounts = CSV_RW.ReadAccountsCSV();
     }
 
-    void OnEnable()
+    void OnDisable()
 	{
         inputFields["IDInputField"].text = "";
 	}

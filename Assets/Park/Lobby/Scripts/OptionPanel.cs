@@ -3,45 +3,45 @@ using UnityEngine;
 
 public class OptionPanel : SceneUI
 {
-    [SerializeField] float masterVolume, bgmVolume, sfxVolume;
+    [SerializeField] float prevMasterVolume, prevBgmVolume, prevSfxVolume;
 
     void OnEnable()
     {
-        sliders["MasterVolumeSlider"].value = GameManager.Audio.MasterVolume;
-        sliders["BGMVolumeSlider"].value = GameManager.Audio.BGMVolume;
-        sliders["SFXVolumeSlider"].value = GameManager.Audio.SFXVolume;
+        prevMasterVolume = GameManager.Audio.MasterVolume * 0.025f;
+        prevBgmVolume = GameManager.Audio.BGMVolume * 0.025f;
+        prevSfxVolume = GameManager.Audio.SFXVolume * 0.025f;
     }
 
     public void OnMasterVolumeSliderChanged()
     {
-        masterVolume = sliders["MasterVolumeSlider"].value;
+        GameManager.Audio.MasterVolume = sliders["MasterVolumeSlider"].value;
     }
 
     public void OnBGMVolumeSliderChanged()
     {
-        bgmVolume = sliders["BGMVolumeSlider"].value;
+        GameManager.Audio.BGMVolume = sliders["BGMVolumeSlider"].value;
     }
 
     public void OnSFXolumeSliderChanged()
     {
-        sfxVolume = sliders["SFXVolumeSlider"].value;
+        GameManager.Audio.SFXVolume = sliders["SFXVolumeSlider"].value;
     }
 
     public void OnCancelButtonClicked()
     {
-        sliders["MasterVolumeSlider"].value = GameManager.Audio.MasterVolume;
-        sliders["BGMVolumeSlider"].value = GameManager.Audio.BGMVolume;
-        sliders["SFXVolumeSlider"].value = GameManager.Audio.SFXVolume;
-        
+        GameManager.Audio.MasterVolume = prevMasterVolume;
+        GameManager.Audio.BGMVolume = prevBgmVolume;
+        GameManager.Audio.SFXVolume = prevSfxVolume;
+
+        sliders["MasterVolumeSlider"].value = prevMasterVolume;
+        sliders["BGMVolumeSlider"].value = prevBgmVolume;
+        sliders["SFXVolumeSlider"].value = prevSfxVolume;
+
         gameObject.SetActive(false);
     }
 
     public void OnConfirmButtonClicked()
     {
-        GameManager.Audio.MasterVolume = masterVolume;
-        GameManager.Audio.BGMVolume = bgmVolume;
-        GameManager.Audio.SFXVolume = sfxVolume;
-
         gameObject.SetActive(false);
     }
 }
