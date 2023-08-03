@@ -1,10 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameUI_PlayerStateBar : MonoBehaviour
+public class InGameUI_PlayerStateBar : SceneUI
 {
     [SerializeField] Animator uiAnimator;
+
+    public override void Initialize()
+    {
+
+    }
 
     void Update()
     {

@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class InGameUI_PlayerAggroBar : MonoBehaviour
+public class InGameUI_PlayerAggroBar : SceneUI
 {
-    [SerializeField] Slider aggroSlider;
-
     [SerializeField] float aggroValue;
+
+    public override void Initialize()
+    {
+
+    }
 
     [ContextMenu("AggroUp")]
     void AggroUp()
@@ -14,7 +16,7 @@ public class InGameUI_PlayerAggroBar : MonoBehaviour
         if (aggroValue > 1f)
             aggroValue = 1f;
 
-        aggroSlider.value = aggroValue;
+        sliders["PlayerAggroBar"].value = aggroValue;
     }
 
     [ContextMenu("AggroDown")]
@@ -24,6 +26,6 @@ public class InGameUI_PlayerAggroBar : MonoBehaviour
         if (aggroValue < 0f)
             aggroValue = 0f;
 
-        aggroSlider.value = aggroValue;
+        sliders["PlayerAggroBar"].value = aggroValue;
     }
 }

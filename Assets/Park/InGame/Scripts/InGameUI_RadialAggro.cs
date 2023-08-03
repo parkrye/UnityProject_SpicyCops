@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class InGameUI_RadialAggro : MonoBehaviour
+public class InGameUI_RadialAggro : SceneUI
 {
-    [SerializeField] Image aggroImage;
-
     [SerializeField] float aggroValue;
+
+    public override void Initialize()
+    {
+
+    }
 
     [ContextMenu("AggroUp")]
     void AggroUp()
@@ -14,7 +16,7 @@ public class InGameUI_RadialAggro : MonoBehaviour
         if(aggroValue > 1f)
             aggroValue = 1f;
 
-        aggroImage.fillAmount = aggroValue;
+        images["AggroImage"].fillAmount = aggroValue;
     }
 
     [ContextMenu("AggroDown")]
@@ -24,6 +26,6 @@ public class InGameUI_RadialAggro : MonoBehaviour
         if(aggroValue < 0f)
             aggroValue = 0f;
 
-        aggroImage.fillAmount = aggroValue;
+        images["AggroImage"].fillAmount = aggroValue;
     }
 }

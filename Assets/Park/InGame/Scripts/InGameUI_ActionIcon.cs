@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class InGameUI_ActionIcon : MonoBehaviour
+public class InGameUI_ActionIcon : SceneUI
 {
-    [SerializeField] Image coolTimeImage;
-    [SerializeField] TMP_Text coolTimeText;
     [SerializeField] KeyCode actionKey;
 
     [SerializeField] float coolTime, nowCoolTime;
     [SerializeField] bool isUsed;
+
+    public override void Initialize()
+    {
+
+    }
 
     void Update()
     {
@@ -26,7 +25,7 @@ public class InGameUI_ActionIcon : MonoBehaviour
             if (Input.GetKeyDown(actionKey))
             {
                 isUsed = true;
-                coolTimeImage.enabled = true;
+                images["ActionCoolImage"].enabled = true;
             }
         }
     }
@@ -40,12 +39,12 @@ public class InGameUI_ActionIcon : MonoBehaviour
             {
                 isUsed = false;
                 nowCoolTime = 0f;
-                coolTimeImage.enabled = false;
-                coolTimeText.text = "";
+                images["ActionCoolImage"].enabled = false;
+                texts["ActionCoolText"].text = "";
             }
             else
             {
-                coolTimeText.text = ((int)nowCoolTime).ToString();
+                texts["ActionCoolText"].text = ((int)nowCoolTime).ToString();
             }
         }
     }

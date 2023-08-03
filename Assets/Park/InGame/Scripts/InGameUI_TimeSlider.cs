@@ -1,30 +1,27 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class InGameUI_TimeSlider : MonoBehaviour
+public class InGameUI_TimeSlider : SceneUI
 {
     [SerializeField] float timeValue;
     [SerializeField] float maxTime;
 
-    Slider timeSlider;
-    [SerializeField] TMP_Text timeText;
-
-    void Awake()
+    public override void Initialize()
     {
-        timeSlider = GetComponent<Slider>();
-        timeSlider.maxValue = maxTime;
+        sliders["TimeSlider"].maxValue = maxTime;
     }
 
     [ContextMenu ("TimeClock")]
     public void TimeClock()
     {
-        timeValue += 1f;
-        timeSlider.value = timeValue;
+        if (timeValue > maxTime)
+            return;
 
-        if(maxTime - timeValue <= 30f)
+        timeValue -= 1f;
+        sliders["TimeSlider"].value = timeValue;
+
+        if(timeValue <= 30f)
         {
-            timeText.text = (maxTime - timeValue).ToString();
+            texts["TimeText"].text = timeValue.ToString();
         }
     }
 }
