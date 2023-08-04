@@ -7,6 +7,6 @@ public class PlayerInteraction : MonoBehaviour
     // Player ªÛ»£¿€øÎ
     
     // Item »πµÊ
-
+    
     
 }
