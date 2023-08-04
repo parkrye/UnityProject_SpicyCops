@@ -73,7 +73,7 @@ public class LobbyPanel : SceneUI
         {
 			StatePanel.Instance.AddMessage(room.CustomProperties.ToString());
             RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-			entry.Initialize(room.Name, room.PlayerCount, room.MaxPlayers, room, enterPrivateRoomPanel);
+			entry.Initialize(room.Name, room.PlayerCount, (byte)room.MaxPlayers, room, enterPrivateRoomPanel);
             roomEntries.Add(entry);
 		}
     }
