@@ -11,11 +11,6 @@ public class LoginPanel : SceneUI
 		GameData.accounts = CSV_RW.ReadAccountsCSV();
     }
 
-    void OnDisable()
-	{
-        inputFields["IDInputField"].text = "";
-	}
-
 	public void OnLoginButtonClicked()
 	{
 		playerID = inputFields["IDInputField"].text;
@@ -53,6 +48,7 @@ public class LoginPanel : SceneUI
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
+        inputFields["IDInputField"].text = "";
         PhotonNetwork.LocalPlayer.NickName = playerID;
 		PhotonNetwork.ConnectUsingSettings();
 	}

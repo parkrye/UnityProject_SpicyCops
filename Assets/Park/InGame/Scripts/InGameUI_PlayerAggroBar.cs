@@ -4,11 +4,6 @@ public class InGameUI_PlayerAggroBar : SceneUI
 {
     [SerializeField] float aggroValue;
 
-    public override void Initialize()
-    {
-
-    }
-
     [ContextMenu("AggroUp")]
     void AggroUp()
     {
