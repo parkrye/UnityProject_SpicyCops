@@ -4,11 +4,6 @@ public class InGameUI_RadialAggro : SceneUI
 {
     [SerializeField] float aggroValue;
 
-    public override void Initialize()
-    {
-
-    }
-
     [ContextMenu("AggroUp")]
     void AggroUp()
     {
