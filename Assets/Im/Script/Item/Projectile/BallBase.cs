@@ -11,17 +11,24 @@ public class BallBase : MonoBehaviourPun
     [SerializeField] protected float throwPower = 10;
     [SerializeField] protected float speed = 1.5f;
     [SerializeField] protected float overlapAreaRange = 3;
-    [SerializeField] protected LayerMask mask;
 
     protected bool isEnded;
     protected Player player;
     protected float curTime;
-    Rigidbody rb;
-
+    protected Rigidbody rb;
+    protected Collider col;
+    protected void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
+    }
     protected void Start()
     {
+        /*
         if(photonView.IsMine)
             StartCoroutine(rrr());
+        */
+        Shot();
     }
     protected IEnumerator rrr()
     {
@@ -42,23 +49,31 @@ public class BallBase : MonoBehaviourPun
             curTime += Time.deltaTime * speed;
             yield return null;
         }
-        yield return new WaitForSeconds(5);
         curTime = 0;
+        yield return new WaitForSeconds(3);
         PhotonNetwork.Destroy(gameObject);
     }
     private void Shot()
     {
-        rb.AddForce(transform.forward * throwPower + Vector3.up * 2, ForceMode.Impulse);
+        rb.AddForce((transform.forward * throwPower) + (Vector3.up * throwPower), ForceMode.Impulse);
     }
 
     protected void OnCollisionEnter(Collision collision)
     {
         Debug.Log(collision.gameObject.layer);
-        if ((collision.gameObject.layer != 3 && collision.gameObject.layer != 6) || collision.gameObject.GetComponent<Player>().Equals(player))
+        if (collision.gameObject.layer == 0)
+            rb.AddForce(transform.forward * -0.5f * throwPower, ForceMode.Impulse);
+        if (collision.gameObject.layer != 3 && collision.gameObject.layer != 6)
             return;
+        PhotonView view = collision.gameObject.GetComponent<PhotonView>();
+        if (view != null && view.Owner.ActorNumber == player.ActorNumber)
+            return;
+        Debug.Log("Fall");
         isEnded = true;
-        // 만약 자기 자신 혹은 트리거용 콜라이더가 아니라면
-        photonView.RPC("RequestExplosion", RpcTarget.MasterClient, transform.position, transform.rotation);
+        rb.velocity = Vector3.zero;
+        col.enabled = false;
+        if(photonView.IsMine)
+            photonView.RPC("RequestExplosion", RpcTarget.MasterClient, transform.position, transform.rotation);
     }
 
     [PunRPC]
@@ -76,5 +91,11 @@ public class BallBase : MonoBehaviourPun
     public void SetPlayer(Player player)
     {
         this.player = player;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, overlapAreaRange);
     }
 }

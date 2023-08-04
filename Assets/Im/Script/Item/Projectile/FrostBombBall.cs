@@ -2,17 +2,14 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class SmokeBombBall : BallBase
+public class FrostBombBall : BallBase
 {
     [SerializeField] GameObject effect;
-    [SerializeField] GameObject explosionEff;
 
     [PunRPC]
     protected override void ResultExplosion(Vector3 pos, Quaternion rot, float sentTime)
     {
-        Instantiate(explosionEff);
         Instantiate(effect);
         if (!PhotonNetwork.IsMasterClient)
             return;
@@ -21,10 +18,10 @@ public class SmokeBombBall : BallBase
         foreach (Collider collider in colliders)
         {
             PhotonView view = collider.GetComponent<PhotonView>();
-            if(view != null)
+            if (view != null)
             {
                 // view.ViewID
-                // 어그로 수치 감소
+                // 슬로우
             }
         }
     }

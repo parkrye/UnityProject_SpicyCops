@@ -4,12 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SmokeBomb", menuName = "Item/Projectile/SmokeBomb")]
-public class SmokeBomb : ProjectileItem
+[CreateAssetMenu(fileName = "PerfumeBomb", menuName = "Item/Projectile/PerfumeBomb")]
+public class PerfumeBomb : ProjectileItem
 {
     protected override void Projectile(Vector3 pos, Quaternion rot, float sentTime, Player player)
     {
-        GameObject ball = PhotonNetwork.Instantiate("SmokeBomb", pos, rot);
+        GameObject ball = PhotonNetwork.Instantiate("PerfumeBomb", pos, rot);
         BallBase b = ball.GetComponent<BallBase>();
         b.SetPlayer(player);
     }
