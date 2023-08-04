@@ -1,23 +1,38 @@
+using Cinemachine;
+using Jeon;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] float clock;
+    [SerializeField] float nowTime, totalTime;
+    public float NowTime { get { return nowTime; } set {  nowTime = value; } }
+    public float TotalTime { get { return totalTime; } set { totalTime = value; } }
 
     [SerializeField] SafeArea safeArea;
-    public float Clock { get { return clock; } set {  clock = value; } }
 
-    // 플레이어 ID:어그로값 딕셔너리
-    // 에너미 스크립트?
+    [SerializeField] Dictionary<int, float> playerDictionary;   // <view id, aggro>
+    public Dictionary<int, float> PlayerDictionary { get {  return playerDictionary; } }
+
+    [SerializeField] Enemy enemy;
+
+    [SerializeField] List<Transform> startPositions;    // initial start positions
+    [SerializeField] int startNum;
+
+    [SerializeField] InGameUIController inGameUIController;
+
+    [SerializeField] CinemachineVirtualCamera playerCamera;
 
     void Start()
     {
+        playerDictionary = new Dictionary<int, float>();
+        inGameUIController.Initialize();
+
         // Normal game mode
         if (PhotonNetwork.InRoom)
         {
@@ -59,14 +74,15 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 방장 작업 대신 수행
         if (newMasterClient.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            StartCoroutine(ClockWorking());
+            StartCoroutine(ClockWorkRoutine());
         }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
-        if (changedProps.ContainsKey(CustomProperty.GetReady(targetPlayer)))
+        if (changedProps.ContainsKey(GameData.PLAYER_LOAD))
         {
+            Debug.Log($"{PlayerLoadCount() == PhotonNetwork.PlayerList.Length}");
             if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
             {
                 if (PhotonNetwork.IsMasterClient)
@@ -81,7 +97,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
     {
-        if (propertiesThatChanged.ContainsKey(CustomProperty.GetLoadTime(PhotonNetwork.CurrentRoom)))
+        if (propertiesThatChanged.ContainsKey(GameData.LOAD_TIME))
         {
             StartCoroutine(GameStartTimer());
         }
@@ -89,46 +105,43 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     IEnumerator GameStartTimer()
     {
-        double loadTime = PhotonNetwork.CurrentRoom.GetLoadTime();
-        while (loadTime  > PhotonNetwork.Time)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-        Debug.Log("Game Start!");
+        yield return new WaitForEndOfFrame();
         GameStart();
     }
 
     void GameStart()
     {
-        // 자기 캐릭터 생성
-        // PhotonNetwork.Instantiate("Player", position, rotation, 0);
-        // 플레이어 생성시 이 스크립트를 가져가도록
-        // 이 스크립트에 플레이어 목록 저장
+        // 캐릭터 생성
         // UI에 플레이어 정보 저장
+        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, player.GetComponent<PhotonView>().ViewID);
+        inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
+        playerCamera.Follow = player.transform;
 
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
-            // 에너미 생성
-            // 에너미 생성시 이 스크립트 가져가도록
-            StartCoroutine(ClockWorking());
+            // 에너미가 이 스크립트 참조
+            StartCoroutine(ClockWorkRoutine());
             safeArea.GameStartSetting();
         }
     }
 
     private void DebugGameStart()
     {
-        // 자기 캐릭터 생성
-        // PhotonNetwork.Instantiate("Player", position, rotation, 0);
-        // 플레이어 생성시 이 스크립트를 가져가도록
-        // 이 스크립트에 플레이어 목록 저장
+        // 캐릭터 생성
+        // UI에 플레이어 정보 저장
+        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, player);
+        inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
+        playerCamera.Follow = player.transform;
 
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
-            // 에너미 생성
-            // 에너미 생성시 이 스크립트 가져가도록
-            StartCoroutine(ClockWorking());
+            // 에너미가 this 참조
+            StartCoroutine(ClockWorkRoutine());
+            safeArea.GameStartSetting();
         }
     }
 
@@ -149,12 +162,40 @@ public class InGameManager : MonoBehaviourPunCallbacks
         return loadCount;
     }
 
-    IEnumerator ClockWorking()
+    IEnumerator ClockWorkRoutine()
     {
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
-            Clock += 0.1f;
+            photonView.RPC("RequestClockWork", RpcTarget.AllViaServer, 0.1f);
         }
+    }
+
+    // rpc
+    [PunRPC]
+    void RequestAddPlayer(int photonViewID, PhotonMessageInfo info)
+    {
+        ResultAddPlayer(photonViewID);
+    }
+
+    public void ResultAddPlayer(int photonViewID)
+    {
+        GameObject player = PhotonView.Find(photonViewID).gameObject;
+        playerDictionary.Add(player.GetComponent<PhotonView>().ViewID, 0f);
+        player.transform.position = startPositions[startNum++].position;
+        inGameUIController.AddOtherPlayerPhotonView(player.GetComponent<PhotonView>());
+        // 플레이어가 this 참조
+    }
+
+    [PunRPC]
+    void RequestClockWork(float time, PhotonMessageInfo info)
+    {
+        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
+        ResultClockWork(time + lag);
+    }
+
+    public void ResultClockWork(float time)
+    {
+        NowTime += time;
     }
 }

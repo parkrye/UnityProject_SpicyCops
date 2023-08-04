@@ -3,19 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Shoes", menuName = "Item/Util/Shoes")]
 public class Shoes : UtilItem
 {
-    protected override void Awake()
-    {
-        base.Awake();
-        itemIcon = Resources.Load<Sprite>("ShoesIcon");
-        itemIndex = (int)Define.ItemIndex.Shoes;
-        itemName = "Shoes";
-        itemList[itemIndex] = this;
-    }
     protected override void GetUtilEffect(Player player)
     {
-        StartCoroutine(SpeedUp(player));
+        // 内风凭 角青 夸没
     }
     IEnumerator SpeedUp(Player player)
     {

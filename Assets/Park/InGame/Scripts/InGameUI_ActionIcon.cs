@@ -7,11 +7,6 @@ public class InGameUI_ActionIcon : SceneUI
     [SerializeField] float coolTime, nowCoolTime;
     [SerializeField] bool isUsed;
 
-    public override void Initialize()
-    {
-
-    }
-
     void Update()
     {
         UseAction();
