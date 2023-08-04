@@ -58,7 +58,7 @@ public class SafeArea : MonoBehaviourPun
         while (rate <= 1)
         {
             scale = Mathf.Lerp(maxScale, minScale, rate);
-            transform.localScale = new Vector3(scale, 2, scale);
+            transform.localScale = new Vector3(scale, 20, scale);
             rate += Time.deltaTime / time;
             yield return new WaitForEndOfFrame();
         }

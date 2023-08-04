@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class UtilItem : Item
 {
-    protected virtual void Awake()
-    {
-        weaponType = Define.WeaponType.Util;
-    }
     protected virtual void GetUtilEffect(Player player)
     {
 
