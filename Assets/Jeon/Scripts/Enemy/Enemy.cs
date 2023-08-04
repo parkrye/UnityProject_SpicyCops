@@ -33,7 +33,7 @@ namespace Jeon
             rb = GetComponent<Rigidbody>();
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animator>();
-            catchZone = GameObject.Find("CatchZone").transform;
+            //catchZone = GameObject.Find("CatchZone").transform;
             curTime = 180f;      // time = InGameManager에서 받아오기
             curState = EnemyState.Idle;
         }
@@ -41,7 +41,7 @@ namespace Jeon
         private void FixedUpdate()
         {
             players = GameObject.FindGameObjectWithTag("Player").transform;
-            
+            agent.destination = players.transform.position;
 
             if (curTime == 175f)
             {

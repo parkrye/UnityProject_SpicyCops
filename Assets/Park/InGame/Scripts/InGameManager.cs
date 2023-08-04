@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -8,6 +9,8 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class InGameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] float clock;
+
+    [SerializeField] SafeArea safeArea;
     public float Clock { get { return clock; } set {  clock = value; } }
 
     // 플레이어 ID:어그로값 딕셔너리
@@ -109,6 +112,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
             // 에너미 생성
             // 에너미 생성시 이 스크립트 가져가도록
             StartCoroutine(ClockWorking());
+            safeArea.GameStartSetting();
         }
     }
 

@@ -163,7 +163,7 @@ public class RoomPanel : SceneUI
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 		PhotonNetwork.CurrentRoom.IsVisible = false;
 
-		PhotonNetwork.LoadLevel("GameScene");
+		PhotonNetwork.LoadLevel("InGameScene");
 	}
 
     public void OnLeaveRoomClicked()

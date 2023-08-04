@@ -37,12 +37,12 @@ public class BallBase : MonoBehaviourPun
         {
             xSpeed = Mathf.Lerp(startPos.x, targetPos.x, curTime);
             zSpeed = Mathf.Lerp(startPos.z, targetPos.z, curTime);
-            ySpeed = Mathf.Lerp(Mathf.Lerp(startPos.y, upPos.y, curTime), Mathf.Lerp(upPos.y, 0, curTime), curTime);
+            ySpeed = Mathf.Lerp(Mathf.Lerp(startPos.y, upPos.y, curTime), Mathf.Lerp(upPos.y, 0.5f, curTime), curTime);
             transform.position = new Vector3(xSpeed, ySpeed, zSpeed);
             curTime += Time.deltaTime * speed;
             yield return null;
         }
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(5);
         curTime = 0;
         PhotonNetwork.Destroy(gameObject);
     }
@@ -53,9 +53,10 @@ public class BallBase : MonoBehaviourPun
 
     protected void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer != 3 && collision.gameObject.layer != 6)
+        Debug.Log(collision.gameObject.layer);
+        if ((collision.gameObject.layer != 3 && collision.gameObject.layer != 6) || collision.gameObject.GetComponent<Player>().Equals(player))
             return;
-        isEnded = true;      
+        isEnded = true;
         // 만약 자기 자신 혹은 트리거용 콜라이더가 아니라면
         photonView.RPC("RequestExplosion", RpcTarget.MasterClient, transform.position, transform.rotation);
     }

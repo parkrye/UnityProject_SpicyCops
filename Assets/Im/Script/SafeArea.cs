@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class SafeArea : MonoBehaviourPun
 {
-    [SerializeField] float maxScale = 120;
-    [SerializeField] float minScale = 40;
+    [SerializeField] float maxScale = 250;
+    [SerializeField] float minScale = 55;
     [SerializeField] float time = 120;
 
     public List<Player> inAreaPlayer;
     public List<Player> outAreaPlayer;
 
-    private void Start()
+    public void GameStartSetting()
     {
         if (!PhotonNetwork.IsMasterClient)
             return;

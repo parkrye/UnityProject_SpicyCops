@@ -8,6 +8,7 @@ public class SmokeBombBall : BallBase
 {
     [SerializeField] GameObject effect;
 
+    [PunRPC]
     protected override void ResultExplosion(Vector3 pos, Quaternion rot, float sentTime)
     {
         Instantiate(effect);
