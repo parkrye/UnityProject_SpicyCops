@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2177653710333447735}
   - component: {fileID: 1851592966291893826}
   - component: {fileID: 1851592966291893827}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BaseCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1545654068231066765}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 46, y: -0.04, z: 51.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -48,7 +48,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!136 &1851592966291893827
 CapsuleCollider:
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 1605709952426557295}
   - component: {fileID: 4512483603570198053}
   - component: {fileID: 1133277410606752433}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
