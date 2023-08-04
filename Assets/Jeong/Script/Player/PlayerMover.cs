@@ -34,8 +34,8 @@ public class PlayerMover : MonoBehaviour
 
     private void Move()
     {
-        Vector3 moveDir = new Vector3(-inputDir.x, 0, -inputDir.y);
-        rigid.velocity = moveDir * moveSpeed * Time.deltaTime + Vector3.up * rigid.velocity.y;
+        Vector3 moveDir = new Vector3(inputDir.x, 0, inputDir.y);
+        rigid.velocity = moveDir * moveSpeed * Time.deltaTime + Vector3.up * rigid.velocity.y; // y°ªÀ» Áß·ÂÀ¸·Î ¶³¾î¶ß¸®´Â Èû
         
         curSpeed = rigid.velocity.magnitude;
 

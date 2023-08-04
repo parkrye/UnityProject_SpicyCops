@@ -33,7 +33,7 @@ public class PlayerPuller : MonoBehaviour
 
     private void OnPull(InputValue value)
     {
-        // space를 누르면 
+        // x키를 누르면 
         if (value.isPressed)
         {
             isPulling = true;
