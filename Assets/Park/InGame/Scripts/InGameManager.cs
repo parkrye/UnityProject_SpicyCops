@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class InGameManager : MonoBehaviourPunCallbacks
@@ -28,9 +29,14 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] CinemachineVirtualCamera playerCamera;
 
+    UnityEvent<float> timeEvent;
+    UnityEvent<Dictionary<int, float>> playerAggroEvent;
+
     void Start()
     {
         playerDictionary = new Dictionary<int, float>();
+        timeEvent = new UnityEvent<float>();
+        playerAggroEvent = new UnityEvent<Dictionary<int, float>>();
         inGameUIController.Initialize();
 
         // Normal game mode
@@ -46,6 +52,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    #region Connection
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions() { IsVisible = false };
@@ -74,7 +81,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 방장 작업 대신 수행
         if (newMasterClient.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            StartCoroutine(ClockWorkRoutine());
+            StartCoroutine(TimerRoutine());
         }
     }
 
@@ -103,6 +110,25 @@ public class InGameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    IEnumerator DebugGameSetupDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        DebugGameStart();
+    }
+
+    int PlayerLoadCount()
+    {
+        int loadCount = 0;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.GetLoad())
+                loadCount++;
+        }
+        return loadCount;
+    }
+    #endregion
+
+    #region Start Game
     IEnumerator GameStartTimer()
     {
         yield return new WaitForEndOfFrame();
@@ -122,7 +148,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            StartCoroutine(ClockWorkRoutine());
+            StartCoroutine(TimerRoutine());
             safeArea.GameStartSetting();
         }
     }
@@ -140,38 +166,47 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 this 참조
-            StartCoroutine(ClockWorkRoutine());
+            StartCoroutine(TimerRoutine());
             safeArea.GameStartSetting();
         }
-    }
+    } 
+    #endregion
 
-    IEnumerator DebugGameSetupDelay()
-    {
-        yield return new WaitForSeconds(1f);
-        DebugGameStart();
-    }
-
-    int PlayerLoadCount()
-    {
-        int loadCount = 0;
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (player.GetLoad())
-                loadCount++;
-        }
-        return loadCount;
-    }
-
-    IEnumerator ClockWorkRoutine()
+    #region Timer
+    IEnumerator TimerRoutine()
     {
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
-            photonView.RPC("RequestClockWork", RpcTarget.AllViaServer, 0.1f);
+            photonView.RPC("RequestTimer", RpcTarget.AllViaServer, 0.1f);
         }
     }
 
-    // rpc
+    [PunRPC]
+    void RequestTimer(float time, PhotonMessageInfo info)
+    {
+        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
+        ResultTimer(time + lag);
+    }
+
+    public void ResultTimer(float time)
+    {
+        NowTime += time;
+        timeEvent?.Invoke(NowTime);
+    }
+
+    public void AddTimeEventListenr(UnityAction<float> lister)
+    {
+        timeEvent.AddListener(lister);
+    }
+
+    public void RemoveTimeEventListener(UnityAction<float> lister)
+    {
+        timeEvent?.RemoveListener(lister);
+    }
+    #endregion
+
+    #region Adding Player
     [PunRPC]
     void RequestAddPlayer(int photonViewID, PhotonMessageInfo info)
     {
@@ -186,16 +221,39 @@ public class InGameManager : MonoBehaviourPunCallbacks
         inGameUIController.AddOtherPlayerPhotonView(player.GetComponent<PhotonView>());
         // 플레이어가 this 참조
     }
+    #endregion
+
+    #region Aggro Manager
+    public void ModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue)
+    {
+        photonView.RPC("RequestModifyPlayerAggro", RpcTarget.AllViaServer, targetPlayerPhotonViewID, modifyValue);
+    }
 
     [PunRPC]
-    void RequestClockWork(float time, PhotonMessageInfo info)
+    void RequestModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue, PhotonMessageInfo info)
     {
-        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
-        ResultClockWork(time + lag);
+        float sum = playerDictionary[targetPlayerPhotonViewID] + modifyValue;
+        if (sum < 0f)
+            sum = 0f;
+        if (sum > GameData.MAX_AGGRO)
+            sum = GameData.MAX_AGGRO;
+        ResultModifyPlayerAggro(targetPlayerPhotonViewID, sum);
     }
 
-    public void ResultClockWork(float time)
+    void ResultModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue)
     {
-        NowTime += time;
+        playerDictionary[targetPlayerPhotonViewID] = modifyValue;
+        playerAggroEvent?.Invoke(playerDictionary);
     }
+
+    public void AddPlayerAggroEventListenr(UnityAction<Dictionary<int, float>> lister)
+    {
+        playerAggroEvent.AddListener(lister);
+    }
+
+    public void RemovePlayerAggroEventListenr(UnityAction<Dictionary<int, float>> lister)
+    {
+        playerAggroEvent?.RemoveListener(lister);
+    } 
+    #endregion
 }

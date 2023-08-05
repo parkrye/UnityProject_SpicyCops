@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 3662049507013204146}
   - component: {fileID: 1945474579070877797}
   m_Layer: 5
-  m_Name: PlayerEntry
+  m_Name: PlayerAggroEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inGameUI_RadialAggro: {fileID: 7139469263193716813}
-  playerPhotonView: {fileID: 0}
+  targetPlayerPhotonView: {fileID: 0}
 --- !u!1 &8337483547094849509
 GameObject:
   m_ObjectHideFlags: 0

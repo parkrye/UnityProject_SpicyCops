@@ -13,13 +13,15 @@ public class InGameUIController : MonoBehaviour
     public List<PhotonView> OtherPlayerPhotonViews { get { return otherPlayerPhotonViews;} }
 
     [SerializeField] InGameUI_PlayerAggroBar inGameUI_PlayerAggroBar;
-    [SerializeField] InGameUI_PlayerZone inGameUI_PlayerZone;
+    [SerializeField] InGameUI_OtherPlayerZone inGameUI_otherPlayerZone;
     [SerializeField] InGameUI_TimeSlider inGameUI_TimeSlider;
 
     public void Initialize()
     {
-        inGameUI_PlayerZone.Initialize();
+        inGameUI_PlayerAggroBar.Initialize();
+        inGameUI_otherPlayerZone.Initialize();
         inGameUI_TimeSlider.Initialize();
+        inGameManager.AddPlayerAggroEventListenr(ModifyAggroUIValue);
     }
 
     public void SetPlayerPhotonView(PhotonView player)
@@ -29,7 +31,7 @@ public class InGameUIController : MonoBehaviour
         {
             if (otherPlayerPhotonViews[i].Equals(player))
             {
-                inGameUI_PlayerZone.RemovePlayerEntry(player);
+                inGameUI_otherPlayerZone.RemovePlayerEntry(player);
                 otherPlayerPhotonViews.RemoveAt(i);
                 return;
             }
@@ -43,13 +45,35 @@ public class InGameUIController : MonoBehaviour
             if (!playerPhotonView.Equals(otherPlayer))
             {
                 otherPlayerPhotonViews.Add(otherPlayer);
-                inGameUI_PlayerZone.AddPlayerEntry(otherPlayer);
+                inGameUI_otherPlayerZone.AddPlayerEntry(otherPlayer);
             }
         }
         else
         {
             otherPlayerPhotonViews.Add(otherPlayer);
-            inGameUI_PlayerZone.AddPlayerEntry(otherPlayer);
+            inGameUI_otherPlayerZone.AddPlayerEntry(otherPlayer);
+        }
+    }
+
+    void ModifyAggroUIValue(Dictionary<int, float> playerAggroDictionary)
+    {
+        foreach(KeyValuePair<int, float> playerAggroPair in playerAggroDictionary)
+        {
+            if (playerAggroPair.Key.Equals(playerPhotonView.ViewID))
+            {
+                inGameUI_PlayerAggroBar.ModifyAggro(playerAggroPair.Value);
+            }
+            else
+            {
+                for(int i = 0; i < otherPlayerPhotonViews.Count; i++)
+                {
+                    if (playerAggroPair.Key.Equals(otherPlayerPhotonViews[i].ViewID))
+                    {
+                        inGameUI_otherPlayerZone.ModifyPlayerAggroValue(otherPlayerPhotonViews[i], playerAggroPair.Value);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

@@ -4,23 +4,19 @@ public class InGameUI_RadialAggro : SceneUI
 {
     [SerializeField] float aggroValue;
 
-    [ContextMenu("AggroUp")]
-    void AggroUp()
+    public override void Initialize()
     {
-        aggroValue += 0.1f;
-        if(aggroValue > 1f)
-            aggroValue = 1f;
-
-        images["AggroImage"].fillAmount = aggroValue;
+        base.Initialize();
+        sliders["PlayerAggroBar"].maxValue = GameData.MAX_AGGRO;
     }
 
-    [ContextMenu("AggroDown")]
-    void AggroDown()
+    public void ModifyAggro(float value)
     {
-        aggroValue -= 0.1f;
-        if(aggroValue < 0f)
+        aggroValue = value;
+        if (aggroValue > GameData.MAX_AGGRO)
+            aggroValue = GameData.MAX_AGGRO;
+        if (aggroValue < 0f)
             aggroValue = 0f;
-
-        images["AggroImage"].fillAmount = aggroValue;
+        sliders["PlayerAggroBar"].value = aggroValue;
     }
 }

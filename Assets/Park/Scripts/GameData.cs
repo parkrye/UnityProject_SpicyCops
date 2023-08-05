@@ -37,19 +37,5 @@ public static class GameData
 		"Soldier"
 	};
 
-	public static Color GetColor(int playerNumber)
-	{
-		switch (playerNumber)
-		{
-			case 0: return Color.red;
-			case 1: return Color.green;
-			case 2: return Color.blue;
-			case 3: return Color.yellow;
-			case 4: return Color.cyan;
-			case 5: return Color.magenta;
-			case 6: return Color.white;
-			case 7: return Color.black;
-			default: return Color.grey;
-		}
-	}
+	public const float MAX_AGGRO = 100f;
 }

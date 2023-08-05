@@ -121,7 +121,7 @@ MonoBehaviour:
   playerPhotonView: {fileID: 0}
   otherPlayerPhotonViews: []
   inGameUI_PlayerAggroBar: {fileID: 1737605292580280770}
-  inGameUI_PlayerZone: {fileID: 6071517874383766496}
+  inGameUI_otherPlayerZone: {fileID: 6071517874383766496}
   inGameUI_TimeSlider: {fileID: 1506818487719642959}
 --- !u!1001 &6661591665105186270
 PrefabInstance:

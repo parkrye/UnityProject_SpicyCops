@@ -6,22 +6,19 @@ public class InGameUI_TimeSlider : SceneUI
     [SerializeField] InGameUIController inGameUIController;
 
     [SerializeField] float timeValue;
-    [SerializeField] float maxTime;
 
     public override void Initialize()
     {
-        maxTime = inGameUIController.inGameManager.TotalTime;
-        timeValue = maxTime;
-        sliders["TimeSlider"].maxValue = maxTime;
+        sliders["TimeSlider"].maxValue = inGameUIController.inGameManager.TotalTime;
+        inGameUIController.inGameManager.AddTimeEventListenr(TimeClock);
     }
 
-    [ContextMenu ("TimeClock")]
-    public void TimeClock()
+    public void TimeClock(float time)
     {
-        if (timeValue > maxTime)
+        if (timeValue > inGameUIController.inGameManager.TotalTime)
             return;
 
-        timeValue -= 1f;
+        timeValue = inGameUIController.inGameManager.TotalTime - time;
         sliders["TimeSlider"].value = timeValue;
 
         if(timeValue <= 30f)

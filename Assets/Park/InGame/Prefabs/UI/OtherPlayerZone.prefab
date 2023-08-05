@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 157210734609470849}
   - component: {fileID: 590225562276867490}
   m_Layer: 5
-  m_Name: PlayerZone
+  m_Name: OtherPlayerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,6 +138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b379fd931c9d86d45a87d4e0f7d39a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerEntry: {fileID: 1945474579070877797, guid: ec7ea952a677e5f4284f0b81fea11a94,
+  playerAggroEntry: {fileID: 1945474579070877797, guid: ec7ea952a677e5f4284f0b81fea11a94,
     type: 3}
   uiAnimator: {fileID: 157210734609470849}
