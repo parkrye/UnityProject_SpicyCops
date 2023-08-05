@@ -20,6 +20,7 @@ public class PlayerMover : MonoBehaviour
     private Animator anim;
     private Rigidbody rigid;
     private Vector2 inputDir;
+    private float ySpeed;
 
     private void Start()
     {
@@ -30,13 +31,16 @@ public class PlayerMover : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+      
     }
 
     private void Move()
     {
         Vector3 moveDir = new Vector3(inputDir.x, 0, inputDir.y);
-        rigid.velocity = moveDir * moveSpeed * Time.deltaTime + Vector3.up * rigid.velocity.y; // y값을 중력으로 떨어뜨리는 힘
         
+        ySpeed += Physics.gravity.y * Time.deltaTime;
+        rigid.velocity = moveDir * moveSpeed * Time.deltaTime + Vector3.up * rigid.velocity.y; // y값을 중력으로 실어주는 힘
+
         curSpeed = rigid.velocity.magnitude;
 
         // 회전
@@ -58,4 +62,6 @@ public class PlayerMover : MonoBehaviour
     {
         inputDir = value.Get<Vector2>();
     }
+
+   
 }
