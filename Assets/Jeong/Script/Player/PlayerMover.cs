@@ -10,12 +10,16 @@ using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed; // 이동속도
+    [SerializeField] public float moveSpeed; // 이동속도
     [SerializeField] private float maxSpeed; // 최대 이동속도
 
-    [SerializeField] public float roateSpeed; // 회전속도
+    [SerializeField] public float rotateSpeed; // 회전속도
+
+    [SerializeField] private bool keepFacingTarget = false; // 잡히는 플레이어를 계속해서 바라보도록 할지 여부
 
     private float curSpeed = 0f;
+
+    private GameObject targetPlayer; // 잡혀지는 플레이어를 저장하는 변수
 
     private Animator anim;
     private Rigidbody rigid;
@@ -34,19 +38,33 @@ public class PlayerMover : MonoBehaviour
       
     }
 
+    public void SetTargetPlayer(GameObject player)
+    {
+        targetPlayer = player;
+    }
+
     private void Move()
     {
         Vector3 moveDir = new Vector3(inputDir.x, 0, inputDir.y);
-        
+
         ySpeed += Physics.gravity.y * Time.deltaTime;
-        rigid.velocity = moveDir * moveSpeed * Time.deltaTime + Vector3.up * rigid.velocity.y; // y값을 중력으로 실어주는 힘
+        rigid.velocity = moveDir * moveSpeed * Time.deltaTime + Vector3.up * rigid.velocity.y;
 
         curSpeed = rigid.velocity.magnitude;
 
         // 회전
         if (moveDir != Vector3.zero)
         {
-            transform.forward = Vector3.Lerp(transform.forward, moveDir, roateSpeed * Time.deltaTime);
+            if (keepFacingTarget && targetPlayer != null)
+            {
+                // 잡히는 플레이어를 바라보도록 회전
+                transform.LookAt(targetPlayer.transform.position, Vector3.up);
+            }
+            else
+            {
+                // 이동 방향으로 회전
+                transform.forward = Vector3.Lerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
+            }
         }
 
         // 최대속력
@@ -63,5 +81,9 @@ public class PlayerMover : MonoBehaviour
         inputDir = value.Get<Vector2>();
     }
 
-   
+    public void SetMoveSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
+
 }

@@ -91,18 +91,24 @@ public class PlayerPuller : MonoBehaviour
     // 잡아당기기 
     private void Pull(GameObject player)
     {
-        // 현재 Player 오베직트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
+        // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
         Vector3 directionToTarget = (player.transform.position - transform.position).normalized;
 
         // 잡아당기려는 Player 오브젝트의 Rigidbody 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
         player.GetComponent<Rigidbody>().AddForce(directionToTarget * -pullForce, ForceMode.Force);
 
-        // ToDo
-        // 잡아당기는 Player는 잡히는 Player를 바라봐야한다.
+        // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
+        player.transform.LookAt(transform.position, Vector3.up);
 
-        // ToDo
+        // 잡아당기는 Player만 바라보도록 회전시킨다.
+        transform.LookAt(player.transform.position, Vector3.up);
+
         // 잡아당기는 Player와 잡히는 Player는 속도가 느려진다.
+        float slowDownFactor = 0.5f; // 일정 비율로 속도를 감소시키는 비율 설정
+        player.GetComponent<PlayerMover>().SetMoveSpeed(player.GetComponent<PlayerMover>().moveSpeed * slowDownFactor);
 
+        // PlayerMover의 targetPlayer를 설정한다.
+        player.GetComponent<PlayerMover>().SetTargetPlayer(gameObject);
     }
 
     private void OnDrawGizmosSelected()
