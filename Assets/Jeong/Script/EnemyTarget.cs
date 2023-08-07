@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class EnemyTarget : MonoBehaviour, Ihitable
 {
-    public void Dead()
+    
+    public void Catch()
     {
+        Debug.Log("Player caught by the Enemy!!");
 
     }
 }
