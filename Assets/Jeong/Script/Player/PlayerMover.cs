@@ -19,7 +19,9 @@ public class PlayerMover : MonoBehaviour
 
     private float curSpeed = 0f;
 
-    private GameObject targetPlayer; // 잡혀지는 플레이어를 저장하는 변수
+    private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
+
+    [SerializeField]private GameObject targetPlayer; // 잡혀지는 플레이어를 저장하는 변수
 
     private Animator anim;
     private Rigidbody rigid;
@@ -34,8 +36,15 @@ public class PlayerMover : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
-      
+        if (!isPulling)
+        {
+            Move();
+        }
+    }
+
+    public void SetIsPulling(bool pulling)
+    {
+        isPulling = pulling;
     }
 
     public void SetTargetPlayer(GameObject player)
@@ -55,14 +64,14 @@ public class PlayerMover : MonoBehaviour
         // 회전
         if (moveDir != Vector3.zero)
         {
-            if (keepFacingTarget && targetPlayer != null)
+            if (isPulling)
             {
-                // 잡히는 플레이어를 바라보도록 회전
+                // 잡히는 플레이어를 바라보도록 회전 (잡기 중에만)
                 transform.LookAt(targetPlayer.transform.position, Vector3.up);
             }
             else
             {
-                // 이동 방향으로 회전
+                // 이동 방향으로 회전 (잡기 중이 아닐 때)
                 transform.forward = Vector3.Lerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
             }
         }
