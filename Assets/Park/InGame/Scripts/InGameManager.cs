@@ -11,14 +11,18 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
+    #region Variables and Properties
     [SerializeField] float nowTime, totalTime;
-    public float NowTime { get { return nowTime; } set {  nowTime = value; } }
+    public float NowTime { get { return nowTime; } set { nowTime = value; } }
     public float TotalTime { get { return totalTime; } set { totalTime = value; } }
 
     [SerializeField] SafeArea safeArea;
 
-    [SerializeField] Dictionary<int, float> playerDictionary;   // <view id, aggro>
-    public Dictionary<int, float> PlayerDictionary { get {  return playerDictionary; } }
+    [SerializeField] Dictionary<int, float> playerAggroDictionary;   // <view id, aggro>
+    [SerializeField] Dictionary<int, bool> playerAliveDictionary;   // <view id, alve>
+    public Dictionary<int, float> PlayerAggroDictionary { get { return playerAggroDictionary; } }
+    public Dictionary<int, bool> PlayerAliveDictionary { get { return playerAliveDictionary; } }
+    [SerializeField] Dictionary<int, int> playerIDDictonary;    // <actor number, view id>
 
     [SerializeField] Enemy enemy;
 
@@ -31,12 +35,16 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     UnityEvent<float> timeEvent;
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
+    UnityEvent<Dictionary<int, bool>> playerAliveEvent;
+    #endregion
 
     void Start()
     {
-        playerDictionary = new Dictionary<int, float>();
+        playerAggroDictionary = new Dictionary<int, float>();
         timeEvent = new UnityEvent<float>();
         playerAggroEvent = new UnityEvent<Dictionary<int, float>>();
+        playerAliveDictionary = new Dictionary<int, bool>();
+        playerIDDictonary = new Dictionary<int, int>();
         inGameUIController.Initialize();
 
         // Normal game mode
@@ -62,6 +70,16 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         StartCoroutine(DebugGameSetupDelay());
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        //int leftPlayerActorNum = otherPlayer.ActorNumber;
+        //GameObject leftPlayerCharacter = PhotonView.Find(playerActorNumberViewIDDictonary[leftPlayerActorNum]).gameObject;
+
+        //playerViewIDAggroValueDictionary.Remove(leftPlayerCharacter.GetComponent<PhotonView>().ViewID);
+        //playerActorNumberViewIDDictonary.Remove(leftPlayerActorNum);
+        //PhotonNetwork.Destroy(leftPlayerCharacter);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -140,7 +158,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
         GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
-        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, player.GetComponent<PhotonView>().ViewID);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.UserId, player.GetComponent<PhotonView>().ViewID);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
 
@@ -158,7 +176,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
         GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
-        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, player);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.UserId, player.GetComponent<PhotonView>().ViewID);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
 
@@ -208,17 +226,19 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     #region Adding Player
     [PunRPC]
-    void RequestAddPlayer(int photonViewID, PhotonMessageInfo info)
+    void RequestAddPlayer(int playerActorNumber, int photonViewID, PhotonMessageInfo info)
     {
-        ResultAddPlayer(photonViewID);
+        ResultAddPlayer(playerActorNumber, photonViewID);
     }
 
-    public void ResultAddPlayer(int photonViewID)
+    public void ResultAddPlayer(int playerActorNumber, int photonViewID)
     {
-        GameObject player = PhotonView.Find(photonViewID).gameObject;
-        playerDictionary.Add(player.GetComponent<PhotonView>().ViewID, 0f);
+        PhotonView player = PhotonView.Find(photonViewID);
+        playerAggroDictionary.Add(photonViewID, 0f);
+        playerAliveDictionary.Add(photonViewID, true);
+        playerIDDictonary.Add(playerActorNumber, photonViewID);
         player.transform.position = startPositions[startNum++].position;
-        inGameUIController.AddOtherPlayerPhotonView(player.GetComponent<PhotonView>());
+        inGameUIController.AddOtherPlayerPhotonView(player);
         // 플레이어가 this 참조
     }
     #endregion
@@ -232,18 +252,21 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RequestModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue, PhotonMessageInfo info)
     {
-        float sum = playerDictionary[targetPlayerPhotonViewID] + modifyValue;
-        if (sum < 0f)
-            sum = 0f;
-        if (sum > GameData.MAX_AGGRO)
-            sum = GameData.MAX_AGGRO;
-        ResultModifyPlayerAggro(targetPlayerPhotonViewID, sum);
+        if (playerAliveDictionary[targetPlayerPhotonViewID])
+        {
+            float sum = playerAggroDictionary[targetPlayerPhotonViewID] + modifyValue;
+            if (sum < 0f)
+                sum = 0f;
+            if (sum > GameData.MAX_AGGRO)
+                sum = GameData.MAX_AGGRO;
+            ResultModifyPlayerAggro(targetPlayerPhotonViewID, sum);
+        }
     }
 
     void ResultModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue)
     {
-        playerDictionary[targetPlayerPhotonViewID] = modifyValue;
-        playerAggroEvent?.Invoke(playerDictionary);
+        playerAggroDictionary[targetPlayerPhotonViewID] = modifyValue;
+        playerAggroEvent?.Invoke(playerAggroDictionary);
     }
 
     public void AddPlayerAggroEventListenr(UnityAction<Dictionary<int, float>> lister)
@@ -254,6 +277,35 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public void RemovePlayerAggroEventListenr(UnityAction<Dictionary<int, float>> lister)
     {
         playerAggroEvent?.RemoveListener(lister);
-    } 
+    }
+    #endregion
+
+    #region Alive Manager
+    public void ModifyPlayerAlive(int targetPlayerPhotonViewID, bool isAlive)
+    {
+        photonView.RPC("RequestModifyPlayerAlive", RpcTarget.AllViaServer, targetPlayerPhotonViewID, isAlive);
+    }
+
+    [PunRPC]
+    void RequestModifyPlayerAlive(int targetPlayerPhotonViewID, bool isAlive, PhotonMessageInfo info)
+    {
+        ResultModifyPlayerAlive(targetPlayerPhotonViewID, isAlive);
+    }
+
+    void ResultModifyPlayerAlive(int targetPlayerPhotonViewID, bool isAlive)
+    {
+        playerAliveDictionary[targetPlayerPhotonViewID] = isAlive;
+        playerAliveEvent?.Invoke(playerAliveDictionary);
+    }
+
+    public void AddPlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
+    {
+        playerAliveEvent.AddListener(lister);
+    }
+
+    public void RemovePlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
+    {
+        playerAliveEvent?.RemoveListener(lister);
+    }
     #endregion
 }

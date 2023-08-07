@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class InGameUI_OtherPlayerZone : SceneUI
 {
-    [SerializeField] InGameUI_PlayerAggroEntry playerAggroEntry;
-    [SerializeField] Dictionary<PhotonView, InGameUI_PlayerAggroEntry> playerAggroEntryDictionary;
+    [SerializeField] InGameUI_PlayerDataEntry playerAggroEntry;
+    [SerializeField] Dictionary<PhotonView, InGameUI_PlayerDataEntry> playerDataEntryDictionary;
     [SerializeField] Animator uiAnimator;
 
     public override void Initialize()
@@ -29,19 +29,19 @@ public class InGameUI_OtherPlayerZone : SceneUI
 
     public void AddPlayerEntry(PhotonView playerPhotonView)
     {
-        InGameUI_PlayerAggroEntry entry = GameManager.UI.ShowSceneUI(playerAggroEntry, transform);
+        InGameUI_PlayerDataEntry entry = GameManager.UI.ShowSceneUI(playerAggroEntry, transform);
         entry.SetTargetPlayerPhotonView(playerPhotonView);
-        playerAggroEntryDictionary.Add(playerPhotonView, entry);
+        playerDataEntryDictionary.Add(playerPhotonView, entry);
     }
 
     public void RemovePlayerEntry(PhotonView playerPhotonView)
     {
-        foreach(KeyValuePair<PhotonView, InGameUI_PlayerAggroEntry> keyValuePair in playerAggroEntryDictionary)
+        foreach(KeyValuePair<PhotonView, InGameUI_PlayerDataEntry> keyValuePair in playerDataEntryDictionary)
         {
             if(keyValuePair.Key.Equals(playerPhotonView))
             {
                 GameManager.Resource.Destroy(keyValuePair.Value);
-                playerAggroEntryDictionary.Remove(keyValuePair.Key);
+                playerDataEntryDictionary.Remove(keyValuePair.Key);
                 return;
             }
         }
@@ -49,11 +49,23 @@ public class InGameUI_OtherPlayerZone : SceneUI
 
     public void ModifyPlayerAggroValue(PhotonView playerPhotonView, float aggroValue)
     {
-        foreach(KeyValuePair<PhotonView, InGameUI_PlayerAggroEntry> photonViewAggroEntryPair in playerAggroEntryDictionary)
+        foreach(KeyValuePair<PhotonView, InGameUI_PlayerDataEntry> photonViewAggroEntryPair in playerDataEntryDictionary)
         {
             if (photonViewAggroEntryPair.Key.Equals(playerPhotonView))
             {
                 photonViewAggroEntryPair.Value.ModifiyAggro(aggroValue);
+                return;
+            }
+        }
+    }
+
+    public void CheckPlayerAlived(PhotonView playerPhotonView, bool alive)
+    {
+        foreach (KeyValuePair<PhotonView, InGameUI_PlayerDataEntry> photonViewAggroEntryPair in playerDataEntryDictionary)
+        {
+            if (photonViewAggroEntryPair.Key.Equals(playerPhotonView))
+            {
+                photonViewAggroEntryPair.Value.CheckAlive(alive);
                 return;
             }
         }

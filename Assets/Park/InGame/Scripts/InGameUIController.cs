@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InGameUIController : MonoBehaviour
 {
@@ -8,20 +9,31 @@ public class InGameUIController : MonoBehaviour
 
     [SerializeField] PhotonView playerPhotonView;
     [SerializeField] List<PhotonView> otherPlayerPhotonViews;
+    [SerializeField] GameObject optionUI;
 
     public PhotonView PlayerPhotonView {  get { return playerPhotonView; } }
     public List<PhotonView> OtherPlayerPhotonViews { get { return otherPlayerPhotonViews;} }
 
-    [SerializeField] InGameUI_PlayerAggroBar inGameUI_PlayerAggroBar;
+    [SerializeField] InGameUI_PlayerDataBar inGameUI_PlayerAggroBar;
     [SerializeField] InGameUI_OtherPlayerZone inGameUI_otherPlayerZone;
     [SerializeField] InGameUI_TimeSlider inGameUI_TimeSlider;
+
+    void Update()
+    {
+        if (!optionUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        {
+            optionUI.SetActive(true);
+        }
+    }
 
     public void Initialize()
     {
         inGameUI_PlayerAggroBar.Initialize();
         inGameUI_otherPlayerZone.Initialize();
         inGameUI_TimeSlider.Initialize();
-        inGameManager.AddPlayerAggroEventListenr(ModifyAggroUIValue);
+        inGameManager.AddPlayerAggroEventListenr(PlayerAggroValueModified);
+        inGameManager.AddPlayerAliveEventListenr(PlayerAliveValueModified);
+        optionUI.SetActive(false);
     }
 
     public void SetPlayerPhotonView(PhotonView player)
@@ -55,13 +67,13 @@ public class InGameUIController : MonoBehaviour
         }
     }
 
-    void ModifyAggroUIValue(Dictionary<int, float> playerAggroDictionary)
+    void PlayerAggroValueModified(Dictionary<int, float> playerAggroDictionary)
     {
         foreach(KeyValuePair<int, float> playerAggroPair in playerAggroDictionary)
         {
             if (playerAggroPair.Key.Equals(playerPhotonView.ViewID))
             {
-                inGameUI_PlayerAggroBar.ModifyAggro(playerAggroPair.Value);
+                inGameUI_PlayerAggroBar.ModifyAggroUI(playerAggroPair.Value);
             }
             else
             {
@@ -70,6 +82,28 @@ public class InGameUIController : MonoBehaviour
                     if (playerAggroPair.Key.Equals(otherPlayerPhotonViews[i].ViewID))
                     {
                         inGameUI_otherPlayerZone.ModifyPlayerAggroValue(otherPlayerPhotonViews[i], playerAggroPair.Value);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    void PlayerAliveValueModified(Dictionary<int, bool> playerAliveDictionary)
+    {
+        foreach(KeyValuePair<int, bool> playerAlivePair in playerAliveDictionary)
+        {
+            if (playerAlivePair.Key.Equals(playerPhotonView.ViewID))
+            {
+                inGameUI_PlayerAggroBar.CheckAlive(playerAlivePair.Value);
+            }
+            else
+            {
+                for(int i = 0; i < otherPlayerPhotonViews.Count; i++)
+                {
+                    if (playerAlivePair.Key.Equals(otherPlayerPhotonViews[i].ViewID))
+                    {
+                        inGameUI_otherPlayerZone.CheckPlayerAlived(otherPlayerPhotonViews[i], playerAlivePair.Value);
                         break;
                     }
                 }
