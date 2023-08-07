@@ -7,7 +7,7 @@ public class InteractAdaptor : MonoBehaviour, IInteractable
 {
     public UnityEvent OnInteract;
 
-    public void Interact()
+    public void Interact(PlayerInteraction player)
     {
         OnInteract?.Invoke();
     }

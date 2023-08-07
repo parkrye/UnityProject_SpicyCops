@@ -46,19 +46,19 @@ namespace Jeon
             {
                 DoFollow();
             }
-            else if (curTime >= 60f && curState == EnemyState.Follow)
+            else if (curTime >= inGameManager.TotalTime * 0.3f && curState == EnemyState.Follow)
             {
                 DoAngry();
             }
-            else if (curTime >= 120f && curState == EnemyState.Angry)
+            else if (curTime >= inGameManager.TotalTime * 0.6f && curState == EnemyState.Angry)
             {
                 DoSemiBerserker();
             }
-            else if (curTime >= 165f && curState == EnemyState.SemiBerserker)
+            else if (curTime >= inGameManager.TotalTime - 15f && curState == EnemyState.SemiBerserker)
             {
                 DoBerserker();
             }
-            else if (curTime >= 180f && curState == EnemyState.Berserker)
+            else if (curTime >= inGameManager.TotalTime && curState == EnemyState.Berserker)
             {
                 DoEndGame();
             }
@@ -74,15 +74,14 @@ namespace Jeon
             curSpeed = agent.speed;
             curTime = 0;
             material.color = Color.white;
-
-
+            playerTransform = new Dictionary<int, Transform>();
         }
 
 
         private void SetPlayerAggro(Dictionary<int, float> playerAggro) //아이디와 어그로수치
         {
             int ViewID = 0;
-            float highAggro = 0;
+            float highAggro = -1;
             foreach (KeyValuePair<int, float> keyValuePair in playerAggro)
             {
                 if (highAggro < keyValuePair.Value)
@@ -96,8 +95,6 @@ namespace Jeon
 
         public void Seting()
         {
-            StartCoroutine(FindPlayer());
-
             inGameManager.AddTimeEventListenr(SetServerTime);
 
             inGameManager.AddPlayerAggroEventListenr(SetPlayerAggro);
@@ -105,7 +102,9 @@ namespace Jeon
             foreach (int playerViewID in inGameManager.PlayerAggroDictionary.Keys)
             {
                 playerTransform.Add(playerViewID, PhotonView.Find(playerViewID).transform);
+                inGameManager.ModifyPlayerAggro(playerViewID, 0f);
             }
+            StartCoroutine(FindPlayer());
         }
 
 

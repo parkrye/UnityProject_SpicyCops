@@ -31,21 +31,21 @@ public class PlayerInteraction : MonoBehaviour
     // 상호작용
     public void Interact()
     {
-        if (canInteract)
-        {
+
             Collider[] colliders = Physics.OverlapSphere(point.position, range);
             foreach (Collider collider in colliders)
             {
                 IInteractable interactable = collider.GetComponent<IInteractable>();
-                interactable?.Interact();
+                interactable?.Interact(this);
                 anim.SetTrigger("IsPicked");
             }
             Debug.Log("Player Interact");
-        }
+        
     }
 
     private void OnInteract(InputValue value)
     {
+        Debug.Log("누름");
         Interact();
     }
 

@@ -7,6 +7,7 @@ using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ItemManager : MonoBehaviourPun
 {
+    public ItemSpot[] ItemSpots = new ItemSpot[1];
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
     private void Awake()
     {
@@ -37,12 +38,12 @@ public class ItemManager : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void RequestGiveRandomItem(PlayerInteraction player, PhotonMessageInfo info)
+    public void RequestGiveRandomItem(int playerId)
     {
         if (!photonView.IsMine)
             return;
-        int randNum = UnityEngine.Random.Range(0, itemList.Length);
-        photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, player, randNum);
+        int randNum = (int)Define.ItemIndex.SmokeBomb;
+        ItemSpots[0].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
     
 }

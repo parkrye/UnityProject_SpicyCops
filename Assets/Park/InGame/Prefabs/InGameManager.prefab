@@ -46,9 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nowTime: 0
-  totalTime: 300
+  totalTime: 180
   safeArea: {fileID: 0}
   enemy: {fileID: 0}
+  startPositions: []
+  startNum: 0
+  inGameUIController: {fileID: 0}
+  playerCamera: {fileID: 0}
 --- !u!114 &2526807270449311358
 MonoBehaviour:
   m_ObjectHideFlags: 0

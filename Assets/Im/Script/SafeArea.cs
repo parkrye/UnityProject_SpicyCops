@@ -1,5 +1,4 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,28 +9,29 @@ public class SafeArea : MonoBehaviourPun
     [SerializeField] float minScale = 55;
     [SerializeField] float time = 120;
 
-    public List<Player> inAreaPlayer;
-    public List<Player> outAreaPlayer;
+    public List<int> inAreaPlayer;
+    public List<int> outAreaPlayer;
+    public InGameManager gameManager;
 
     public void GameStartSetting()
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        inAreaPlayer = new List<Player>();
-        outAreaPlayer = new List<Player>();
-        foreach(Player player in PhotonNetwork.PlayerList)
+        inAreaPlayer = new List<int>();
+        outAreaPlayer = new List<int>();
+        foreach(int viewID in gameManager.PlayerAggroDictionary.Keys)
         {
-            inAreaPlayer.Add(player);
+            inAreaPlayer.Add(viewID);
         }
         AreaEnable();
     }
     private void OnCollisionExit(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player != null)
+        PhotonView collide = collision.gameObject.GetComponent<PhotonView>();
+        if (inAreaPlayer.Contains(collide.ViewID))
         {
-            outAreaPlayer.Add(player);
-            inAreaPlayer.Remove(player);
+            outAreaPlayer.Add(collide.ViewID);
+            inAreaPlayer.Remove(collide.ViewID);
         }
         // 플레이어인지 체크하고
         // 나간 플레이어는 나간플레이어 목록에 추가하고
@@ -39,11 +39,11 @@ public class SafeArea : MonoBehaviourPun
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player != null)
+        PhotonView collide = collision.gameObject.GetComponent<PhotonView>();
+        if (inAreaPlayer.Contains(collide.ViewID))
         {
-            inAreaPlayer.Add(player);
-            outAreaPlayer.Remove(player);
+            inAreaPlayer.Add(collide.ViewID);
+            outAreaPlayer.Remove(collide.ViewID);
         }
     }
 

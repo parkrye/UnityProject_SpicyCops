@@ -15,6 +15,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] float nowTime, totalTime;
     public float NowTime { get { return nowTime; } set { nowTime = value; } }
     public float TotalTime { get { return totalTime; } set { totalTime = value; } }
+    [SerializeField] int readyPlayerCount;
 
     [SerializeField] SafeArea safeArea;
 
@@ -170,6 +171,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
             // 에너미가 이 스크립트 참조
             StartCoroutine(TimerRoutine());
             safeArea.GameStartSetting();
+            StartCoroutine(GameSetting());
         }
     }
 
@@ -188,8 +190,19 @@ public class InGameManager : MonoBehaviourPunCallbacks
             // 에너미가 this 참조
             StartCoroutine(TimerRoutine());
             safeArea.GameStartSetting();
+            StartCoroutine(GameSetting());
         }
     } 
+
+    IEnumerator GameSetting()
+    {
+        while(readyPlayerCount < PhotonNetwork.PlayerList.Length)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        enemy.Seting();
+
+    }
     #endregion
 
     #region Timer
@@ -242,9 +255,18 @@ public class InGameManager : MonoBehaviourPunCallbacks
         player.transform.position = startPositions[startNum++].position;
         inGameUIController.AddOtherPlayerPhotonView(player);
         InGameAvatarManager playerAvatarManager = player.GetComponent<InGameAvatarManager>();
-        playerAvatarManager.Initialize(avatarNum, colorNum);
+        /*playerAvatarManager.Initialize(avatarNum, colorNum);*/ // 스킨관련떄문에 주석처리함
         // 플레이어가 this 참조
+        ModifyPlayerAggro(photonViewID, 0f);
+        photonView.RPC("RequestCreatedPlayer", RpcTarget.MasterClient);
+
     }
+    [PunRPC]
+    void RequestCreatedPlayer(PhotonMessageInfo info)
+    {
+        readyPlayerCount++;
+    }
+
     #endregion
 
     #region Aggro Manager
