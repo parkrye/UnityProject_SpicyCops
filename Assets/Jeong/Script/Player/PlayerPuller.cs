@@ -1,11 +1,12 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerPuller : MonoBehaviour
+public class PlayerPuller : MonoBehaviourPun
 {
-    [SerializeField] private bool debug; // Ray확인용
+    [SerializeField] private bool debug; // Gizmo확인용
 
     [SerializeField] private float pullForce; // 잡아당기는 힘
     [SerializeField] private float pullRange; // 잡아당기는 범위
@@ -18,16 +19,22 @@ public class PlayerPuller : MonoBehaviour
     private bool canPull = true; // 잡기 가능한지 여부
     // ******************************************************************
 
-    [SerializeField] private PlayerMover mover;
+    
     [SerializeField] private bool isPulling = false;
 
-    private GameObject targetPlayer;
     [SerializeField] private GameObject currentPullTarget;
+    [SerializeField] private GameObject targetPlayer;
+
+    private PlayerInput playerInput;
     private Animator anim;
 
     private void Start()
     {
+        playerInput  = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
+
+        if (!photonView.IsMine)
+            Destroy(playerInput);
     }
 
     private void FixedUpdate()
@@ -36,35 +43,23 @@ public class PlayerPuller : MonoBehaviour
         {
             // 현재 시간이 지속시간을 초과하면 잡기 상태 해제
             if (Time.time - pullingStartTime > pullDuration)
-        {
-            isPulling = false;
-            anim.SetBool("IsPulled", false);
-            targetPlayer = null;
-            // 쿨타임 시작
-            StartCoroutine(PullCooldown());
-        }
-        // 잡아당기기 동작
-        else
-        {
-            PullTarget();
-           /* // isPulling이 true면 계속해서 타겟을 찾는다.
-            // 현재 시간이 지속시간을 초과하면 잡기 상태 해제
-            if (isPulling)
             {
-                // PlayerMover 클래스의 isPulling 값을 설정
-                mover.SetIsPulling(true);
-                FindTargetPlayer();
+                isPulling = false;
+                anim.SetBool("IsPulled", false);
+                targetPlayer = null;
+                // 쿨타임 시작
+                StartCoroutine(PullCooldown());
             }
+
+            // 잡아당기기 동작
             else
             {
-                // PlayerMover 클래스의 isPulling 값을 해제
-                mover.SetIsPulling(false);
-            }*/
+                PullTarget();
+            }
         }
-    }
         else if (!canPull && Time.time - pullingStartTime < pullCooltime)
         {
-            Debug.Log("Cooltime: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
+            Debug.Log("Cooltimes: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
         }
     }
 
@@ -72,22 +67,20 @@ public class PlayerPuller : MonoBehaviour
 
     private void OnPull(InputValue value)
     {
-        
         // x키를 누르면 
         if (value.isPressed && canPull)
         {
             if (currentPullTarget != null)
             {
-                Debug.Log("OnPull == true");
                 isPulling = true;
                 pullingStartTime = Time.time;
+                FindTargetPlayer();
                 anim.SetBool("IsPulled", true);
                 canPull = false; // 잡기 후 쿨타임 적용
             }
         }
         else
-        {
-            Debug.Log("OnPull == false");
+        { 
             isPulling = false;
             anim.SetBool("IsPulled", false);
             targetPlayer = null; // 잡기 해제
@@ -103,7 +96,6 @@ public class PlayerPuller : MonoBehaviour
 
     private void PullTarget()
     {
-        Debug.Log("PullTarget");
         // 타겟을 찾으면 잡아당긴다.
         if (isPulling && targetPlayer != null)
         {
@@ -113,7 +105,6 @@ public class PlayerPuller : MonoBehaviour
 
     private void FindTargetPlayer() // 잡아당길 Player 탐색
     {
-        Debug.Log("FindTargetPlayer");
         Collider[] colliders = Physics.OverlapSphere(transform.position, pullRange);
 
         // 가장 가까운 Player와의 거리를 최대값으로 초기화하고, Player의 GameObject를 null로 초기화한다.
@@ -125,8 +116,8 @@ public class PlayerPuller : MonoBehaviour
         {
             if (collider.gameObject != gameObject && collider.gameObject.CompareTag("Player"))
             {
-                SphereCollider sphereCollider = collider.gameObject.GetComponent<SphereCollider>();
-                if (sphereCollider != null && sphereCollider == currentPullTarget)
+                CapsuleCollider capsuleCollider = collider.gameObject.GetComponent<CapsuleCollider>();
+                if (capsuleCollider != null)
                 {
                     // 현재 Player와 다른 Player 사이의 거리 계산
                     float distance = Vector3.Distance(transform.position, collider.transform.position);
@@ -148,7 +139,7 @@ public class PlayerPuller : MonoBehaviour
     // 잡아당기기 
     private void Pull(GameObject player)
     {
-        Debug.Log("Pull");
+        
         // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
         Vector3 directionToTarget = (player.transform.position - transform.position).normalized;
 
@@ -164,20 +155,15 @@ public class PlayerPuller : MonoBehaviour
         // 잡아당기는 Player와 잡히는 Player는 속도가 느려진다.
         float slowDownFactor = 0.5f;
         player.GetComponent<PlayerMover>().SetMoveSpeed(player.GetComponent<PlayerMover>().moveSpeed * slowDownFactor);
-
-        // PlayerMover의 targetPlayer를 설정한다.
-        player.GetComponent<PlayerMover>().SetTargetPlayer(gameObject);
     }
 
     public void SetPullTarget(GameObject target)
     {
-        Debug.Log("SetPullTarget");
         currentPullTarget = target;
     }
 
     public void ClearPullTarget()
     {
-        Debug.Log("ClearPullTarget");
         currentPullTarget = null;
     }
 

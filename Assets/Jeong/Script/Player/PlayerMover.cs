@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Photon.Pun.Demo.Procedural;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,48 +9,37 @@ using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
-public class PlayerMover : MonoBehaviour
+public class PlayerMover : MonoBehaviourPun
 {
     [SerializeField] public float moveSpeed; // 이동속도
     [SerializeField] private float maxSpeed; // 최대 이동속도
 
     [SerializeField] public float rotateSpeed; // 회전속도
 
-    [SerializeField] private bool keepFacingTarget = false; // 잡히는 플레이어를 계속해서 바라보도록 할지 여부
-
     private float curSpeed = 0f;
-
-    private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
-
-    [SerializeField]private GameObject targetPlayer; // 잡혀지는 플레이어를 저장하는 변수
 
     private Animator anim;
     private Rigidbody rigid;
+    private PlayerInput playerInput;
+
     private Vector2 inputDir;
     private float ySpeed;
+
+    private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
 
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        playerInput = GetComponent<PlayerInput>();
+
+        if (!photonView.IsMine)
+            Destroy(playerInput);
     }
 
     private void FixedUpdate()
     {
-        if (!isPulling)
-        {
-            Move();
-        }
-    }
-
-    public void SetIsPulling(bool pulling)
-    {
-        isPulling = pulling;
-    }
-
-    public void SetTargetPlayer(GameObject player)
-    {
-        targetPlayer = player;
+        Move();
     }
 
     private void Move()
@@ -64,16 +54,9 @@ public class PlayerMover : MonoBehaviour
         // 회전
         if (moveDir != Vector3.zero)
         {
-            if (isPulling)
-            {
-                // 잡히는 플레이어를 바라보도록 회전 (잡기 중에만)
-                transform.LookAt(targetPlayer.transform.position, Vector3.up);
-            }
-            else
-            {
-                // 이동 방향으로 회전 (잡기 중이 아닐 때)
-                transform.forward = Vector3.Lerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
-            }
+            // 이동 방향으로 회전 (잡기상태가 아닐떄)
+            if(!isPulling)
+            transform.forward = Vector3.Lerp(transform.forward, moveDir, rotateSpeed * Time.deltaTime);
         }
 
         // 최대속력
@@ -94,5 +77,7 @@ public class PlayerMover : MonoBehaviour
     {
         moveSpeed = speed;
     }
+
+  
 
 }

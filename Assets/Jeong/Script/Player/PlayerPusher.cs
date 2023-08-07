@@ -5,18 +5,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerPusher : MonoBehaviour
-{/*
+{
     [SerializeField] private bool debug;
     [SerializeField] private float pushForce; // 미는 힘
     [SerializeField] private float pushRange; // 밀 수 있는 범위
-    [SerializeField] private PlayerMover mover;
+
+    // ******************* 아래는 서버에서 받아올 항목*********************
+    [SerializeField] private float pushDuration; // 미는 시간
+    [SerializeField] private float pushCooltime; // 밀기 쿨타임
+
+    private float pushingStartTime; // 밀기 시작 시간
+    private bool canPush = true; // 밀기 가능한지 여부
+    // ******************************************************************
 
     [SerializeField] private bool isPushing = false;
 
-    private GameObject targetPlayer;
     private Animator anim;
-
-    private Coroutine pushRoutine;
+    
+    [SerializeField] private GameObject currentPullTarget;
+    [SerializeField] private GameObject targetPlayer;
 
     private void Start()
     {
@@ -25,19 +32,44 @@ public class PlayerPusher : MonoBehaviour
 
     private void FixedUpdate()
     {
-        PushTarget();
-        // isPushing이 true면 계속해서 타겟을 찾는다.
         if (isPushing)
         {
-            FindTargetPlayer();
+            if(Time.time - pushingStartTime > pushDuration)
+            {
+                isPushing = false;
+                anim.SetBool("IsPushed", false);
+                targetPlayer = null;
+                // 쿨타임 시작
+                StartCoroutine(PushCooldown());
+            }
+            
+            // 밀기 동작
+            else
+            {
+                PushTarget();
+            }
+        }
+        else if (!canPush && Time.time - pushingStartTime < pushCooltime)
+        {
+            Debug.Log("Cooltimes: " + Mathf.Max(0, (pushingStartTime + pushCooltime - Time.time)).ToString("0") + " seconds");
         }
     }
 
     private void OnPush(InputValue value)
     {
         // z키를 누르면 
-        if (value.isPressed)
-        PushTarget();
+        if (value.isPressed && canPush)
+        {
+            if (currentPullTarget != null)
+            {
+                isPushing = true;
+                pushingStartTime = Time.time;
+                FindTargetPlayer();
+                anim.SetTrigger("IsPushed");
+                canPush = false;
+            }
+        }
+            
     }
 
     private void PushTarget()
@@ -45,23 +77,19 @@ public class PlayerPusher : MonoBehaviour
         // 타겟을 찾으면 민다.
         if (isPushing && targetPlayer != null)
         {
-            pushRoutine = StartCoroutine(PushRoutine);
-        }
-    }
-
-    IEnumerator PushRoutine()
-    {
-        while (true)
-        {
             Push(targetPlayer);
-            anim.SetTrigger("IsPushed");
-            isPushing = true;
-            yield return new WaitForSeconds(10f);
-            isPushing = false;
         }
     }
 
-    private void FindTargetPlayer() // 밀쳐버릴 Player 탐색
+
+    private IEnumerator PushCooldown()
+    {
+        yield return new WaitForSeconds(pushCooltime);
+        canPush = true; // 쿨타임 종료 후 다시 잡을 수 있도록 설정
+        currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
+    }
+
+    private void FindTargetPlayer() // 잡아당길 Player 탐색
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, pushRange);
 
@@ -72,19 +100,21 @@ public class PlayerPusher : MonoBehaviour
         // 범위안의 Collider를 모두 확인하는 작업
         foreach (Collider collider in colliders)
         {
-            // Player 태그 탐색
             if (collider.gameObject != gameObject && collider.gameObject.CompareTag("Player"))
             {
-                // 현재 Player와 다른 Player 사이의 거리 계산
-                float distance = Vector3.Distance(transform.position, collider.transform.position);
-
-                // 거리가 더 가까운 Player를 찾으면
-                if (distance < closestDistance)
+                CapsuleCollider capsuleCollider = collider.gameObject.GetComponent<CapsuleCollider>();
+                if (capsuleCollider != null)
                 {
-                    // 최대값으로 초기화했던 가장 가까운거리를 새로찾은 거리로 갱신하고
-                    closestDistance = distance;
-                    // 마찬가지로 null이 들어있던 Player의 Gameobject도 새로 갱신한다.
-                    closestPlayer = collider.gameObject;
+                    // 현재 Player와 다른 Player 사이의 거리 계산
+                    float distance = Vector3.Distance(transform.position, collider.transform.position);
+                    // 거리가 더 가까운 Player를 찾으면
+                    if (distance < closestDistance)
+                    {
+                        // 최대값으로 초기화했던 가장 가까운거리를 새로찾은 거리로 갱신하고
+                        closestDistance = distance;
+                        // 마찬가지로 null이 들어있던 Player의 Gameobject도 새로 갱신한다.
+                        closestPlayer = collider.gameObject;
+                    }
                 }
             }
         }
@@ -100,11 +130,17 @@ public class PlayerPusher : MonoBehaviour
 
         // 미려는 Player 오브젝트의 Rigidbody 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 민다.
         player.GetComponent<Rigidbody>().AddForce(directionToTarget * pushForce, ForceMode.Impulse);
-        
-        // ToDo
-        // 미려는 Player는 밀리는 Player를 바라봐야한다.
     }
 
+    public void SetPullTarget(GameObject target)
+    {
+        currentPullTarget = target;
+    }
+
+    public void ClearPullTarget()
+    {
+        currentPullTarget = null;
+    }
 
     private void OnDrawGizmosSelected()
     {
@@ -113,5 +149,5 @@ public class PlayerPusher : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, pushRange);
-    }*/
+    }
 }
