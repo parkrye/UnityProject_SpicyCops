@@ -69,9 +69,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1347492666}
   - component: {fileID: 1347492667}
+  - component: {fileID: 2051056854}
   m_Layer: 0
-  m_Name: pullTarget
-  m_TagString: Untagged
+  m_Name: PullTarget
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347492665}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -105,6 +106,18 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0.7}
+--- !u!114 &2051056854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347492665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11cf01f86f909eb42a1cc0d4850baeae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &313990516559857683
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,6 +199,7 @@ GameObject:
   - component: {fileID: 6331125720310579712}
   - component: {fileID: 971852262734992764}
   - component: {fileID: 1430067383}
+  - component: {fileID: 1430067391}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -308,7 +322,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 300
   maxSpeed: 300
-  roateSpeed: 30
+  rotateSpeed: 30
+  keepFacingTarget: 1
+  targetPlayer: {fileID: 0}
 --- !u!114 &6331125720310579712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,10 +338,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  pullForce: 50
-  pullRange: 1
+  pullForce: 100
+  pullRange: 2
+  pullDuration: 5
+  pullCooltime: 10
   mover: {fileID: 3867471486490592155}
   isPulling: 0
+  currentPullTarget: {fileID: 0}
 --- !u!114 &971852262734992764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,6 +369,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f2522a35ae72c4b9760d22891d6ace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1430067391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763264028448811103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff639a57c1e0514b993b89626cf4b7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 1
+  point: {fileID: 1347492666}
+  range: 1
 --- !u!1 &1406072523747191004
 GameObject:
   m_ObjectHideFlags: 0
