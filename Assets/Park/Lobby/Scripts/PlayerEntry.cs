@@ -56,6 +56,11 @@ public class PlayerEntry : SceneUI
 	public void SetPlayerReady(bool ready)
 	{
         texts["ReadyText"].text = ready ? "Ready" : "";
+        if (ready)
+        {
+            GameData.CurrentAvatarNum = avatarNum;
+            GameData.CurrentColorNum = avatarColorNum;
+        }
 	}
 
 	public void OnReadyButtonClicked()
