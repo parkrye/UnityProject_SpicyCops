@@ -23,7 +23,6 @@ public static class GameData
     public static UserData userData;
 	public static Dictionary<string, UserData> accounts;
 
-    // All Buyable Avatar Names
     public static readonly List<string> AVATAR = new()
 	{
         "Bandit",
@@ -38,4 +37,7 @@ public static class GameData
 	};
 
 	public const float MAX_AGGRO = 100f;
+
+	public static int CurrentAvatarNum = 0;
+	public static int CurrentColorNum = 0;
 }

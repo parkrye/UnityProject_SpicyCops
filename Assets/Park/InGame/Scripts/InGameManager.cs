@@ -20,9 +20,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] Dictionary<int, float> playerAggroDictionary;   // <view id, aggro>
     [SerializeField] Dictionary<int, bool> playerAliveDictionary;   // <view id, alve>
+    [SerializeField] Dictionary<int, int> playerIDDictonary;    // <actor number, view id>
     public Dictionary<int, float> PlayerAggroDictionary { get { return playerAggroDictionary; } }
     public Dictionary<int, bool> PlayerAliveDictionary { get { return playerAliveDictionary; } }
-    [SerializeField] Dictionary<int, int> playerIDDictonary;    // <actor number, view id>
+    public Dictionary<int, int> PlayerIDDictionary { get { return playerIDDictonary; } }
 
     [SerializeField] Enemy enemy;
 
@@ -40,9 +41,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        playerAggroDictionary = new Dictionary<int, float>();
         timeEvent = new UnityEvent<float>();
         playerAggroEvent = new UnityEvent<Dictionary<int, float>>();
+        playerAliveEvent = new UnityEvent<Dictionary<int, bool>>();
+        playerAggroDictionary = new Dictionary<int, float>();
         playerAliveDictionary = new Dictionary<int, bool>();
         playerIDDictonary = new Dictionary<int, int>();
         inGameUIController.Initialize();
@@ -158,7 +160,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
         GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
-        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.UserId, player.GetComponent<PhotonView>().ViewID);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
 
@@ -176,7 +178,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
         GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
-        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.UserId, player.GetComponent<PhotonView>().ViewID);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
 
@@ -226,12 +228,12 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     #region Adding Player
     [PunRPC]
-    void RequestAddPlayer(int playerActorNumber, int photonViewID, PhotonMessageInfo info)
+    void RequestAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum, PhotonMessageInfo info)
     {
-        ResultAddPlayer(playerActorNumber, photonViewID);
+        ResultAddPlayer(playerActorNumber, photonViewID, avatarNum, colorNum);
     }
 
-    public void ResultAddPlayer(int playerActorNumber, int photonViewID)
+    public void ResultAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
         PhotonView player = PhotonView.Find(photonViewID);
         playerAggroDictionary.Add(photonViewID, 0f);
@@ -239,6 +241,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerIDDictonary.Add(playerActorNumber, photonViewID);
         player.transform.position = startPositions[startNum++].position;
         inGameUIController.AddOtherPlayerPhotonView(player);
+        InGameAvatarManager playerAvatarManager = player.GetComponent<InGameAvatarManager>();
+        playerAvatarManager.Initialize(avatarNum, colorNum);
         // 플레이어가 this 참조
     }
     #endregion
