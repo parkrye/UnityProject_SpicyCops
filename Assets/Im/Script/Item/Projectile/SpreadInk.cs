@@ -11,10 +11,10 @@ public class SpreadInk : UtilItem
     {
         // 코루틴
     }
-    IEnumerator Ink()
+    public override IEnumerator Corutine(Player player)
     {
         // 화면가리기
         yield return new WaitForSeconds(5);
-        // 자괴?
+        // 치우기
     }
 }

@@ -1,9 +1,9 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ItemManager : MonoBehaviourPun
 {
@@ -29,5 +29,20 @@ public class ItemManager : MonoBehaviourPun
     {
         float lag = (float)(PhotonNetwork.Time - sentTime);
         itemList[index].UseItem(pos, rot, lag, player);
+        if (itemList[index].WeaponType == Define.WeaponType.Util)
+        {
+            UtilItem uItem = (UtilItem)itemList[index];
+            StartCoroutine(uItem.Corutine(player));
+        }
     }
+
+    [PunRPC]
+    public void RequestGiveRandomItem(PlayerInteraction player, PhotonMessageInfo info)
+    {
+        if (!photonView.IsMine)
+            return;
+        int randNum = UnityEngine.Random.Range(0, itemList.Length);
+        photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, player, randNum);
+    }
+    
 }

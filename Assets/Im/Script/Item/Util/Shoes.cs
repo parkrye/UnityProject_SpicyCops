@@ -10,10 +10,10 @@ public class Shoes : UtilItem
     {
         // 코루틴 실행 요청
     }
-    IEnumerator SpeedUp(Player player)
+    public override IEnumerator Corutine(Player player)
     {
-        // 플레이어 속도증가
+        // 속도 증가
         yield return new WaitForSeconds(5);
-        // 원래속도로
+        // 원래대로
     }
 }
