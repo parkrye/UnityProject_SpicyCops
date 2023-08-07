@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,18 +12,24 @@ namespace Jeon
 {
     public abstract class Enemy : MonoBehaviour
     {
+        [SerializeField] Transform player;
+
         private Rigidbody rb;
         private NavMeshAgent agent;
         private Vector3 followPos;
         public Animator anim;
+        [SerializeField] InGameManager inGameManager;
 
         Dictionary<string, int> playerState = new Dictionary<string, int>();
+        Dictionary<int, Transform> playerTransform;
 
-        [SerializeField] Transform players;
+
         [SerializeField] Transform catchZone;
         [SerializeField] float targetFindTime;
 
-        public enum EnemyState { Idle, Follow, Angry, Berserker, Catch}
+        int maxAggroViewID;
+
+        public enum EnemyState { Idle, Follow, Angry, SemiBerserker, Berserker, End, Catch}
 
         private EnemyState curState;
         private EnemyState lastState;
@@ -29,44 +37,77 @@ namespace Jeon
         [SerializeField] float curTime;            // 현재시간은 게임내에서 시간을 적용시킨다 약 : 처음 시간은 180초
         [SerializeField] float curSpeed;
 
-        public void Awake()
+        [SerializeField] Material material;
+
+        private void SetServerTime(float time)
         {
+            curTime = time;
+            if (curTime >= 5f && curState == EnemyState.Idle)
+            {
+                DoFollow();
+            }
+            else if (curTime >= 60f && curState == EnemyState.Follow)
+            {
+                DoAngry();
+            }
+            else if (curTime >= 120f && curState == EnemyState.Angry)
+            {
+                DoSemiBerserker();
+            }
+            else if (curTime >= 165f && curState == EnemyState.SemiBerserker)
+            {
+                DoBerserker();
+            }
+            else if (curTime >= 180f && curState == EnemyState.Berserker)
+            {
+                DoEndGame();
+            }
+        }
+
+        private void Awake()
+        {
+
             rb = GetComponent<Rigidbody>();
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animator>();
             //catchZone = GameObject.Find("CatchZone").transform;
-            curTime = 180f;      // time = InGameManager에서 받아오기
             curSpeed = agent.speed;
-        }
-        private void Start()
-        {
-            players = GameObject.FindGameObjectWithTag("Player").transform;
+            curTime = 0;
+            material.color = Color.white;
 
-            StartCoroutine(FinedPlayer());
+
         }
 
-        private void Update()
+
+        private void SetPlayerAggro(Dictionary<int, float> playerAggro) //아이디와 어그로수치
         {
-            
-            switch (curState)
+            int ViewID = 0;
+            float highAggro = 0;
+            foreach (KeyValuePair<int, float> keyValuePair in playerAggro)
             {
-                case EnemyState.Idle:
-                    DoIdle();
-                    break;
-                case EnemyState.Follow:
-                    DoFollow();
-                    break;
-                case EnemyState.Angry:
-                    DoAngry();
-                    break;
-                case EnemyState.Berserker:
-                    DoBerserker();
-                    break;
-                case EnemyState.Catch:
-                    DoCatch();
-                    break;
+                if (highAggro < keyValuePair.Value)
+                {
+                    highAggro = keyValuePair.Value;
+                    ViewID = keyValuePair.Key;
+                }
+            }
+            maxAggroViewID = ViewID;
+        }
+
+        public void Seting()
+        {
+            StartCoroutine(FindPlayer());
+
+            inGameManager.AddTimeEventListenr(SetServerTime);
+
+            inGameManager.AddPlayerAggroEventListenr(SetPlayerAggro);
+
+            foreach (int playerViewID in inGameManager.PlayerAggroDictionary.Keys)
+            {
+                playerTransform.Add(playerViewID, PhotonView.Find(playerViewID).transform);
             }
         }
+
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -75,28 +116,14 @@ namespace Jeon
                 anim.SetTrigger("InArea");
             }
         }
-        private void DoIdle()
-        {
-            
-            // 게임을 시작할 때 잠깐 몇초동안 가만히 있는다
-            if (curTime <= 175f)
-            {
-                curState = EnemyState.Follow;
-                
-            }
-            StopCoroutine(FinedPlayer());
-        }
         private void DoFollow()
         {
             anim.SetBool("WalkTime", true);
             agent.speed = 3f;
 
             // Player중에 어그로수치가 가장 높은 player를 쫒는다
-            if (curTime <= 120f)
-            {
-                curState = EnemyState.Angry;
-
-            }
+            curState = EnemyState.Follow;
+            material.color = new Color(1, 0.75f, 0.75f);
         }
 
         private void DoAngry()
@@ -106,30 +133,38 @@ namespace Jeon
             anim.SetBool("WalkTime", false);
             anim.SetBool("RunningTime", true);
 
-            if (curTime <= 60f)
-            {
-                curState = EnemyState.Berserker;
-            }
+            curState = EnemyState.Angry;
+            material.color = new Color(1, 0.45f, 0.45f);
         }
 
-        private void DoBerserker()
+        private void DoSemiBerserker()
         {
             agent.speed = 4f;
-            if (curTime <= 15f)
-            {
-                agent.speed = 6f;
-            }
-            else if (curTime <= 0)
-            {
-                agent.speed = 0f;
-                StopAllCoroutines();
-            }
+
+            material.color = new Color(1, 0.15f, 0.15f);
+            curState = EnemyState.SemiBerserker;
+        }
+        private void DoBerserker()
+        {
+            agent.speed = 6f;
+            material.color = new Color(0.24f, 0f, 0f);
+
+            curState = EnemyState.Berserker;
+        }
+
+        private void DoEndGame()
+        {
+            agent.speed = 0f;
+            curState = EnemyState.End;
+
+            material.color = Color.white;
+
+            StopAllCoroutines();
         }
 
         private void DoCatch()
         {
             curSpeed = agent.speed;
-            lastState = curState;
 
             agent.speed = 0.1f;
         }
@@ -141,16 +176,15 @@ namespace Jeon
             curState = lastState;
         }
 
-        IEnumerator FinedPlayer()
+        IEnumerator FindPlayer()
         {
             yield return new WaitForSeconds(5f);
             
             curState = EnemyState.Idle;
-            curTime = 175f;
             yield return null;
             while (true)
             {
-                agent.destination = players.transform.position;
+                agent.destination = playerTransform[maxAggroViewID].position;
                 yield return new WaitForSeconds(0.5f);
             }
         }
