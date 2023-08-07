@@ -11,18 +11,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float curAggro;
     [SerializeField] private float maxAggro;
 
-    private enum PlayerState { Idle, Attack, Hit, Targetting, Slow, Strun, Dead, Size } // 대기, 공격, 타겟,  피격, 둔화, 기절, 잡힘
+    private enum PlayerState { Idle, Attack, Hit, Slow, Strun, Dead, Size } // 대기, 공격, 피격, 둔화, 기절, 잡힘
 
     private PlayerState curState;
-    private PlayerState lastState;
 
-    
-    private void AggroGauge()
+    private void Start()
     {
-        // Player 어그로 수치 관리
-        // 인게임매니저를 통해 어그로수치를 서버에 발신요청한다.
-        // 서버에서 수락하면 어그로수치를 인게임매니저를 통해 다른 Player와 Enemy에게 어그로 수치를 발신한다.
-        // 인게임 매니저를 통해 다른Player의 어그로수치를 받아온다.
+        curState = PlayerState.Idle;
     }
 
     private void Update()
@@ -37,14 +32,6 @@ public class PlayerController : MonoBehaviour
                 DoAttack();
                 break;
 
-            case PlayerState.Targetting:
-                DoTargetting();
-                break;
-
-            case PlayerState.Dead:
-                DoDead();
-                break;
-
             case PlayerState.Hit:
                 DoHit();
                 break;
@@ -56,14 +43,29 @@ public class PlayerController : MonoBehaviour
             case PlayerState.Strun:
                 DoSturn();
                 break;
+
+            case PlayerState.Dead:
+                DoDead();
+                break;
         }
     }
 
+    private void AggroGauge()
+    {
+        // Player 어그로 수치 관리
+        // 인게임매니저를 통해 어그로수치를 서버에 발신요청한다.
+        // 서버에서 수락하면 어그로수치를 인게임매니저를 통해 다른 Player와 Enemy에게 어그로 수치를 발신한다.
+        // 인게임 매니저를 통해 다른Player의 어그로수치를 받아온다.
+    }
 
     private void DoIdle()
     {
         // 대기상태, 다른 상태 진입
-        // Attack, Hit, Targetting, Sturn, Caught 전환
+        // Attack, Hit,  Sturn, Dead 전환
+
+        // 공격 아이템 습득시 DoAttack 상태전환
+        // 피격 당할시 DoHit 상태전환
+        // Enemy에게 잡힐시 Dead 상태전환
     }
 
 
@@ -72,35 +74,37 @@ public class PlayerController : MonoBehaviour
         // 공격상태
         // Idle 전환
         // 아이템 사용
+
+        // 공격 아이템 사용 후 DoIdle 상태전환
+        // Enemy에게 잡힐시 Dead 상태전환
     }
 
     private void DoHit()
     {
         // 피격상태, 다른 상태 진입
-        // Idle, Slow, Sturn, Targetting 전환 
-        // 아이템 피격 
-    }
+        // Slow, Sturn 전환 
 
-    private void DoTargetting()
-    {
-        // 어그로수치가 가장 높은 상태
-        // Idle, Caught 전환
-        // 아이템 피격
+        // 둔화 아이템 피격시 Slow 상태전환
+        // 기절 아이템 피격시 Strun 상태전환
+        // Enemy에게 잡힐시 Dead 상태전환
     }
-
 
     private void DoSlow()
     {
-        // Hit을 통한 둔화상태
-        // Idle, Targetting, Caught 전환
-        // 아이템 피격
+        // 아이템 피격 둔화
+        // Idle, Dead 전환
+
+        // 둔화 후 일정시간 이후 Idle 상태전환
+        // Enemy에게 잡힐시 Dead 상태전환
     }
 
     private void DoSturn()
     {
-        // Hit을 통한 기절상태
-        // Idle, Targetting, Caught 전환
-        // 아이템 피격
+        // 아이템 피격 기절
+        // Idle, Dead 전환
+
+        // 기절 후 일정시간 이후 Idle 상태전환
+        // Enemy에게 잡힐시 Dead 상태전환
     }
 
     private void DoDead()
