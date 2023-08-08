@@ -152,6 +152,74 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "8439314f-85f6-418d-8ad2-138d29b8a7f7",
+            "actions": [
+                {
+                    "name": "ESC",
+                    "type": "Button",
+                    "id": "e344d7ab-f6c5-4fc2-a790-04cc359b9c1a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Tab",
+                    "type": "Button",
+                    "id": "1a5471c8-e372-4297-b38e-f8a9ff10d4d2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "F5",
+                    "type": "Button",
+                    "id": "f9dec532-2a3f-4874-83e1-c3389d636f78",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "692890ec-181a-4386-afa9-357be36a27fc",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ESC",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "feac3dfb-60df-49aa-b163-b29b6c971f43",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3b13ae1b-58a9-41b3-95bd-8f6dd486d13b",
+                    "path": "<Keyboard>/f5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "F5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

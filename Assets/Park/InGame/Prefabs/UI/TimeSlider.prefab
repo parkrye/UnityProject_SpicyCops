@@ -467,7 +467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inGameUIController: {fileID: 0}
-  timeValue: 300
+  timeValue: 180
 --- !u!1 &5232040638505435221
 GameObject:
   m_ObjectHideFlags: 0
