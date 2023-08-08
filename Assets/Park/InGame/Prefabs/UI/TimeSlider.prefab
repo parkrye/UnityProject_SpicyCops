@@ -175,7 +175,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -466,8 +466,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d90798b404d6d2346958f67d923288d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inGameUIController: {fileID: 0}
   timeValue: 300
-  maxTime: 300
 --- !u!1 &5232040638505435221
 GameObject:
   m_ObjectHideFlags: 0

@@ -128,8 +128,8 @@ public class PlayerPusher : MonoBehaviour
         // 현재 Player 오브젝트와 미려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
         Vector3 directionToTarget = (player.transform.position - transform.position).normalized;
 
-        // 미려는 Player 오브젝트의 Rigidbody 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 민다.
-        player.GetComponent<Rigidbody>().AddForce(directionToTarget * pushForce, ForceMode.Impulse);
+        // 미려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 민다.
+        player.GetComponent<CharacterController>().Move(directionToTarget * pushForce);
     }
 
     public void SetPullTarget(GameObject target)

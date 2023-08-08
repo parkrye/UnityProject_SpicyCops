@@ -37,21 +37,7 @@ public class PlayerEntry : SceneUI
         characterSkinManagers = avatarRoot.GetComponentsInChildren<CharacterSkinManager>();
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
-        StopAllCoroutines();
-        StartCoroutine(URoutine());
     }
-
-	IEnumerator URoutine()
-	{
-		while (true)
-		{
-			yield return null;
-			if(Input.GetKeyDown(KeyCode.F5))
-			{
-				OnReadyButtonClicked();
-            }
-		}
-	}
 
 	public void SetPlayerReady(bool ready)
 	{
@@ -64,8 +50,10 @@ public class PlayerEntry : SceneUI
 	}
 
 	public void OnReadyButtonClicked()
-	{
-		bool isPlayerReady = !CustomProperty.GetReady(player);
+    {
+        if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
+            return;
+        bool isPlayerReady = !CustomProperty.GetReady(player);
         CustomProperty.SetReady(player, isPlayerReady);
 
 		SetPlayerReady(isPlayerReady);
@@ -151,5 +139,10 @@ public class PlayerEntry : SceneUI
     public override void Initialize()
     {
         throw new System.NotImplementedException();
+    }
+
+    void OnF5()
+    {
+        OnReadyButtonClicked();
     }
 }

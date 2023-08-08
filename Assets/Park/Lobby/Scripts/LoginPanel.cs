@@ -57,4 +57,9 @@ public class LoginPanel : SceneUI
 	{
 		Application.Quit();
 	}
+
+    void OnEnter()
+    {
+        OnLoginButtonClicked();
+    }
 }

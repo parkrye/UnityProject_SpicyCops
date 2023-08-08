@@ -35,9 +35,16 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] CinemachineVirtualCamera playerCamera;
 
+    [SerializeField] Queue<(int, string)> rankQueue;
+    public Queue<(int, string)> RankQueue { get { return rankQueue; } }
+
+    [SerializeField] ItemManager itemManager;
+    public ItemManager ItemManager { get {  return itemManager; } }
+
     UnityEvent<float> timeEvent;
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
+    UnityEvent<(int, string)> playerDeadEvent;
     #endregion
 
     void Start()
@@ -48,6 +55,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAggroDictionary = new Dictionary<int, float>();
         playerAliveDictionary = new Dictionary<int, bool>();
         playerIDDictonary = new Dictionary<int, int>();
+        rankQueue = new Queue<(int, string)> ();
+        playerDeadEvent = new UnityEvent<(int, string)> ();
         inGameUIController.Initialize();
 
         // Normal game mode
@@ -211,7 +220,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
-            photonView.RPC("RequestTimer", RpcTarget.AllViaServer, 0.1f);
+            photonView.RPC("RequestTimer", RpcTarget.MasterClient, 0.1f);
         }
     }
 
@@ -332,6 +341,85 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public void RemovePlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
     {
         playerAliveEvent?.RemoveListener(lister);
+    }
+    #endregion
+
+    #region Rank Manager
+    public void PlayerDead(int targetPlayerPhotonViewID)
+    {
+        photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
+    }
+
+    [PunRPC]
+    void RequestPlayerDead(int targetPlayerPhotonViewID, PhotonMessageInfo info)
+    {
+        ResultPlayerDead(targetPlayerPhotonViewID);
+    }
+
+    void ResultPlayerDead(int targetPlayerPhotonViewID)
+    {
+        rankQueue.Enqueue((rankQueue.Count + 1, PhotonView.Find(targetPlayerPhotonViewID).Owner.NickName));
+        playerDeadEvent?.Invoke(rankQueue.Peek());
+        
+        if(rankQueue.Count >= readyPlayerCount - 1)
+        {
+            GameEnd();
+        }
+    }
+
+    public void AddPlayerDeadEventListenr(UnityAction<(int, string)> lister)
+    {
+        playerDeadEvent.AddListener(lister);
+    }
+
+    public void RemovePlayerDeadEventListenr(UnityAction<(int, string)> lister)
+    {
+        playerDeadEvent?.RemoveListener(lister);
+    }
+    #endregion
+
+    #region End Game Manager
+    public void GameEnd()
+    {
+        photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    void RequestGameEnd(PhotonMessageInfo info)
+    {
+        ResultGameEnd();
+    }
+
+    void ResultGameEnd()
+    {
+        // 플레이어 정지
+        // 애너미 정지
+        inGameUIController.EndGameUI();
+    }
+    #endregion
+
+    #region Item
+    public void SetItemUI(int itemNum)
+    {
+        inGameUIController.SettingItemIcon(itemNum);
+    }
+
+    public void DrawEffect(int usingPlayerActorNumber)
+    {
+        photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, usingPlayerActorNumber);
+    }
+
+    [PunRPC]
+    void RequestDrawEffect(int usingPlayerActorNumber, PhotonMessageInfo info)
+    {
+        ResultDrawEffect(usingPlayerActorNumber);
+    }
+
+    void ResultDrawEffect(int usingPlayerActorNumber)
+    {
+        if (PhotonNetwork.LocalPlayer.ActorNumber == usingPlayerActorNumber)
+            return;
+        inGameUIController.DrawEffectOnUI();
     }
     #endregion
 }
