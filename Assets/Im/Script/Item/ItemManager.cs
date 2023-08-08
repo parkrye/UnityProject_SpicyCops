@@ -7,7 +7,7 @@ using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ItemManager : MonoBehaviourPun
 {
-    public ItemSpot[] itemSpots = new ItemSpot[10];
+    public ItemSpot[] itemSpots = new ItemSpot[14];
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
     InGameManager gameManager;
     private void Awake()
@@ -34,17 +34,18 @@ public class ItemManager : MonoBehaviourPun
     protected void RequestUseItem(Vector3 pos, Quaternion rot, int index, PhotonMessageInfo info)
     {
         float sentTime = (float)info.SentServerTime;
-        photonView.RPC("ResultUseItem", RpcTarget.AllViaServer, pos, rot, sentTime, info.Sender, index);
+        photonView.RPC("ResultUseItem", RpcTarget.AllViaServer, pos, rot, sentTime, info.Sender, index, info.Sender);
     }
     [PunRPC]
-    protected void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index)
+    protected void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index, Player sender)
     {
         float lag = (float)(PhotonNetwork.Time - sentTime);
-        itemList[index].UseItem(pos, rot, lag, viewId);
+        itemList[index].UseItem(pos, rot, lag, viewId, sender);
         if (itemList[index].WeaponType == Define.WeaponType.Util)
         {
             UtilItem uItem = (UtilItem)itemList[index];
-            StartCoroutine(uItem.Corutine(viewId));
+            StartCoroutine(uItem.Corutine(viewId, sender));
+            return;
         }
         if(itemList[index].WeaponType == Define.WeaponType.Melee)
         {

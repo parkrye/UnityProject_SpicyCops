@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ProjectileItem : Item
 {
-    public override void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId)
+    public override void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId, Player sender)
     {
         Projectile(pos, rot, lag, viewId);
     }

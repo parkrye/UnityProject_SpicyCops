@@ -11,7 +11,7 @@ public class Shoes : UtilItem
     {
         // 内风凭 角青 夸没
     }
-    public override IEnumerator Corutine(int viewId)
+    public override IEnumerator Corutine(int viewId, Player player)
     {
         PhotonView view = PhotonView.Find(viewId);
         PlayerMover mover = view.gameObject.GetComponent<PlayerMover>();

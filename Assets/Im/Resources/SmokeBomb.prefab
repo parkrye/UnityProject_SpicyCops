@@ -152,9 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47bc05abdf67cc4e96239be9d7f3b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwPower: 10
+  throwPower: 5
   speed: 1.5
   overlapAreaRange: 3
+  gameManager: {fileID: 0}
   effect: {fileID: 3315540658757254800, guid: 73267e3079e02de43b32ea088d86041a, type: 3}
   explosionEff: {fileID: 2651620616266283360, guid: 45ff4fae94b1b4c45bc282e994a3f8c7,
     type: 3}

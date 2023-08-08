@@ -12,7 +12,7 @@ public class SpreadInk : UtilItem
     {
         // 코루틴
     }
-    public override IEnumerator Corutine(int viewId)
+    public override IEnumerator Corutine(int viewId, Player player)
     {
         
         // 화면가리기

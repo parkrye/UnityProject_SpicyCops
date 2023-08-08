@@ -16,7 +16,7 @@ public class MeleeItem : Item
             return;
         colliders = Physics.OverlapBox(pos, attackArea / 2.5f, rot);
     }
-    public override void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId)
+    public override void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId, Player sender)
     {
         MeeleAttack(pos, rot, lag, viewId);
     }

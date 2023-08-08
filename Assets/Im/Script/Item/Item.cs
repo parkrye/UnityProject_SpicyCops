@@ -15,7 +15,7 @@ public class Item : ScriptableObject
     public int ItemIndex { get { return itemIndex; } }
     public Define.WeaponType WeaponType { get { return weaponType; } }
 
-    public virtual void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId)
+    public virtual void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId, Player sender)
     {
 
     }
