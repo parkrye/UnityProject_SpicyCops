@@ -1,12 +1,8 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-using static UnityEditorInternal.VersionControl.ListControl;
 
 namespace Jeon
 {
@@ -14,20 +10,23 @@ namespace Jeon
     {
         [SerializeField] Transform player;
 
-        private Rigidbody rb;
         private NavMeshAgent agent;
-        private Vector3 followPos;
-        public Animator anim;
+        private Animator anim;
+
+        public PhotonView photonView;
+
+        public Animator Anim { get { return anim; } }
         [SerializeField] InGameManager inGameManager;
 
         Dictionary<string, int> playerState = new Dictionary<string, int>();
-        Dictionary<int, Transform> playerTransform;
+        public Dictionary<int, Transform> playerTransform;
 
 
         [SerializeField] Transform catchZone;
         [SerializeField] float targetFindTime;
 
         int maxAggroViewID;
+        float moveSpeed;
 
         public enum EnemyState { Idle, Follow, Angry, SemiBerserker, Berserker, End, Catch}
 
@@ -40,6 +39,13 @@ namespace Jeon
         [SerializeField] Material material;
 
         private void SetServerTime(float time)
+        {
+            photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
+
+        }
+
+        [PunRPC]
+        protected void RequestEnemyMoveSetting(float time)    // 에이전트 스피드가 되는지 RPC Time.
         {
             curTime = time;
             if (curTime >= 5f && curState == EnemyState.Idle)
@@ -63,20 +69,15 @@ namespace Jeon
                 DoEndGame();
             }
         }
-
         private void Awake()
         {
-
-            rb = GetComponent<Rigidbody>();
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animator>();
             //catchZone = GameObject.Find("CatchZone").transform;
             curSpeed = agent.speed;
-            curTime = 0;
             material.color = Color.white;
             playerTransform = new Dictionary<int, Transform>();
         }
-
 
         private void SetPlayerAggro(Dictionary<int, float> playerAggro) //아이디와 어그로수치
         {
@@ -107,14 +108,6 @@ namespace Jeon
             StartCoroutine(FindPlayer());
         }
 
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.tag == "Player")
-            {
-                anim.SetTrigger("InArea");
-            }
-        }
         private void DoFollow()
         {
             anim.SetBool("WalkTime", true);
@@ -127,7 +120,6 @@ namespace Jeon
 
         private void DoAngry()
         {
-            // 이동속도를 증가시키고 어그로수치가 가장 높은 player를 쫒는다
             agent.speed = 3.5f;
             anim.SetBool("WalkTime", false);
             anim.SetBool("RunningTime", true);
@@ -143,6 +135,7 @@ namespace Jeon
             material.color = new Color(1, 0.15f, 0.15f);
             curState = EnemyState.SemiBerserker;
         }
+
         private void DoBerserker()
         {
             agent.speed = 6f;
@@ -184,7 +177,7 @@ namespace Jeon
             while (true)
             {
                 agent.destination = playerTransform[maxAggroViewID].position;
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.2f);
             }
         }
     }
