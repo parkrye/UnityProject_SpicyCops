@@ -129,9 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c912cec03a6aa04468f4c1d03174ae1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwPower: 10
+  throwPower: 5
   speed: 1.5
   overlapAreaRange: 3
+  gameManager: {fileID: 0}
   effect: {fileID: 5810154232264818605, guid: 34cc0f63e6b424241bb6edc32520e729, type: 3}
 --- !u!114 &5801992060820961646
 MonoBehaviour:

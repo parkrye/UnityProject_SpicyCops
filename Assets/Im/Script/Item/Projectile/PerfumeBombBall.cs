@@ -10,7 +10,7 @@ public class PerfumeBombBall : BallBase
     [PunRPC]
     protected override void ResultExplosion(Vector3 pos, Quaternion rot, float sentTime)
     {
-        Instantiate(effect);
+        Instantiate(effect, pos, Quaternion.identity);
         if (!PhotonNetwork.IsMasterClient)
             return;
         // 현재위치 기준 이펙트 및 사운드 적용
@@ -18,11 +18,12 @@ public class PerfumeBombBall : BallBase
         foreach (Collider collider in colliders)
         {
             PhotonView view = collider.GetComponent<PhotonView>();
-            if (view != null)
+            PlayerMover mover = collider.GetComponent<PlayerMover>();
+            if (view != null && mover != null)
             {
-                // view.ViewID
-                // 어그로 수치 증가
+                gameManager.ModifyPlayerAggro(view.ViewID, +10);
             }
         }
+        Destroy(gameObject, 2f);
     }
 }

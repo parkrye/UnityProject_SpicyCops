@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class SafeArea : MonoBehaviourPun
 {
-    [SerializeField] float maxScale = 250;
-    [SerializeField] float minScale = 55;
-    [SerializeField] float time = 120;
+    float maxScale = 300;
+    float minScale = 55;
+    float time = 120;
 
     public List<int> inAreaPlayer;
     public List<int> outAreaPlayer;
     public InGameManager gameManager;
+
 
     public void GameStartSetting()
     {

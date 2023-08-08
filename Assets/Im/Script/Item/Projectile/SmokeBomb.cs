@@ -7,10 +7,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SmokeBomb", menuName = "Item/Projectile/SmokeBomb")]
 public class SmokeBomb : ProjectileItem
 {
-    protected override void Projectile(Vector3 pos, Quaternion rot, float sentTime, Player player)
+    protected override void Projectile(Vector3 pos, Quaternion rot, float sentTime, int viewId)
     {
         GameObject ball = PhotonNetwork.Instantiate("SmokeBomb", pos, rot);
         BallBase b = ball.GetComponent<BallBase>();
-        b.SetPlayer(player);
+        b.SetPlayer(viewId);
     }
 }

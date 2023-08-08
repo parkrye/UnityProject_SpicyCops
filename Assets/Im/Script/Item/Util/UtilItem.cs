@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class UtilItem : Item
 {
-    protected virtual void GetUtilEffect(Player player)
+    protected virtual void GetUtilEffect(int viewId)
     {
 
     }
-    public override void UseItem(Vector3 pos, Quaternion rot, float lag, Player player)
+    public override void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId, Player sender)
     {
-        GetUtilEffect(player);
+        GetUtilEffect(viewId);
     }
-    public virtual IEnumerator Corutine(Player player)
+    public virtual IEnumerator Corutine(int viewId, Player player)
     {
         yield return null;
     }
