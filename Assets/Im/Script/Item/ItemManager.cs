@@ -7,15 +7,26 @@ using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ItemManager : MonoBehaviourPun
 {
-    public ItemSpot[] ItemSpots = new ItemSpot[1];
+    public ItemSpot[] itemSpots = new ItemSpot[10];
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
+    InGameManager gameManager;
     private void Awake()
     {
-        for(int i = 0; i < itemList.Length; i++)
+        gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
+
+        for (int i = 0; i < itemList.Length; i++)
         {
             Item item = GameManager.Resource.Load<Item>($"Item/{(Define.ItemIndex)i}");
             if(item != null)
+            {
                 itemList[i] = item;
+                item.gameManager = gameManager;
+            }
+        }
+        for(int i = 0; i < itemSpots.Length; i++)
+        {
+            itemSpots[i].itemManager = this;
+            itemSpots[i].itemSpotIndex = i;
         }
     }
 
@@ -26,24 +37,29 @@ public class ItemManager : MonoBehaviourPun
         photonView.RPC("ResultUseItem", RpcTarget.AllViaServer, pos, rot, sentTime, info.Sender, index);
     }
     [PunRPC]
-    protected void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, Player player, int index)
+    protected void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index)
     {
         float lag = (float)(PhotonNetwork.Time - sentTime);
-        itemList[index].UseItem(pos, rot, lag, player);
+        itemList[index].UseItem(pos, rot, lag, viewId);
         if (itemList[index].WeaponType == Define.WeaponType.Util)
         {
             UtilItem uItem = (UtilItem)itemList[index];
-            StartCoroutine(uItem.Corutine(player));
+            StartCoroutine(uItem.Corutine(viewId));
+        }
+        if(itemList[index].WeaponType == Define.WeaponType.Melee)
+        {
+            MeleeItem mItem = (MeleeItem)itemList[index];
+            StartCoroutine(mItem.Cor(viewId));
         }
     }
 
     [PunRPC]
-    public void RequestGiveRandomItem(int playerId)
+    public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
     {
         if (!photonView.IsMine)
             return;
-        int randNum = (int)Define.ItemIndex.SmokeBomb;
-        ItemSpots[0].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
+        int randNum = UnityEngine.Random.Range(0, itemList.Length);
+        itemSpots[itemSpotIndex].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
     
 }

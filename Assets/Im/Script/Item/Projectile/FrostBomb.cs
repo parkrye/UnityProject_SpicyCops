@@ -7,10 +7,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FrostBomb", menuName = "Item/Projectile/FrostBomb")]
 public class FrostBomb : ProjectileItem
 {
-    protected override void Projectile(Vector3 pos, Quaternion rot, float lag, Player player)
+    protected override void Projectile(Vector3 pos, Quaternion rot, float lag, int viewId)
     {
         GameObject ball = PhotonNetwork.Instantiate("FrostBomb", pos, rot);
         BallBase b = ball.GetComponent<BallBase>();
-        b.SetPlayer(player);
+        b.SetPlayer(viewId);
     }
 }
