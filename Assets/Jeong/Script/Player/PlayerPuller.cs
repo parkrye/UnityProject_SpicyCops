@@ -1,6 +1,5 @@
 using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -33,6 +32,10 @@ public class PlayerPuller : MonoBehaviourPun
         playerInput  = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
 
+        playerInput = GetComponent<PlayerInput>();
+
+        if (!photonView.IsMine)
+            Destroy(playerInput);
     }
 
     private void FixedUpdate()

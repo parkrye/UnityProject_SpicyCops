@@ -12,8 +12,10 @@ public class PlayerMover : MonoBehaviourPun
     private Animator anim;
     private CharacterController controller;
     private Rigidbody rigid;
+    private PlayerInput playerInput;
 
     [SerializeField] private Transform lookRotation;
+
 
     private Vector3 inputDir;
     private float ySpeed;
@@ -22,10 +24,14 @@ public class PlayerMover : MonoBehaviourPun
 
     private void Start()
     {
-        
+
         anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
+        playerInput = GetComponent<PlayerInput>();
+
+        if (!photonView.IsMine)
+            Destroy(playerInput);
 
         lookRotation.position = new Vector3(0, 0, 0.2f);
     }
