@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 157210734609470854}
   - component: {fileID: 157210734609470849}
   - component: {fileID: 590225562276867490}
+  - component: {fileID: 787984109606144103}
   m_Layer: 5
   m_Name: OtherPlayerZone
   m_TagString: Untagged
@@ -141,3 +142,33 @@ MonoBehaviour:
   playerAggroEntry: {fileID: 1945474579070877797, guid: ec7ea952a677e5f4284f0b81fea11a94,
     type: 3}
   uiAnimator: {fileID: 157210734609470849}
+--- !u!114 &787984109606144103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157210734609470874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: 0}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

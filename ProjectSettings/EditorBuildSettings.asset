@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Park/Scenes/LobbyScene.unity
     guid: d7fd80fbec72b6f46bba36d5bc88d097
   - enabled: 1
-    path: Assets/Jeon/Scenes/InGameScene.unity
-    guid: af7e03c3138c3d14fba9edb2c9c44e9d
+    path: Assets/Park/Scenes/InGameScene.unity
+    guid: a0ffe33d017af0141874535ebda878aa
   m_configObjects: {}

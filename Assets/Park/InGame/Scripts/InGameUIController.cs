@@ -1,7 +1,7 @@
 using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class InGameUIController : MonoBehaviour
 {
@@ -17,14 +17,11 @@ public class InGameUIController : MonoBehaviour
     [SerializeField] InGameUI_PlayerDataBar inGameUI_PlayerAggroBar;
     [SerializeField] InGameUI_OtherPlayerZone inGameUI_otherPlayerZone;
     [SerializeField] InGameUI_TimeSlider inGameUI_TimeSlider;
-
-    void Update()
-    {
-        if (!optionUI.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-        {
-            optionUI.SetActive(true);
-        }
-    }
+    [SerializeField] InGameUI_EndUI inGameUI_EndUI;
+    [SerializeField] InGameUI_ItemIcon inGameUI_ItemIcon;
+    [SerializeField] GameObject playingUI;
+    [SerializeField] GameObject effectUI;
+    [SerializeField] bool isPlaying;
 
     public void Initialize()
     {
@@ -109,5 +106,49 @@ public class InGameUIController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void EndGameUI()
+    {
+        isPlaying = false;
+        playingUI.SetActive(false);
+        inGameUI_EndUI.gameObject.SetActive(true);
+    }
+
+    public void SettingItemIcon(int itemNum)
+    {
+        if(itemNum < 0)
+        {
+            inGameUI_ItemIcon.SettingIconImage();
+        }
+        else
+        {
+            inGameUI_ItemIcon.SettingIconImage(inGameManager.ItemManager.itemList[itemNum].ItemIcon);
+        }
+    }
+    
+    public void DrawEffectOnUI()
+    {
+        StartCoroutine(EffectRoutine());
+    }
+
+    IEnumerator EffectRoutine()
+    {
+        effectUI.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        effectUI.SetActive(false);
+    }
+
+    void OnESC()
+    {
+        if (isPlaying && !optionUI.activeSelf)
+        {
+            optionUI.SetActive(true);
+        }
+    }
+
+    void OnTab()
+    {
+        inGameUI_otherPlayerZone.OnTab();
     }
 }

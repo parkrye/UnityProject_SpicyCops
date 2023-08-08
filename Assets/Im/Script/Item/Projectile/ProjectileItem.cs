@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class ProjectileItem : Item
 {
-    public override void UseItem(Vector3 pos, Quaternion rot, float lag, Player player)
+    public override void UseItem(Vector3 pos, Quaternion rot, float lag, int viewId)
     {
-        Projectile(pos, rot, lag, player);
+        Projectile(pos, rot, lag, viewId);
     }
-    protected virtual void Projectile(Vector3 pos, Quaternion rot, float lag, Player player) 
+    protected virtual void Projectile(Vector3 pos, Quaternion rot, float lag, int viewId) 
     { 
 
     }
