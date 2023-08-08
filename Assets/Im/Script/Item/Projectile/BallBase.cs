@@ -8,12 +8,14 @@ using static UnityEngine.Rendering.DebugUI.Table;
 
 public class BallBase : MonoBehaviourPun
 {
-    [SerializeField] protected float throwPower = 10;
+    [SerializeField] protected float throwPower = 5;
     [SerializeField] protected float speed = 1.5f;
     [SerializeField] protected float overlapAreaRange = 3;
 
+    public InGameManager gameManager;
+
     protected bool isEnded;
-    protected Player player;
+    protected int viewId;
     protected float curTime;
     protected Rigidbody rb;
     protected Collider col;
@@ -21,6 +23,8 @@ public class BallBase : MonoBehaviourPun
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+        gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
+        rb.mass = 0.4f;
     }
     protected void Start()
     {
@@ -66,12 +70,13 @@ public class BallBase : MonoBehaviourPun
         if (collision.gameObject.layer != 3 && collision.gameObject.layer != 6)
             return;
         PhotonView view = collision.gameObject.GetComponent<PhotonView>();
-        if (view != null && view.Owner.ActorNumber == player.ActorNumber)
+        if (view != null && view.ViewID == viewId)
             return;
         Debug.Log("Fall");
         isEnded = true;
         rb.velocity = Vector3.zero;
         col.enabled = false;
+        rb.useGravity = false;
         if(photonView.IsMine)
             photonView.RPC("RequestExplosion", RpcTarget.MasterClient, transform.position, transform.rotation);
     }
@@ -88,9 +93,9 @@ public class BallBase : MonoBehaviourPun
         float lag = (float)(PhotonNetwork.Time - sentTime);
     }
 
-    public void SetPlayer(Player player)
+    public void SetPlayer(int viewId)
     {
-        this.player = player;
+        this.viewId = viewId;
     }
 
     private void OnDrawGizmos()

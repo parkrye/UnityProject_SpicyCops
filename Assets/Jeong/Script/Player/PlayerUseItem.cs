@@ -16,7 +16,7 @@ public class PlayerUseItem : MonoBehaviourPun
         Debug.Log("사용시도");
         if (MyItem < 0)
             return;
-        if(true)
+        if (itemManager.itemList[myItem].WeaponType == Define.WeaponType.Projectile)
             itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, ProjectilePos.position, ProjectilePos.rotation, myItem);
         else
         {

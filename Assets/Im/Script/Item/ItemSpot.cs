@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class ItemSpot : MonoBehaviourPun, IInteractable
 {
-    [SerializeField] ItemManager itemManager;
+    public ItemManager itemManager;
+    public int itemSpotIndex;
     [SerializeField] float regenCoolTime;
     Animator animator;
     bool isActive;
@@ -19,9 +20,12 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     {
         if (isActive) // && 아이템을 가지고 있지 않을 것
         {
+            PlayerUseItem useItem = player.gameObject.GetComponent<PlayerUseItem>();
+            if (useItem.MyItem > -1)
+                return;
             PhotonView view = player.GetComponent<PhotonView>();
             playerId = view.ViewID;
-            itemManager.photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID);
+            itemManager.photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID, itemSpotIndex);
         }
     }
     [PunRPC]

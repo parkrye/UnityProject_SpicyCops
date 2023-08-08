@@ -40,4 +40,9 @@ public static class GameData
 
 	public static int CurrentAvatarNum = 0;
 	public static int CurrentColorNum = 0;
+
+	public static List<int> Reward = new()
+	{
+		50, 30, 20, 10
+	};
 }

@@ -9,24 +9,6 @@ public class InGameUI_OtherPlayerZone : SceneUI
     [SerializeField] Dictionary<PhotonView, InGameUI_PlayerDataEntry> playerDataEntryDictionary;
     [SerializeField] Animator uiAnimator;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        StartCoroutine(ShowAndHideRotuine());
-    }
-
-    IEnumerator ShowAndHideRotuine()
-    {
-        while (true)
-        {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                uiAnimator.SetTrigger("OnTab");
-            }
-            yield return null;
-        }
-    }
-
     public void AddPlayerEntry(PhotonView playerPhotonView)
     {
         InGameUI_PlayerDataEntry entry = GameManager.UI.ShowSceneUI(playerAggroEntry, transform);
@@ -69,5 +51,10 @@ public class InGameUI_OtherPlayerZone : SceneUI
                 return;
             }
         }
+    }
+
+    public void OnTab()
+    {
+        uiAnimator.SetTrigger("OnTab");
     }
 }

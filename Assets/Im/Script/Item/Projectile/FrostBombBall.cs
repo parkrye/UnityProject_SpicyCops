@@ -10,7 +10,7 @@ public class FrostBombBall : BallBase
     [PunRPC]
     protected override void ResultExplosion(Vector3 pos, Quaternion rot, float sentTime)
     {
-        Instantiate(effect);
+        Instantiate(effect, pos, Quaternion.identity);
         if (!PhotonNetwork.IsMasterClient)
             return;
         // 현재위치 기준 이펙트 및 사운드 적용
@@ -18,11 +18,24 @@ public class FrostBombBall : BallBase
         foreach (Collider collider in colliders)
         {
             PhotonView view = collider.GetComponent<PhotonView>();
-            if (view != null)
+            PlayerMover mover = collider.GetComponent<PlayerMover>();
+            if (view != null && mover != null)
             {
-                // view.ViewID
-                // 슬로우
+                StartCoroutine(SlowDown(mover));
             }
         }
+        Destroy(gameObject, 3f);
+    }
+    IEnumerator SlowDown(PlayerMover mover)
+    {
+        float speed = mover.moveSpeed;
+        float rate = 0;
+        while(rate < 1)
+        {
+            mover.moveSpeed = Mathf.Lerp(0, speed, rate);
+            rate += Time.deltaTime / 3;
+            yield return new WaitForEndOfFrame();
+        }
+        mover.moveSpeed = speed;
     }
 }
