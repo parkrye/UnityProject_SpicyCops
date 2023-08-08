@@ -33,8 +33,6 @@ public class PlayerPuller : MonoBehaviourPun
         playerInput  = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
 
-        if (!photonView.IsMine)
-            Destroy(playerInput);
     }
 
     private void FixedUpdate()
@@ -143,8 +141,8 @@ public class PlayerPuller : MonoBehaviourPun
         // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
         Vector3 directionToTarget = (player.transform.position - transform.position).normalized;
 
-        // 잡아당기려는 Player 오브젝트의 Rigidbody 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
-        player.GetComponent<Rigidbody>().AddForce(directionToTarget * -pullForce, ForceMode.Force);
+        // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
+        player.GetComponent<CharacterController>().Move(directionToTarget * -pullForce);
 
         // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
         player.transform.LookAt(transform.position, Vector3.up);

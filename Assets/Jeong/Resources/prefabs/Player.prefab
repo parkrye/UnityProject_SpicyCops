@@ -192,6 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4381141863056317004}
   - component: {fileID: 6245512063204991220}
+  - component: {fileID: 542863240382540060}
   - component: {fileID: 1430067382}
   - component: {fileID: 5928692652320241462}
   - component: {fileID: 399192538609358569}
@@ -247,6 +248,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!143 &542863240382540060
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763264028448811103}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &1430067382
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -325,9 +344,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2ff7dda7e776f409f25f4496466a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 300
-  maxSpeed: 300
-  rotateSpeed: 30
+  curSpeed: 0
+  moveSpeed: 1000
+  rotateSpeed: 3
 --- !u!114 &6331125720310579712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,6 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProjectilePos: {fileID: 3581481082758046739}
+  itemManager: {fileID: 0}
 --- !u!1 &1406072523747191004
 GameObject:
   m_ObjectHideFlags: 0
