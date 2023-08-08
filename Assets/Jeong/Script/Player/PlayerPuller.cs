@@ -57,7 +57,7 @@ public class PlayerPuller : MonoBehaviourPun
         }
         else if (!canPull && Time.time - pullingStartTime < pullCooltime)
         {
-            Debug.Log("Cooltimes: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
+            // Debug.Log("Cooltimes: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
         }
     }
 

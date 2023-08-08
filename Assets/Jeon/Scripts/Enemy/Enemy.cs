@@ -6,9 +6,9 @@ using UnityEngine.AI;
 
 namespace Jeon
 {
-    public abstract class Enemy : MonoBehaviour
+    public abstract class Enemy : MonoBehaviourPun
     {
-        [SerializeField] Transform player;
+        [SerializeField] Transform player;  
 
         private NavMeshAgent agent;
         private Animator anim;

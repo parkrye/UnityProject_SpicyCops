@@ -2,28 +2,31 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitBox : MonoBehaviour
+public class HitBox : MonoBehaviourPun
 {
-    private PoliceEnemy enemy;
+    [SerializeField] private PoliceEnemy enemy;
     List<int> playerViewIdList;
+    [SerializeField] PhotonView myView;
 
     private void Awake()
     {
         enemy = GetComponentInParent<PoliceEnemy>();
+        playerViewIdList = new();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name + other.gameObject.layer);
         if (other.gameObject.layer == 3)
         {
-            enemy.photonView.RPC("RequestAddPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
+            myView.RPC("RequestAddPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 3)
         {
-            enemy.photonView.RPC("RequestExitPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
+            myView.RPC("RequestExitPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
         }
 
     }
@@ -31,7 +34,7 @@ public class HitBox : MonoBehaviour
     private void RequestAddPlayer(int playerId)
     {
         playerViewIdList.Add(playerId);
-        enemy.photonView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
+        myView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
     }
 
     [PunRPC]

@@ -52,8 +52,11 @@ public class PlayerMover : MonoBehaviourPun
         
         Vector3 fowarVec = new Vector3(Vector3.forward.x, 0, Vector3.forward.z);
         Vector3 rightVec = new Vector3(Vector3.right.x, 0, Vector3.right.z);
+        
+        
         ySpeed += Physics.gravity.y * Time.deltaTime;
-        controller.Move(Vector3.up * ySpeed * Time.deltaTime);
+
+        controller.Move(Vector3.up * ySpeed);
 
         if (inputDir != null)
         {

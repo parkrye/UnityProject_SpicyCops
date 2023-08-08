@@ -169,7 +169,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero + Vector3.up * 5f, Quaternion.identity, 0);
         photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
@@ -188,7 +188,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero + Vector3.up * 5f, Quaternion.identity, 0);
         photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;

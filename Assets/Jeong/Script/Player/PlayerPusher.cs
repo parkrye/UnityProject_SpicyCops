@@ -51,7 +51,7 @@ public class PlayerPusher : MonoBehaviour
         }
         else if (!canPush && Time.time - pushingStartTime < pushCooltime)
         {
-            Debug.Log("Cooltimes: " + Mathf.Max(0, (pushingStartTime + pushCooltime - Time.time)).ToString("0") + " seconds");
+            // Debug.Log("Cooltimes: " + Mathf.Max(0, (pushingStartTime + pushCooltime - Time.time)).ToString("0") + " seconds");
         }
     }
 
@@ -84,7 +84,7 @@ public class PlayerPusher : MonoBehaviour
 
     private IEnumerator PushCooldown()
     {
-        yield return new WaitForSeconds(pushCooltime);
+        yield return new WaitForSeconds(GameData.PushCoolTime);
         canPush = true; // 쿨타임 종료 후 다시 잡을 수 있도록 설정
         currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
     }

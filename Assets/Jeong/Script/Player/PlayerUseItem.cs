@@ -8,6 +8,7 @@ public class PlayerUseItem : MonoBehaviourPun
     private void Awake()
     {
         itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+        myItem = -1;
     }
     private int myItem;
     public int MyItem { get { return myItem; } set { myItem = value; } }
@@ -17,10 +18,10 @@ public class PlayerUseItem : MonoBehaviourPun
         if (MyItem < 0)
             return;
         if (itemManager.itemList[myItem].WeaponType == Define.WeaponType.Projectile)
-            itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, ProjectilePos.position, ProjectilePos.rotation, myItem);
+            itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, ProjectilePos.position, ProjectilePos.rotation, myItem, photonView.ViewID);
         else
         {
-            itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, transform.position, transform.rotation, myItem);
+            itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, transform.position, transform.rotation, myItem, photonView.ViewID);
         }
         MyItem = -1;
     }

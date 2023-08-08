@@ -4,7 +4,7 @@ public static class CustomProperty
 {
     public static bool GetReady(this Player player)
     {
-        ExitGames.Client.Photon.Hashtable property = new();
+        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
         if (property.ContainsKey(GameData.PLAYER_READY))
             return (bool)property[GameData.PLAYER_READY];
         else
@@ -22,7 +22,7 @@ public static class CustomProperty
 
     public static bool GetLoad(this Player player)
     {
-        ExitGames.Client.Photon.Hashtable property = new();
+        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
         if (property.ContainsKey(GameData.PLAYER_LOAD))
             return (bool)property[GameData.PLAYER_LOAD];
         else

@@ -13,7 +13,7 @@ public class PlayerDied : MonoBehaviour
 
     public void DoDeath()
     {
-        animator.SetBool("IsDead", true);
+        animator.SetBool("IsDied", true);
         // 경륜이한테 InGameManager받아오면 PlayerAliveDictionary false로
     }
 }
