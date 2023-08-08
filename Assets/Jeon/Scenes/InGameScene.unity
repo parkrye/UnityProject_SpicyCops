@@ -249,6 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &10743330
 MonoBehaviour:
@@ -4403,6 +4404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &670105578
 MonoBehaviour:
@@ -4586,6 +4588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &673142817
 MonoBehaviour:
@@ -4829,6 +4832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &694398924
 MonoBehaviour:
@@ -5012,6 +5016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &698496512
 MonoBehaviour:
@@ -5201,6 +5206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &702575316
 MonoBehaviour:
@@ -5494,6 +5500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &707332319
 MonoBehaviour:
@@ -5701,6 +5708,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &711619419
 MonoBehaviour:
@@ -6865,6 +6873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &849478490
 MonoBehaviour:
@@ -7542,9 +7551,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 243585d93500f1d4bb192528cf8229b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxScale: 250
-  minScale: 55
-  time: 120
   inAreaPlayer: 
   outAreaPlayer: 
   gameManager: {fileID: 848810279}
@@ -7966,6 +7972,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &1074175492
 MonoBehaviour:
@@ -8427,6 +8434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &1195309465
 MonoBehaviour:
@@ -10208,8 +10216,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0992ba959aba847b4956554e99c8bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemSpots:
-  - {fileID: 670105577}
+  itemSpots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   itemList:
   - {fileID: 0}
   - {fileID: 0}
@@ -11612,6 +11633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &1791306350
 MonoBehaviour:
@@ -11819,6 +11841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &1804539533
 MonoBehaviour:
@@ -12008,6 +12031,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemManager: {fileID: 1557232631}
+  itemSpotIndex: 0
   regenCoolTime: 10
 --- !u!114 &1808757213
 MonoBehaviour:
@@ -99276,6 +99300,11 @@ PrefabInstance:
       propertyPath: inGameManager
       value: 
       objectReference: {fileID: 848810279}
+    - target: {fileID: 8439823349611257090, guid: 57016265a6e024c4ebcaeba4fd37cac4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c9392e4217d2c844a8ead4eb5ef18fa4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
 --- !u!33 &8480824550473327341
