@@ -35,6 +35,19 @@ public class PlayerEntry : SceneUI
         avatarTexture = _avatarTexture;
         avatarImage.texture = avatarTexture;
         characterSkinManagers = avatarRoot.GetComponentsInChildren<CharacterSkinManager>();
+
+        if (player.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
+        {
+            avatarNum = (int)avatarValue;
+            avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
+        }
+
+        if (player.CustomProperties.TryGetValue(GameData.PLAYER_COLOR, out object colorValue))
+        {
+            avatarColorNum = (int)colorValue;
+            characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+        }
+
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
     }
@@ -116,6 +129,8 @@ public class PlayerEntry : SceneUI
         avatarColorNum = 0;
         player.SetAvatarColor(avatarColorNum);
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+
+        CustomProperty.SetAvatarNumber(player, avatarNum);
     }
 
     public void OnColorButtonClicked(bool isLeft)
@@ -134,6 +149,8 @@ public class PlayerEntry : SceneUI
         }
         player.SetAvatarColor(avatarColorNum);
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+
+        CustomProperty.SetAvatarColor(player, avatarColorNum);
     }
 
     public override void Initialize()

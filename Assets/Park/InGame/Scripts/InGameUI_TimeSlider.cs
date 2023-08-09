@@ -23,7 +23,7 @@ public class InGameUI_TimeSlider : SceneUI
 
         if(timeValue <= 30f)
         {
-            texts["TimeText"].text = timeValue.ToString();
+            texts["TimeText"].text = ((int)timeValue).ToString();
         }
     }
 }

@@ -3,8 +3,6 @@ using Photon.Realtime;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class BallBase : MonoBehaviourPun
 {
