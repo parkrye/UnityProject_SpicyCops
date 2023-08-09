@@ -1,12 +1,14 @@
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HitBox : MonoBehaviourPun
 {
     [SerializeField] private PoliceEnemy enemy;
-    List<int> playerViewIdList;
     [SerializeField] PhotonView myView;
+    [SerializeField] InGameManager inGameManager;
+    List<int> playerViewIdList;
 
     private void Awake()
     {
@@ -46,6 +48,8 @@ public class HitBox : MonoBehaviourPun
             {
                 enemy.Anim.SetTrigger("InArea");
                 enemy.playerTransform[view].GetComponent<PlayerDied>().DoDeath();
+                inGameManager.PlayerDead(view);
+                enemy.playerTransform[view].GetComponent<PlayerInput>().enabled = false;
             }
         }
     }
