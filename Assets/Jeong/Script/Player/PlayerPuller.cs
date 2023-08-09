@@ -52,6 +52,16 @@ public class PlayerPuller : MonoBehaviourPun
                 StartCoroutine(PullCooldown());
             }
 
+            /*  if (Vector3.Distance(targetPlayer.transform.position,transform.position) > Vector3.Distance(transform.position,transform.position)) // PlayerTarget 범위를 벗어나면 잡기 상태 해제
+              {
+                  isPulling = false;
+                  anim.SetBool("IsPulled", false);
+                  targetPlayer = null;
+
+                  // 쿨타임 시작
+                  StartCoroutine(PullCooldown());
+              }*/
+
             // 잡아당기기 동작
             else
             {
@@ -60,7 +70,8 @@ public class PlayerPuller : MonoBehaviourPun
         }
         else if (!canPull && Time.time - pullingStartTime < pullCooltime)
         {
-            // Debug.Log("Cooltimes: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
+            Debug.Log("Cooltimes: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
+            return;
         }
     }
 
