@@ -18,15 +18,12 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
 
     public void Interact(PlayerInteraction player)
     {
-        if (isActive) // && 아이템을 가지고 있지 않을 것
-        {
-            PlayerUseItem useItem = player.gameObject.GetComponent<PlayerUseItem>();
-            if (useItem.MyItem > -1)
-                return;
-            PhotonView view = player.GetComponent<PhotonView>();
-            playerId = view.ViewID;
-            itemManager.photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID, itemSpotIndex);
-        }
+        PlayerUseItem useItem = player.gameObject.GetComponent<PlayerUseItem>();
+        if (!isActive || useItem.MyItem > -1)
+            return;
+        PhotonView view = player.GetComponent<PhotonView>();
+        playerId = view.ViewID;
+        itemManager.photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID, itemSpotIndex);
     }
     [PunRPC]
     public void ResultGiveRandomItem(int viewId, int index)

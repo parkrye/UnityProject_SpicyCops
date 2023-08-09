@@ -1,13 +1,12 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviourPun
 {
     public ItemSpot[] itemSpots = new ItemSpot[14];
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
-    InGameManager gameManager;
+    public InGameManager gameManager;
     private void Awake()
     {
         gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
@@ -32,24 +31,13 @@ public class ItemManager : MonoBehaviourPun
     protected void RequestUseItem(Vector3 pos, Quaternion rot, int index, int viewId, PhotonMessageInfo info)
     {
         float sentTime = (float)info.SentServerTime;
-        photonView.RPC("ResultUseItem", RpcTarget.AllViaServer, pos, rot, sentTime, viewId, index, info.Sender);
+        photonView.RPC("ResultUseItem", RpcTarget.MasterClient, pos, rot, sentTime, viewId, index, info.Sender);
     }
     [PunRPC]
     protected void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index, Player sender)
     {
         float lag = (float)(PhotonNetwork.Time - sentTime);
         itemList[index].UseItem(pos, rot, lag, viewId, sender);
-        if (itemList[index].WeaponType == Define.WeaponType.Util)
-        {
-            UtilItem uItem = (UtilItem)itemList[index];
-            StartCoroutine(uItem.Corutine(viewId, sender));
-            return;
-        }
-        if(itemList[index].WeaponType == Define.WeaponType.Melee)
-        {
-            MeleeItem mItem = (MeleeItem)itemList[index];
-            StartCoroutine(mItem.Cor(viewId));
-        }
     }
 
     [PunRPC]
@@ -58,6 +46,7 @@ public class ItemManager : MonoBehaviourPun
         if (!photonView.IsMine)
             return;
         int randNum = UnityEngine.Random.Range(0, itemList.Length);
+        // int randNum = 0;
         itemSpots[itemSpotIndex].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
     

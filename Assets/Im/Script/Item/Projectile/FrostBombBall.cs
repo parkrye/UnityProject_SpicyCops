@@ -21,21 +21,9 @@ public class FrostBombBall : BallBase
             PlayerMover mover = collider.GetComponent<PlayerMover>();
             if (view != null && mover != null)
             {
-                StartCoroutine(SlowDown(mover));
+                // ½½·Î¿ì
             }
         }
         Destroy(gameObject, 3f);
-    }
-    IEnumerator SlowDown(PlayerMover mover)
-    {
-        float speed = mover.moveSpeed;
-        float rate = 0;
-        while(rate < 1)
-        {
-            mover.moveSpeed = Mathf.Lerp(0, speed, rate);
-            rate += Time.deltaTime / 3;
-            yield return new WaitForEndOfFrame();
-        }
-        mover.moveSpeed = speed;
     }
 }
