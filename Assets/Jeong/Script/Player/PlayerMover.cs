@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class PlayerMover : MonoBehaviourPun
 {
     [SerializeField] public float curSpeed = 0f;
+    [SerializeField] public float originSpeed; // 이동속도
     [SerializeField] public float moveSpeed; // 이동속도
     [SerializeField] public float rotateSpeed; // 회전속도
 
@@ -15,7 +16,7 @@ public class PlayerMover : MonoBehaviourPun
     [SerializeField] public float speedChangeDuration; // 이동속도 변경 시간
 
     [SerializeField] private float startSpeedChangeTIme; // 이동속도 증가 시작 시간
-
+    [SerializeField] private float gravity;
 
     private Animator anim;
     private CharacterController controller;
@@ -26,17 +27,20 @@ public class PlayerMover : MonoBehaviourPun
 
 
     private Vector3 inputDir;
+    Vector3 fowarVec;
+    Vector3 rightVec;
+
     private float ySpeed;
 
     private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
 
     private bool isSpeedUp = false;
     private bool isSpeedDown = false;
-    private bool isSturn = false;
+    private bool isStun = false;
+    bool haveControll = false;
 
-    private void Start()
+    void Start()
     {
-
         anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
@@ -45,33 +49,60 @@ public class PlayerMover : MonoBehaviourPun
         if (!photonView.IsMine)
             Destroy(playerInput);
 
-        lookRotation.position = new Vector3(0, 0, 0.2f);
+        lookRotation.localPosition = new Vector3(0, 0, 0.2f);
+        ySpeed = gravity * Time.deltaTime;
+        moveSpeed = originSpeed;
     }
-    
-    private void FixedUpdate()
-    {
-        
-        Move();
-        //lookRotation.localPosition = (new Vector3(inputDir.x + transform.position.x, 0, inputDir.z + transform.position.z) + transform.forward * 0.2f);
 
+    public void Initialize()
+    {
+        StartCoroutine(URoutine());
+        StartCoroutine(FRoutine());
+        ChangeControll(true);
+    }
+
+    public void ChangeControll(bool controll)
+    {
+        haveControll = controll;
+    }
+
+    IEnumerator URoutine()
+    {
+        while (true)
+        {
+            if (haveControll)
+            {
+                Move();
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator FRoutine()
+    {
+        while(true)
+        {
+            if (haveControll)
+            {
+                controller.Move(fowarVec * inputDir.z * moveSpeed * Time.deltaTime);
+                controller.Move(rightVec * inputDir.x * moveSpeed * Time.deltaTime);
+            }
+            controller.Move(Vector3.up * ySpeed);
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     private void Move()
     {
+        fowarVec = new Vector3(Vector3.forward.x, 0, Vector3.forward.z);
+        rightVec = new Vector3(Vector3.right.x, 0, Vector3.right.z);
+
         if (inputDir.magnitude == 0)
         {
             curSpeed = Mathf.Lerp(curSpeed, 0, 0.9f);
             anim.SetFloat("IsMoved", curSpeed);
             return;
         }
-
-        Vector3 fowarVec = new Vector3(Vector3.forward.x, 0, Vector3.forward.z);
-        Vector3 rightVec = new Vector3(Vector3.right.x, 0, Vector3.right.z);
-
-
-        ySpeed += Physics.gravity.y * Time.deltaTime;
-
-        controller.Move(Vector3.up * ySpeed);
 
         if (inputDir != null)
         {
@@ -81,6 +112,8 @@ public class PlayerMover : MonoBehaviourPun
         // 회전
 
         transform.LookAt(transform.position + Vector3.forward * inputDir.z + Vector3.right * inputDir.x);
+        anim.SetFloat("IsMoved", curSpeed);
+
 
         //if (fowarVec != Vector3.zero && rightVec != Vector3.zero)
         //{
@@ -95,10 +128,6 @@ public class PlayerMover : MonoBehaviourPun
         //    }
         //}
 
-        controller.Move(fowarVec * inputDir.z * moveSpeed * Time.deltaTime);
-        controller.Move(rightVec * inputDir.x * moveSpeed * Time.deltaTime);
-
-        anim.SetFloat("IsMoved", curSpeed);
     }
 
     private void OnMove(InputValue value)
@@ -117,31 +146,34 @@ public class PlayerMover : MonoBehaviourPun
         if (isSpeedUp) 
         {
             Debug.Log("스피드업 코루틴 시작");
-            moveSpeed = moveSpeed * speedIncrease; // speedIncrease만큼 배속을 곱적용 한다.
-            yield return new WaitForSeconds(speedChangeDuration); // speedIncreaseDuration시간만큼 지속한다.
+            moveSpeed = moveSpeed * 1.5f; // speedIncrease만큼 배속을 곱적용 한다.
+            yield return new WaitForSeconds(3); // speedIncreaseDuration시간만큼 지속한다.
             Debug.Log("스피드업 코루틴 종료");
-            moveSpeed = moveSpeed / speedIncrease; //speedIncrease로 나누어 원본으로 돌아간다.
+            moveSpeed = originSpeed; //speedIncrease로 나누어 원본으로 돌아간다.
             isSpeedUp = false;
         }
 
         if (isSpeedDown)
         {
             Debug.Log("스피드다운 코루틴 시작");
-            moveSpeed = moveSpeed / speedIncrease; // speedIncrease만큼 배속을 나눔 적용한다.
-            yield return new WaitForSeconds(speedChangeDuration); // speedIncreaseDuration시간만큼 지속한다.
+            moveSpeed = moveSpeed * 0.5f; // speedIncrease만큼 배속을 나눔 적용한다.
+            yield return new WaitForSeconds(3); // speedIncreaseDuration시간만큼 지속한다.
             Debug.Log("스피드다운 코루틴 종료");
-            moveSpeed = moveSpeed * speedIncrease; //speedIncrease로 곱적용하여 원본으로 돌아간다.
+            moveSpeed = originSpeed; //speedIncrease로 곱적용하여 원본으로 돌아간다.
             isSpeedDown = false;
         }
 
-        if (isSturn)
+        if (isStun)
         {
             Debug.Log("스턴 코루틴 시작");
-            moveSpeed = 0; // 스턴하여 0으로 이동속도가 고정된다.
-            yield return new WaitForSeconds(speedChangeDuration); // speedIncreaseDuration시간만큼 지속한다.
+            // moveSpeed = 0; // 스턴하여 0으로 이동속도가 고정된다.
+            haveControll = false;
+            anim.SetTrigger("IsStun");
+            yield return new WaitForSeconds(2); // speedIncreaseDuration시간만큼 지속한다.
             Debug.Log("스턴 코루틴 종료");
-            moveSpeed = 10; //스턴이 풀리면 10으로 이동속도가 돌아온다.
-            isSturn = false;
+            // moveSpeed = originSpeed; //스턴이 풀리면 10으로 이동속도가 돌아온다.
+            haveControll = true;
+            isStun = false;
         }
     }
 
@@ -159,9 +191,9 @@ public class PlayerMover : MonoBehaviourPun
         StartCoroutine(speedChangerRoutine());
     }
 
-    public void OnSturn() // 스턴
+    public void OnStun() // 스턴
     {
-        isSturn = true;
+        isStun = true;
         startSpeedChangeTIme = Time.time;
         StartCoroutine(speedChangerRoutine());
     }

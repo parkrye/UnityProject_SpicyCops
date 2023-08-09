@@ -21,7 +21,7 @@ public class FrostBombBall : BallBase
             PlayerMover mover = collider.GetComponent<PlayerMover>();
             if (view != null && mover != null)
             {
-                // ½½·Î¿ì
+                mover.OnSpeedDown();
             }
         }
         Destroy(gameObject, 3f);

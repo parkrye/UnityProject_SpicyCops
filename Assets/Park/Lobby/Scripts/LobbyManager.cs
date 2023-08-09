@@ -35,7 +35,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 		{
 			OnDisconnected(DisconnectCause.None);
 		}
-	}
+        lobbyPanel_Rooms.gameObject.SetActive(false);
+        lobbyPannel.SetActive(false);
+
+    }
 
     public override void OnEnable()
     {
@@ -113,18 +116,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
 	{
         SetActivePanel(Panel.Lobby);
-        lobbyPanel_Rooms.OnLobbyCountChanged();
+        if (lobbyPanel_Rooms.isActiveAndEnabled)
+            lobbyPanel_Rooms.OnLobbyCountChanged();
     }
 
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
-	{
-		lobbyPanel_Rooms.UpdateRoomList(roomList);
+    {
+        if (lobbyPanel_Rooms.isActiveAndEnabled)
+            lobbyPanel_Rooms.UpdateRoomList(roomList);
 	}
 
 	public override void OnLeftLobby()
 	{
 		SetActivePanel(Panel.Lobby);
-        lobbyPanel_Rooms.OnLobbyCountChanged();
+        if (lobbyPanel_Rooms.isActiveAndEnabled)
+            lobbyPanel_Rooms.OnLobbyCountChanged();
     }
 
 	void SetActivePanel(Panel panel)
@@ -146,7 +152,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 	{
 		while (PhotonNetwork.InLobby)
         {
-            lobbyPanel_Rooms.OnLobbyCountChanged();
+            if (lobbyPanel_Rooms.isActiveAndEnabled)
+                lobbyPanel_Rooms.OnLobbyCountChanged();
             yield return new WaitForSeconds(1f);
 		}
 	}

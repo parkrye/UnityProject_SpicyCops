@@ -32,7 +32,7 @@ public static class GameData
 		"FBI",
 		"Girl",
 		"Mafia",
-		"Motocyclist",
+		"Motorcyclist",
 		"Soldier"
 	};
 

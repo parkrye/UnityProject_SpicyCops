@@ -1,5 +1,4 @@
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,12 @@ public class InGameUI_OtherPlayerZone : SceneUI
     [SerializeField] InGameUI_PlayerDataEntry playerAggroEntry;
     [SerializeField] Dictionary<PhotonView, InGameUI_PlayerDataEntry> playerDataEntryDictionary;
     [SerializeField] Animator uiAnimator;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        playerDataEntryDictionary = new();
+    }
 
     public void AddPlayerEntry(PhotonView playerPhotonView)
     {

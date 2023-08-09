@@ -28,8 +28,8 @@ public class InGameUIController : MonoBehaviour
         inGameUI_PlayerAggroBar.Initialize();
         inGameUI_otherPlayerZone.Initialize();
         inGameUI_TimeSlider.Initialize();
-        inGameManager.AddPlayerAggroEventListenr(PlayerAggroValueModified);
-        inGameManager.AddPlayerAliveEventListenr(PlayerAliveValueModified);
+        inGameManager.AddPlayerAggroEventListener(PlayerAggroValueModified);
+        inGameManager.AddPlayerAliveEventListener(PlayerAliveValueModified);
         optionUI.SetActive(false);
     }
 

@@ -280,8 +280,8 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2.5
   m_Radius: 0.5
-  m_SlopeLimit: 34
-  m_StepOffset: 0.3
+  m_SlopeLimit: 40
+  m_StepOffset: 0.4
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.25, z: 0}
@@ -364,12 +364,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curSpeed: 0
-  moveSpeed: 10
+  originSpeed: 6
+  moveSpeed: 6
   rotateSpeed: 0.1
-  speedIncrease: 5
-  speedIncreaseDuration: 3
+  speedIncrease: 3
+  speedChangeDuration: 3
+  startSpeedChangeTIme: 0
+  gravity: -50
   lookRotation: {fileID: 1081388338}
-  isSpeedUp: 0
 --- !u!114 &6331125720310579712
 MonoBehaviour:
   m_ObjectHideFlags: 0

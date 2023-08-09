@@ -13,7 +13,7 @@ namespace Jeon
         private NavMeshAgent agent;
         private Animator anim;
 
-        private PhotonView _photonView;
+        [SerializeField] PhotonView _photonView;
 
         public Animator Anim { get { return anim; } }
         [SerializeField] InGameManager inGameManager;
@@ -96,9 +96,9 @@ namespace Jeon
 
         public void Seting()
         {
-            inGameManager.AddTimeEventListenr(SetServerTime);
+            inGameManager.AddTimeEventListener(SetServerTime);
 
-            inGameManager.AddPlayerAggroEventListenr(SetPlayerAggro);
+            inGameManager.AddPlayerAggroEventListener(SetPlayerAggro);
 
             foreach (int playerViewID in inGameManager.PlayerAggroDictionary.Keys)
             {
@@ -118,7 +118,7 @@ namespace Jeon
 
         private void DoAngry()
         {
-            agent.speed = 4f;
+            agent.speed = 5f;
             anim.SetBool("WalkTime", false);
             anim.SetBool("RunningTime", true);
 
@@ -128,7 +128,7 @@ namespace Jeon
 
         private void DoSemiBerserker()
         {
-            agent.speed = 5.5f;
+            agent.speed = 7.5f;
 
             curState = EnemyState.SemiBerserker;
             material.color = new Color(1, 0.45f, 0.45f);
@@ -136,7 +136,7 @@ namespace Jeon
 
         private void DoBerserker()
         {
-            agent.speed = 8f;
+            agent.speed = 9.5f;
             material.color = new Color(0.24f, 0f, 0f);
 
             curState = EnemyState.Berserker;

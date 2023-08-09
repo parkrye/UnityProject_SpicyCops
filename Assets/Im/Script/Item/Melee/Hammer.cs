@@ -22,10 +22,7 @@ public class Hammer : MeleeItem
             PlayerMover mover = collider.gameObject.GetComponent<PlayerMover>();
             if (mover == null)
                 return;
-            Debug.Log("기절");
-            // getcomponent 플레이어 검출
-            // 자기자신은 리턴
-            // 기절 부여(컨트롤러 일정시간 비활성화?) 혹은 이동속도 0
+            mover.OnStun();
         }
     }
 }

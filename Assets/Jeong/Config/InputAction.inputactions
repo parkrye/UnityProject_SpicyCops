@@ -69,7 +69,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sturn",
+                    "name": "Stun",
                     "type": "Button",
                     "id": "7ecba805-cec3-40ba-b1e1-32e98abaec50",
                     "expectedControlType": "Button",
@@ -207,7 +207,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Sturn",
+                    "action": "Stun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

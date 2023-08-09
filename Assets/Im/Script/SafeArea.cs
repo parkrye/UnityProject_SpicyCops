@@ -9,42 +9,53 @@ public class SafeArea : MonoBehaviourPun
     float minScale = 55;
     float time = 120;
 
-    public List<int> inAreaPlayer;
     public List<int> outAreaPlayer;
     public InGameManager gameManager;
 
+    private void Awake()
+    {
+        outAreaPlayer = new List<int>();
+    }
 
+    private void OutCheck(float f)
+    {
+        foreach (int i in outAreaPlayer)
+        {
+            gameManager.ModifyPlayerAggro(i, 0.5f);
+        }
+    }
+        
     public void GameStartSetting()
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        inAreaPlayer = new List<int>();
         outAreaPlayer = new List<int>();
-        foreach(int viewID in gameManager.PlayerAggroDictionary.Keys)
-        {
-            inAreaPlayer.Add(viewID);
-        }
+        gameManager.AddTimeEventListener(OutCheck);
         AreaEnable();
     }
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        PhotonView collide = collision.gameObject.GetComponent<PhotonView>();
-        if (inAreaPlayer.Contains(collide.ViewID))
-        {
-            outAreaPlayer.Add(collide.ViewID);
-            inAreaPlayer.Remove(collide.ViewID);
-        }
+        PlayerMover mover = other.GetComponent<PlayerMover>();
+        if (mover == null)
+            return;
+        PhotonView v = other.GetComponent<PhotonView>();
+        if (v == null)
+            return;
+        if (outAreaPlayer.Contains(v.ViewID))
+            return;
+        outAreaPlayer.Add(v.ViewID);
         // 플레이어인지 체크하고
         // 나간 플레이어는 나간플레이어 목록에 추가하고
         // 나간 플레이어를 서버에 전송
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        PhotonView collide = collision.gameObject.GetComponent<PhotonView>();
-        if (inAreaPlayer.Contains(collide.ViewID))
+        PhotonView v = other.GetComponent<PhotonView>();
+        if (v == null)
+            return;
+        if (outAreaPlayer.Contains(v.ViewID))
         {
-            inAreaPlayer.Add(collide.ViewID);
-            outAreaPlayer.Remove(collide.ViewID);
+            outAreaPlayer.Remove(v.ViewID);
         }
     }
 

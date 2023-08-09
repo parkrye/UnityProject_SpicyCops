@@ -11,6 +11,6 @@ public class Shoes : UtilItem
     {
         PhotonView view = PhotonView.Find(viewId);
         PlayerMover mover = view.gameObject.GetComponent<PlayerMover>();
-        // mover.???
+        mover.OnSpeedUp();
     }
 }

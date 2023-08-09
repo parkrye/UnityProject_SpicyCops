@@ -25,7 +25,7 @@ public class LobbyPanel : SceneUI
 
     void OnEnable()
 	{
-		ClearRoomList();
+        PhotonNetwork.JoinLobby();
     }
 
     public void OnCreateRoomButtonClicked()
@@ -74,6 +74,8 @@ public class LobbyPanel : SceneUI
         {
 			StatePanel.Instance.AddMessage(room.CustomProperties.ToString());
             RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
+            if (entry.Equals(null))
+                continue;
 			entry.Initialize(room.Name, room.PlayerCount, (byte)room.MaxPlayers, room, enterPrivateRoomPanel);
             roomEntries.Add(entry);
 		}

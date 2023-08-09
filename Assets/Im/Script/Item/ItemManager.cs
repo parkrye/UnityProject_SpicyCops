@@ -4,26 +4,30 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviourPun
 {
-    public ItemSpot[] itemSpots = new ItemSpot[14];
+    public ItemSpot[] itemSpots = new ItemSpot[16];
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
     public InGameManager gameManager;
-    private void Awake()
+
+    public void Init()
     {
-        gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
 
         for (int i = 0; i < itemList.Length; i++)
         {
             Item item = GameManager.Resource.Load<Item>($"Item/{(Define.ItemIndex)i}");
-            if(item != null)
+            if (item != null)
             {
                 itemList[i] = item;
                 item.gameManager = gameManager;
             }
         }
-        for(int i = 0; i < itemSpots.Length; i++)
+        for (int i = 0; i < itemSpots.Length; i++)
         {
             itemSpots[i].itemManager = this;
             itemSpots[i].itemSpotIndex = i;
+        }
+        foreach (var item in itemSpots) 
+        {
+            item.Init();
         }
     }
 
@@ -43,10 +47,8 @@ public class ItemManager : MonoBehaviourPun
     [PunRPC]
     public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
     {
-        if (!photonView.IsMine)
-            return;
         int randNum = UnityEngine.Random.Range(0, itemList.Length);
-        // int randNum = 0;
+        // int randNum = (int)Define.ItemIndex.SmokeBomb;
         itemSpots[itemSpotIndex].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
     

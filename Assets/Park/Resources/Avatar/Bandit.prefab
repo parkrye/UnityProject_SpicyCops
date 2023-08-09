@@ -455,6 +455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skinMaterials: []
   skinRenderer: {fileID: 0}
+  colorNum: 0
 --- !u!1 &4779249987440587216
 GameObject:
   m_ObjectHideFlags: 0

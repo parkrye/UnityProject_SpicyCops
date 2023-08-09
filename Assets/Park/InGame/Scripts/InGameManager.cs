@@ -169,11 +169,13 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero + Vector3.up * 5f, Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber].position, Quaternion.identity, 0);
         photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
+        playerCamera.LookAt = player.transform;
 
+        itemManager.Init();
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
@@ -188,11 +190,13 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero + Vector3.up * 5f, Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber].position, Quaternion.identity, 0);
         photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
+        playerCamera.LookAt = player.transform;
 
+        itemManager.Init();
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
@@ -210,7 +214,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(0.1f);
         }
         enemy.Seting();
-
     }
     #endregion
 
@@ -242,7 +245,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void AddTimeEventListenr(UnityAction<float> lister)
+    public void AddTimeEventListener(UnityAction<float> lister)
     {
         timeEvent.AddListener(lister);
     }
@@ -267,7 +270,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAggroDictionary.Add(photonViewID, 0f);
         playerAliveDictionary.Add(photonViewID, true);
         playerIDDictonary.Add(playerActorNumber, photonViewID);
-        player.transform.position = startPositions[startNum++].position;
         inGameUIController.AddOtherPlayerPhotonView(player);
 
         InGameAvatarManager playerAvatarManager = player.GetComponent<InGameAvatarManager>();
@@ -276,6 +278,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         ModifyPlayerAggro(photonViewID, 0f);
         photonView.RPC("RequestCreatedPlayer", RpcTarget.MasterClient);
 
+        player.GetComponent<PlayerMover>().Initialize();
     }
     [PunRPC]
     void RequestCreatedPlayer(PhotonMessageInfo info)
@@ -311,12 +314,12 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAggroEvent?.Invoke(playerAggroDictionary);
     }
 
-    public void AddPlayerAggroEventListenr(UnityAction<Dictionary<int, float>> lister)
+    public void AddPlayerAggroEventListener(UnityAction<Dictionary<int, float>> lister)
     {
         playerAggroEvent.AddListener(lister);
     }
 
-    public void RemovePlayerAggroEventListenr(UnityAction<Dictionary<int, float>> lister)
+    public void RemovePlayerAggroEventListener(UnityAction<Dictionary<int, float>> lister)
     {
         playerAggroEvent?.RemoveListener(lister);
     }
@@ -347,22 +350,22 @@ public class InGameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void AddPlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
+    public void AddPlayerAliveEventListener(UnityAction<Dictionary<int, bool>> lister)
     {
         playerAliveEvent.AddListener(lister);
     }
 
-    public void RemovePlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
+    public void RemovePlayerAliveEventListener(UnityAction<Dictionary<int, bool>> lister)
     {
         playerAliveEvent?.RemoveListener(lister);
     }
 
-    public void AddPlayerDeadEventListenr(UnityAction<(int, string)> lister)
+    public void AddPlayerDeadEventListener(UnityAction<(int, string)> lister)
     {
         playerDeadEvent.AddListener(lister);
     }
 
-    public void RemovePlayerDeadEventListenr(UnityAction<(int, string)> lister)
+    public void RemovePlayerDeadEventListener(UnityAction<(int, string)> lister)
     {
         playerDeadEvent?.RemoveListener(lister);
     }

@@ -13,7 +13,12 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        isActive = true;
+    }
+    public void Init()
+    {
         isActive = false;
+        animator.SetTrigger("Use");
     }
 
     public void Interact(PlayerInteraction player)
@@ -36,6 +41,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
         PhotonView view = PhotonView.Find(viewId);
         PlayerUseItem useItem = view.gameObject.GetComponent<PlayerUseItem>();
         useItem.MyItem = index;
+        itemManager.gameManager.SetItemUI(index);
         Debug.Log((Define.ItemIndex)index);
     }
     public void RegenItem()

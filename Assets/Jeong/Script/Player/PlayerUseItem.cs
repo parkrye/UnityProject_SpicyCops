@@ -24,6 +24,7 @@ public class PlayerUseItem : MonoBehaviourPun
             itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, transform.position, transform.rotation, myItem, photonView.ViewID);
         }
         MyItem = -1;
+        itemManager.gameManager.SetItemUI(myItem);
     }
   
 }

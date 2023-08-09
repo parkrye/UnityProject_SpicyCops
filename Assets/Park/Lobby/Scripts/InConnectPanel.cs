@@ -14,6 +14,7 @@ public class InConnectPanel : MonoBehaviour
     {
         gameObject.SetActive(false);
         lobbyPanel_Rooms.SetActive(true);
+        lobbyPanel_Rooms.GetComponent<LobbyPanel>().OnLobbyCountChanged();
     }
 
     public void OnOptionButtonClicked()

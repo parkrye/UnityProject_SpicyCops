@@ -10,7 +10,7 @@ public class InGameUI_TimeSlider : SceneUI
     public override void Initialize()
     {
         sliders["TimeSlider"].maxValue = inGameUIController.inGameManager.TotalTime;
-        inGameUIController.inGameManager.AddTimeEventListenr(TimeClock);
+        inGameUIController.inGameManager.AddTimeEventListener(TimeClock);
     }
 
     public void TimeClock(float time)

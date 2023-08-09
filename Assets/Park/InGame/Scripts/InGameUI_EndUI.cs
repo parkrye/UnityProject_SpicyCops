@@ -10,7 +10,7 @@ public class InGameUI_EndUI : SceneUI
     {
         base.Initialize();
         inGameUIController = _inGameUIController;
-        inGameUIController.inGameManager.AddPlayerDeadEventListenr(AddPlayerRank);
+        inGameUIController.inGameManager.AddPlayerDeadEventListener(AddPlayerRank);
     }
 
     public void AddPlayerRank((int, string) rankPair)

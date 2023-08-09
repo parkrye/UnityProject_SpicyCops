@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Unity.VisualScripting.StickyNote;
 
 public class CharacterSkinManager : MonoBehaviour
 {

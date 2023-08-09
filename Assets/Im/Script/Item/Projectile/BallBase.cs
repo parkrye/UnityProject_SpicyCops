@@ -6,7 +6,7 @@ public class BallBase : MonoBehaviourPun
 {
     [SerializeField] protected float throwPower = 5;
     [SerializeField] protected float speed = 1.5f;
-    [SerializeField] protected float overlapAreaRange = 5;
+    [SerializeField] protected float overlapAreaRange = 7;
 
     public InGameManager gameManager;
 
