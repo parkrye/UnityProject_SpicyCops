@@ -48,6 +48,10 @@ public class PlayerEntry : SceneUI
             characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
         }
 
+        for(int i = 0; i < characterSkinManagers.Length; i++)
+        {
+            characterSkinManagers[i].gameObject.SetActive(i == avatarNum);
+        }
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
     }
