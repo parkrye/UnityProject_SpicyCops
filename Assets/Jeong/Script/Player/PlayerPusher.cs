@@ -1,10 +1,9 @@
-using Photon.Realtime;
+using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerPusher : MonoBehaviour
+public class PlayerPusher : MonoBehaviourPun
 {
     [SerializeField] private bool debug;
     [SerializeField] private float pushForce; // นฬดย ศ๛
@@ -20,6 +19,7 @@ public class PlayerPusher : MonoBehaviour
 
     [SerializeField] private bool isPushing = false;
 
+    private PlayerInput playerInput;
     private Animator anim;
     
     [SerializeField] private GameObject currentPullTarget;
@@ -28,6 +28,11 @@ public class PlayerPusher : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+
+        playerInput = GetComponent<PlayerInput>();
+
+        if (!photonView.IsMine)
+            Destroy(playerInput);
     }
 
     private void FixedUpdate()

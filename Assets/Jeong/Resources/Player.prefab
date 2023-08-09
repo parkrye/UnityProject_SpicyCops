@@ -366,7 +366,10 @@ MonoBehaviour:
   curSpeed: 0
   moveSpeed: 10
   rotateSpeed: 0.1
+  speedIncrease: 5
+  speedIncreaseDuration: 3
   lookRotation: {fileID: 1081388338}
+  isSpeedUp: 0
 --- !u!114 &6331125720310579712
 MonoBehaviour:
   m_ObjectHideFlags: 0
