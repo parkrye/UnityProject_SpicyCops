@@ -47,7 +47,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     UnityEvent<(int, string)> playerDeadEvent;
     #endregion
 
-    void Start()
+    void Awake()
     {
         timeEvent = new UnityEvent<float>();
         playerAggroEvent = new UnityEvent<Dictionary<int, float>>();
@@ -217,7 +217,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region Timer
     IEnumerator TimerRoutine()
     {
-        while (true)
+        while (NowTime < TotalTime)
         {
             yield return new WaitForSeconds(0.1f);
             photonView.RPC("RequestTimer", RpcTarget.MasterClient, 0.1f);
@@ -235,6 +235,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         NowTime += time;
         timeEvent?.Invoke(NowTime);
+
+        if(NowTime > TotalTime)
+        {
+
+        }
     }
 
     public void AddTimeEventListenr(UnityAction<float> lister)
@@ -258,13 +263,15 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public void ResultAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
         PhotonView player = PhotonView.Find(photonViewID);
+
         playerAggroDictionary.Add(photonViewID, 0f);
         playerAliveDictionary.Add(photonViewID, true);
         playerIDDictonary.Add(playerActorNumber, photonViewID);
         player.transform.position = startPositions[startNum++].position;
         inGameUIController.AddOtherPlayerPhotonView(player);
+
         InGameAvatarManager playerAvatarManager = player.GetComponent<InGameAvatarManager>();
-        /*playerAvatarManager.Initialize(avatarNum, colorNum);*/ // 스킨관련떄문에 주석처리함
+        playerAvatarManager.Initialize(avatarNum, colorNum);
         // 플레이어가 this 참조
         ModifyPlayerAggro(photonViewID, 0f);
         photonView.RPC("RequestCreatedPlayer", RpcTarget.MasterClient);
@@ -315,22 +322,29 @@ public class InGameManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region Alive Manager
-    public void ModifyPlayerAlive(int targetPlayerPhotonViewID, bool isAlive)
+    #region Rank(Dead) Manager
+    public void PlayerDead(int targetPlayerPhotonViewID)
     {
-        photonView.RPC("RequestModifyPlayerAlive", RpcTarget.AllViaServer, targetPlayerPhotonViewID, isAlive);
+        photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
     }
 
     [PunRPC]
-    void RequestModifyPlayerAlive(int targetPlayerPhotonViewID, bool isAlive, PhotonMessageInfo info)
+    void RequestPlayerDead(int targetPlayerPhotonViewID)
     {
-        ResultModifyPlayerAlive(targetPlayerPhotonViewID, isAlive);
+        ResultPlayerDead(targetPlayerPhotonViewID);
     }
 
-    void ResultModifyPlayerAlive(int targetPlayerPhotonViewID, bool isAlive)
+    void ResultPlayerDead(int targetPlayerPhotonViewID)
     {
-        playerAliveDictionary[targetPlayerPhotonViewID] = isAlive;
+        playerAliveDictionary[targetPlayerPhotonViewID] = false;
+        rankQueue.Enqueue((rankQueue.Count + 1, PhotonView.Find(targetPlayerPhotonViewID).Owner.NickName));
         playerAliveEvent?.Invoke(playerAliveDictionary);
+        playerDeadEvent?.Invoke(rankQueue.Peek());
+        
+        if(rankQueue.Count >= readyPlayerCount - 1)
+        {
+            GameEnd();
+        }
     }
 
     public void AddPlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
@@ -341,30 +355,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public void RemovePlayerAliveEventListenr(UnityAction<Dictionary<int, bool>> lister)
     {
         playerAliveEvent?.RemoveListener(lister);
-    }
-    #endregion
-
-    #region Rank Manager
-    public void PlayerDead(int targetPlayerPhotonViewID)
-    {
-        photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
-    }
-
-    [PunRPC]
-    void RequestPlayerDead(int targetPlayerPhotonViewID, PhotonMessageInfo info)
-    {
-        ResultPlayerDead(targetPlayerPhotonViewID);
-    }
-
-    void ResultPlayerDead(int targetPlayerPhotonViewID)
-    {
-        rankQueue.Enqueue((rankQueue.Count + 1, PhotonView.Find(targetPlayerPhotonViewID).Owner.NickName));
-        playerDeadEvent?.Invoke(rankQueue.Peek());
-        
-        if(rankQueue.Count >= readyPlayerCount - 1)
-        {
-            GameEnd();
-        }
     }
 
     public void AddPlayerDeadEventListenr(UnityAction<(int, string)> lister)
@@ -406,11 +396,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     public void DrawEffect(int usingPlayerActorNumber)
     {
-        photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, usingPlayerActorNumber);
+        photonView.RPC("RequestDrawEffect", RpcTarget.AllViaServer, usingPlayerActorNumber);
     }
 
     [PunRPC]
-    void RequestDrawEffect(int usingPlayerActorNumber, PhotonMessageInfo info)
+    void RequestDrawEffect(int usingPlayerActorNumber)
     {
         ResultDrawEffect(usingPlayerActorNumber);
     }

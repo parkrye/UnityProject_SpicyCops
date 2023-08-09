@@ -6,14 +6,14 @@ using UnityEngine.AI;
 
 namespace Jeon
 {
-    public abstract class Enemy : MonoBehaviourPun
+    public class Enemy : MonoBehaviourPun
     {
         [SerializeField] Transform player;  
 
         private NavMeshAgent agent;
         private Animator anim;
 
-        public PhotonView photonView;
+        private PhotonView _photonView;
 
         public Animator Anim { get { return anim; } }
         [SerializeField] InGameManager inGameManager;
@@ -40,7 +40,7 @@ namespace Jeon
 
         private void SetServerTime(float time)
         {
-            photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
+            _photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
 
         }
 
@@ -113,32 +113,30 @@ namespace Jeon
             anim.SetBool("WalkTime", true);
             agent.speed = 3f;
 
-            // Player중에 어그로수치가 가장 높은 player를 쫒는다
             curState = EnemyState.Follow;
-            material.color = new Color(1, 0.75f, 0.75f);
         }
 
         private void DoAngry()
         {
-            agent.speed = 3.5f;
+            agent.speed = 4f;
             anim.SetBool("WalkTime", false);
             anim.SetBool("RunningTime", true);
 
             curState = EnemyState.Angry;
-            material.color = new Color(1, 0.45f, 0.45f);
+            material.color = new Color(1, 0.65f, 0.65f);
         }
 
         private void DoSemiBerserker()
         {
-            agent.speed = 4f;
+            agent.speed = 5.5f;
 
-            material.color = new Color(1, 0.15f, 0.15f);
             curState = EnemyState.SemiBerserker;
+            material.color = new Color(1, 0.45f, 0.45f);
         }
 
         private void DoBerserker()
         {
-            agent.speed = 6f;
+            agent.speed = 8f;
             material.color = new Color(0.24f, 0f, 0f);
 
             curState = EnemyState.Berserker;
@@ -154,7 +152,7 @@ namespace Jeon
             StopAllCoroutines();
         }
 
-        private void DoCatch()
+        /*private void DoCatch()
         {
             curSpeed = agent.speed;
 
@@ -166,7 +164,7 @@ namespace Jeon
             curState = EnemyState.Idle;
             agent.speed = curSpeed;
             curState = lastState;
-        }
+        }*/
 
         IEnumerator FindPlayer()
         {

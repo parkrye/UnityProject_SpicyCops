@@ -346,8 +346,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2ff7dda7e776f409f25f4496466a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curSpeed: 0
   moveSpeed: 10
   rotateSpeed: 3
+  lookRotation: {fileID: 0}
 --- !u!114 &505872770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,7 +903,7 @@ GameObject:
   - component: {fileID: 5789641316916756526}
   - component: {fileID: 302688056}
   m_Layer: 0
-  m_Name: pullTarget
+  m_Name: PlayerTarget
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
