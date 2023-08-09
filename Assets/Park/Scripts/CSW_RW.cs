@@ -19,10 +19,11 @@ public static class CSV_RW
     {
         Dictionary<string, UserData> answer = new();       // 저장할 딕셔너리
 
-        TextAsset data = Resources.Load<Object>($"CSV/{GameData.ACCOUNTCSVFILE}") as TextAsset;
+        Object readData = Resources.Load<Object>($"CSV/{GameData.ACCOUNTCSVFILE}");
 
-        if (!data)
+        if (!readData)
             return answer;
+        TextAsset data = readData as TextAsset;
 
         // 텍스트에셋으로 변환한 기록 파일 데이터
         string[] texts = data.text.Split("\n");             // 데이터를 줄바꿈 단위로 분할한 문자열 배열
@@ -55,8 +56,6 @@ public static class CSV_RW
         foreach (KeyValuePair<string, UserData> pair in GameData.accounts)
         {                                                       // 각 데이터 쌍에 대하여
             sb.Append(pair.Key);
-            sb.Append(delimiter);
-            sb.Append(pair.Value.id);
             sb.Append(delimiter);
             sb.Append(pair.Value.coin);
             sb.Append(delimiter);

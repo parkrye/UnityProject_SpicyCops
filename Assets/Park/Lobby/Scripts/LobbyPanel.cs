@@ -15,6 +15,7 @@ public class LobbyPanel : SceneUI
 	[SerializeField] EnterPrivateRoomPanel enterPrivateRoomPanel;
 
     [SerializeField] GameObject shopPanel;
+    [SerializeField] GameObject lobbyPanel_InConnect;
 
     protected override void Awake()
 	{
@@ -40,8 +41,9 @@ public class LobbyPanel : SceneUI
     }
 
     public void OnLeaveLobbyClicked()
-	{
-		PhotonNetwork.LeaveLobby();
+    {
+        gameObject.SetActive(false);
+        lobbyPanel_InConnect.SetActive(true);
     }
 
     public void OnRandomMatchingButtonClicked()
@@ -68,7 +70,6 @@ public class LobbyPanel : SceneUI
 	{
 		ClearRoomList();
 
-		// 여기서 받아온 room에 roomoption이 없음
 		foreach (RoomInfo room in roomList)
         {
 			StatePanel.Instance.AddMessage(room.CustomProperties.ToString());

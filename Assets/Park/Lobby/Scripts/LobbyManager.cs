@@ -7,16 +7,17 @@ using UnityEngine;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-	public enum Panel { Login, InConnect, Lobby, Room }
+	public enum Panel { Login, Lobby, Room }
 
 	[SerializeField] Panel curPanel, prevPanel;
 
 	[SerializeField] LoginPanel loginPanel;
-	[SerializeField] InConnectPanel inConnectPanel;
 	[SerializeField] RoomPanel roomPanel;
-	[SerializeField] LobbyPanel lobbyPanel;
+    [SerializeField] InConnectPanel lobbyPanel_InConnect;
+    [SerializeField] LobbyPanel lobbyPanel_Rooms;
+    [SerializeField] GameObject lobbyPannel;
 
-	void Start()
+    void Start()
 	{
 		if (PhotonNetwork.IsConnected)
 		{
@@ -45,7 +46,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
 	{
 		if(prevPanel.Equals(Panel.Login))
-			SetActivePanel(Panel.InConnect);
+			SetActivePanel(Panel.Lobby);
+        PhotonNetwork.JoinLobby();
     }
 
 	public override void OnDisconnected(DisconnectCause cause)
@@ -84,7 +86,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 	{
 		SetActivePanel(Panel.Lobby);
         AddMessage("Left room");
-        lobbyPanel.OnLobbyCountChanged();
+        PhotonNetwork.JoinLobby();
+        lobbyPanel_Rooms.OnLobbyCountChanged();
     }
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -110,18 +113,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
 	{
         SetActivePanel(Panel.Lobby);
-        lobbyPanel.OnLobbyCountChanged();
+        lobbyPanel_Rooms.OnLobbyCountChanged();
     }
 
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
 	{
-		lobbyPanel.UpdateRoomList(roomList);
+		lobbyPanel_Rooms.UpdateRoomList(roomList);
 	}
 
 	public override void OnLeftLobby()
 	{
-		SetActivePanel(Panel.InConnect);
-        lobbyPanel.OnLobbyCountChanged();
+		SetActivePanel(Panel.Lobby);
+        lobbyPanel_Rooms.OnLobbyCountChanged();
     }
 
 	void SetActivePanel(Panel panel)
@@ -130,10 +133,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 		curPanel = panel;
 
         loginPanel.gameObject?.SetActive(curPanel == Panel.Login);
-		inConnectPanel.gameObject?.SetActive(curPanel == Panel.InConnect);
 		roomPanel.gameObject?.SetActive(curPanel == Panel.Room);
-		lobbyPanel.gameObject?.SetActive(curPanel == Panel.Lobby);
-	}
+        lobbyPannel.SetActive(curPanel == Panel.Lobby);
+    }
 
 	void AddMessage(string message)
 	{
@@ -144,7 +146,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 	{
 		while (PhotonNetwork.InLobby)
         {
-            lobbyPanel.OnLobbyCountChanged();
+            lobbyPanel_Rooms.OnLobbyCountChanged();
             yield return new WaitForSeconds(1f);
 		}
 	}

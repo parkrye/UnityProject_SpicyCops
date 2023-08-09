@@ -2,8 +2,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ItemManager : MonoBehaviourPun
 {
