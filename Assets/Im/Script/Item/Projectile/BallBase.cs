@@ -1,16 +1,12 @@
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class BallBase : MonoBehaviourPun
 {
     [SerializeField] protected float throwPower = 5;
     [SerializeField] protected float speed = 1.5f;
-    [SerializeField] protected float overlapAreaRange = 3;
+    [SerializeField] protected float overlapAreaRange = 5;
 
     public InGameManager gameManager;
 

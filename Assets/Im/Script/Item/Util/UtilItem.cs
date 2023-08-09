@@ -13,8 +13,4 @@ public class UtilItem : Item
     {
         GetUtilEffect(viewId);
     }
-    public virtual IEnumerator Corutine(int viewId, Player player)
-    {
-        yield return null;
-    }
 }
