@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class SafeArea : MonoBehaviourPun
     float maxScale = 300;
     float minScale = 55;
     float time = 120;
+    float rate;
+    float scale;
+    float oneTick;
 
     public List<int> outAreaPlayer;
     public InGameManager gameManager;
@@ -15,8 +19,17 @@ public class SafeArea : MonoBehaviourPun
     private void Awake()
     {
         outAreaPlayer = new List<int>();
+        oneTick = 1 / 1200;
     }
 
+    private void GrowLess(float f)
+    {
+        scale = Mathf.Lerp(maxScale, minScale, rate);
+        transform.localScale = new Vector3(scale, 8, scale);
+        rate += oneTick;
+        if (rate > 1)
+            gameManager.RemoveTimeEventListener(GrowLess);
+    }
     private void OutCheck(float f)
     {
         foreach (int i in outAreaPlayer)
@@ -29,7 +42,10 @@ public class SafeArea : MonoBehaviourPun
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
+        rate = 0;
+        scale = maxScale;
         outAreaPlayer = new List<int>();
+        gameManager.AddTimeEventListener(GrowLess);
         gameManager.AddTimeEventListener(OutCheck);
         AreaEnable();
     }

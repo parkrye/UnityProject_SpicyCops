@@ -9,6 +9,8 @@ public class FrostBomb : ProjectileItem
 {
     protected override void Projectile(Vector3 pos, Quaternion rot, float lag, int viewId)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
         GameObject ball = PhotonNetwork.Instantiate("FrostBomb", pos, rot);
         BallBase b = ball.GetComponent<BallBase>();
         b.SetPlayer(viewId);

@@ -32,13 +32,13 @@ public class ItemManager : MonoBehaviourPun
     }
 
     [PunRPC]
-    protected void RequestUseItem(Vector3 pos, Quaternion rot, int index, int viewId, PhotonMessageInfo info)
+    public void RequestUseItem(Vector3 pos, Quaternion rot, int index, int viewId, PhotonMessageInfo info)
     {
         float sentTime = (float)info.SentServerTime;
-        photonView.RPC("ResultUseItem", RpcTarget.MasterClient, pos, rot, sentTime, viewId, index, info.Sender);
+        photonView.RPC("ResultUseItem", RpcTarget.AllBufferedViaServer, pos, rot, sentTime, viewId, index, info.Sender);
     }
     [PunRPC]
-    protected void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index, Player sender)
+    public void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index, Player sender)
     {
         float lag = (float)(PhotonNetwork.Time - sentTime);
         itemList[index].UseItem(pos, rot, lag, viewId, sender);
