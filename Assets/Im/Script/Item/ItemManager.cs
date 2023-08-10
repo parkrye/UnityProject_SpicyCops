@@ -48,7 +48,7 @@ public class ItemManager : MonoBehaviourPun
     public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
     {
         int randNum = UnityEngine.Random.Range(0, itemList.Length);
-        // int randNum = (int)Define.ItemIndex.SmokeBomb;
+        // int randNum = (int)Define.ItemIndex.Hammer;
         itemSpots[itemSpotIndex].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
     

@@ -47,12 +47,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nowTime: 0
   totalTime: 180
+  readyPlayerCount: 0
   safeArea: {fileID: 0}
   enemy: {fileID: 0}
   startPositions: []
   startNum: 0
   inGameUIController: {fileID: 0}
   playerCamera: {fileID: 0}
+  itemManager: {fileID: 0}
+  igmPhotonView: {fileID: 2526807270449311358}
 --- !u!114 &2526807270449311358
 MonoBehaviour:
   m_ObjectHideFlags: 0
