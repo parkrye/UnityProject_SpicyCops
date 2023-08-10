@@ -8,8 +8,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpreadInk", menuName = "Item/Util/SpreadInk")]
 public class SpreadInk : UtilItem
 {
-    protected override void GetUtilEffect(int viewId)
+    protected override void GetUtilEffect(int viewId, Player sender)
     {
-        gameManager.DrawEffect(viewId);
+        gameManager.DrawEffect(sender.ActorNumber);
     }
 }

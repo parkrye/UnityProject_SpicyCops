@@ -3,19 +3,21 @@ using UnityEngine;
 
 public class InGameAvatarManager : CharacterSkinManager
 {
-    [SerializeField] List<GameObject> avatars;
+    [SerializeField] Animator animator;
+    [SerializeField] List<GameObject> characters;
+    [SerializeField] List<Avatar> avatars;
     [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] int avatarNum;
     
     public void Initialize(int _avatar, int _color)
     {
-        avatars = new List<GameObject>();
         avatarNum = _avatar;
 
-        for(int i = 0; i < avatars.Count; i++)
+        for(int i = 0; i < characters.Count; i++)
         {
-            avatars[i].SetActive(i == avatarNum);
+            characters[i].SetActive(i == avatarNum);
         }
+        animator.avatar = avatars[avatarNum];
 
         SettingColor(_color);
     }

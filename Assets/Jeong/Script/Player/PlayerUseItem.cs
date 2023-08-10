@@ -1,13 +1,22 @@
 using Photon.Pun;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerUseItem : MonoBehaviourPun
 {
     [SerializeField] Transform ProjectilePos;
     [SerializeField] ItemManager itemManager;
+    [SerializeField] List<Transform> hammers;
+
+    Animator anim;
     private void Awake()
     {
         itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+        for(int i = 0; i < hammers.Count; i++)
+            hammers[i].gameObject.SetActive(false);
+
+        anim = GetComponent<Animator>();
         myItem = -1;
     }
     private int myItem;
@@ -23,8 +32,30 @@ public class PlayerUseItem : MonoBehaviourPun
         {
             itemManager.photonView.RPC("RequestUseItem", RpcTarget.MasterClient, transform.position, transform.rotation, myItem, photonView.ViewID);
         }
+
+        if (itemManager.itemList[myItem].WeaponType == Define.WeaponType.Melee)
+        {
+
+            //hammer.transform.position = new Vector3(0, 0.008f, 0f);
+            //hammer.transform.localEulerAngles = new Vector3(0, 90, 0);
+
+            anim.SetTrigger("IsHammer");
+            StartCoroutine(HammerRoutine());
+        }
         MyItem = -1;
         itemManager.gameManager.SetItemUI(myItem);
     }
-  
+
+    public IEnumerator HammerRoutine()
+    {
+        for (int i = 0; i < hammers.Count; i++)
+        {
+            hammers[i].gameObject.SetActive(true);
+
+        }
+        yield return new WaitForSeconds(1.5f);
+        for (int i = 0; i < hammers.Count; i++)
+            hammers[i].gameObject.SetActive(false);
+    }
+        
 }

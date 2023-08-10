@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Shoes", menuName = "Item/Util/Shoes")]
 public class Shoes : UtilItem
 {
-    protected override void GetUtilEffect(int viewId)
+    protected override void GetUtilEffect(int viewId, Player sender)
     {
         PhotonView view = PhotonView.Find(viewId);
         PlayerMover mover = view.gameObject.GetComponent<PlayerMover>();
