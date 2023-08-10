@@ -591,6 +591,8 @@ MonoBehaviour:
   skinMaterials: []
   skinRenderer: {fileID: 0}
   colorNum: 0
+  animator: {fileID: 0}
+  characters: []
   avatars:
   - {fileID: 0}
   - {fileID: 0}
@@ -617,6 +619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectilePos: {fileID: 3581481082758046739}
   itemManager: {fileID: 0}
+  hammers: []
 --- !u!114 &9097749911895436960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,6 +693,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 0
     Name: IsStun
+  - Type: 9
+    SynchronizeType: 0
+    Name: IsHammer
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
