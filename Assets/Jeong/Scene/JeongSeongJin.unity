@@ -6491,7 +6491,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-112942
+  m_Name: pb_Mesh-1252780
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8343,16 +8343,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2605984385375819106, guid: 61717d0222d3aba469d0df527f71b1c5,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.000000022510386
-      objectReference: {fileID: 0}
-    - target: {fileID: 2605984385375819106, guid: 61717d0222d3aba469d0df527f71b1c5,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.000000009241283
-      objectReference: {fileID: 0}
     - target: {fileID: 4381141863056317004, guid: 61717d0222d3aba469d0df527f71b1c5,
         type: 3}
       propertyPath: m_RootOrder
@@ -8407,11 +8397,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9097749911895436960, guid: 61717d0222d3aba469d0df527f71b1c5,
-        type: 3}
-      propertyPath: sceneViewId
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61717d0222d3aba469d0df527f71b1c5, type: 3}
