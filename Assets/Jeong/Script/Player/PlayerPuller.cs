@@ -29,7 +29,6 @@ public class PlayerPuller : MonoBehaviourPun
 
     private void Start()
     {
-        playerInput  = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
 
         playerInput = GetComponent<PlayerInput>();

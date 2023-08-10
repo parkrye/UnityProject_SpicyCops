@@ -39,8 +39,9 @@ public class PlayerUseItem : MonoBehaviourPun
             //hammer.transform.position = new Vector3(0, 0.008f, 0f);
             //hammer.transform.localEulerAngles = new Vector3(0, 90, 0);
 
-            anim.SetTrigger("IsHammer");
+            anim.SetBool("IsHammer", true);
             StartCoroutine(HammerRoutine());
+            anim.SetBool("IsHammer", false);
         }
         MyItem = -1;
         itemManager.gameManager.SetItemUI(myItem);

@@ -71,7 +71,7 @@ public class PlayerPusher : MonoBehaviourPun
                 isPushing = true;
                 pushingStartTime = Time.time;
                 FindTargetPlayer();
-                anim.SetTrigger("IsPushed");
+                anim.SetBool("IsPushed",true);
                 canPush = false;
             }
         }

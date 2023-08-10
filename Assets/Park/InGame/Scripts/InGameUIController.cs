@@ -22,6 +22,7 @@ public class InGameUIController : MonoBehaviour
     [SerializeField] GameObject playingUI;
     [SerializeField] GameObject effectUI;
     [SerializeField] bool isPlaying;
+    public bool IsPlaying { get { return isPlaying; } }
 
     public void Initialize()
     {

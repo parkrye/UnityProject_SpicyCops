@@ -36,8 +36,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] CinemachineVirtualCamera playerCamera;
 
-    [SerializeField] Queue<(int, string)> rankQueue;
-    public Queue<(int, string)> RankQueue { get { return rankQueue; } }
+    [SerializeField] Queue<(int, int)> rankQueue;
+    public Queue<(int, int)> RankQueue { get { return rankQueue; } }
 
     [SerializeField] ItemManager itemManager;
     public ItemManager ItemManager { get {  return itemManager; } }
@@ -46,7 +46,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     UnityEvent<float> timeEvent;
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
-    UnityEvent<(int, string)> playerDeadEvent;
+    UnityEvent<(int, int)> playerDeadEvent;
     #endregion
 
     void Awake()
@@ -57,8 +57,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAggroDictionary = new Dictionary<int, float>();
         playerAliveDictionary = new Dictionary<int, bool>();
         playerIDDictonary = new Dictionary<int, int>();
-        rankQueue = new Queue<(int, string)> ();
-        playerDeadEvent = new UnityEvent<(int, string)> ();
+        rankQueue = new Queue<(int, int)> ();
+        playerDeadEvent = new UnityEvent<(int, int)> ();
         inGameUIController.Initialize();
 
         // Normal game mode
@@ -265,7 +265,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         if(NowTime > TotalTime)
         {
-
+            GameEnd();
         }
     }
 
@@ -282,7 +282,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     #region Adding Player
     [PunRPC]
-    void RequestAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum, PhotonMessageInfo info)
+    void RequestAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
         ResultAddPlayer(playerActorNumber, photonViewID, avatarNum, colorNum);
     }
@@ -290,6 +290,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public void ResultAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
         PhotonView player = PhotonView.Find(photonViewID);
+        Debug.Log(player.gameObject.name + playerActorNumber);
 
         playerAggroDictionary.Add(photonViewID, 0f);
         playerAliveDictionary.Add(photonViewID, true);
@@ -319,7 +320,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void RequestModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue, PhotonMessageInfo info)
+    void RequestModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue)
     {
         if (playerAliveDictionary[targetPlayerPhotonViewID])
         {
@@ -364,7 +365,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     void ResultPlayerDead(int targetPlayerPhotonViewID)
     {
         playerAliveDictionary[targetPlayerPhotonViewID] = false;
-        rankQueue.Enqueue((rankQueue.Count + 1, PhotonView.Find(targetPlayerPhotonViewID).Owner.NickName));
+        rankQueue.Enqueue((rankQueue.Count + 1, targetPlayerPhotonViewID));
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankQueue.Peek());
         
@@ -384,12 +385,12 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAliveEvent?.RemoveListener(lister);
     }
 
-    public void AddPlayerDeadEventListener(UnityAction<(int, string)> lister)
+    public void AddPlayerDeadEventListener(UnityAction<(int, int)> lister)
     {
         playerDeadEvent.AddListener(lister);
     }
 
-    public void RemovePlayerDeadEventListener(UnityAction<(int, string)> lister)
+    public void RemovePlayerDeadEventListener(UnityAction<(int, int)> lister)
     {
         playerDeadEvent?.RemoveListener(lister);
     }
@@ -398,7 +399,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region End Game Manager
     public void GameEnd()
     {
-        igmPhotonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
+        if (inGameUIController.IsPlaying)
+        {
+            
+            igmPhotonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
+        }
     }
 
     [PunRPC]

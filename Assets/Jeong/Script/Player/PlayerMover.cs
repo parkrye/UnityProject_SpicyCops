@@ -33,6 +33,7 @@ public class PlayerMover : MonoBehaviourPun
     private float ySpeed;
 
     private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
+    private bool isPushing = false; // PlayerPuller 클래스로부터 전달받은 값
 
     private bool isSpeedUp = false;
     private bool isSpeedDown = false;
@@ -168,8 +169,9 @@ public class PlayerMover : MonoBehaviourPun
             Debug.Log("스턴 코루틴 시작");
             // moveSpeed = 0; // 스턴하여 0으로 이동속도가 고정된다.
             haveControll = false;
-            anim.SetTrigger("IsStun");
+            anim.SetBool("IsStun", true);
             yield return new WaitForSeconds(2); // speedIncreaseDuration시간만큼 지속한다.
+            anim.SetBool("IsStun", false);
             Debug.Log("스턴 코루틴 종료");
             // moveSpeed = originSpeed; //스턴이 풀리면 10으로 이동속도가 돌아온다.
             haveControll = true;
@@ -177,24 +179,51 @@ public class PlayerMover : MonoBehaviourPun
         }
     }
 
-    public void OnSpeedUp() // 스피드업
+    [PunRPC]
+    public void OnSpeedUp(int viewID) // 스피드업
     {
+        if (photonView.ViewID != viewID)
+            return;
         isSpeedUp = true;
         startSpeedChangeTIme = Time.time;
         StartCoroutine(speedChangerRoutine());
     }
 
-    public void OnSpeedDown() // 스피드다운
+    [PunRPC]
+    public void OnSpeedDown(int viewID) // 스피드다운
     {
+        if (photonView.ViewID != viewID)
+            return;
         isSpeedDown = true;
         startSpeedChangeTIme = Time.time;
         StartCoroutine(speedChangerRoutine());
     }
 
-    public void OnStun() // 스턴
+    [PunRPC]
+    public void OnStun(int viewID) // 스턴
     {
+        if (photonView.ViewID != viewID)
+            return;
         isStun = true;
         startSpeedChangeTIme = Time.time;
         StartCoroutine(speedChangerRoutine());
+    }
+
+    [PunRPC]
+    public void Annoy(int viewID)
+    {
+        if(photonView.ViewID != viewID)
+        {
+            if (isPulling)
+            {
+
+            }
+
+            if (isPushing)
+            {
+
+            }
+        }
+       
     }
 }
