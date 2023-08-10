@@ -1,7 +1,5 @@
 using Photon.Pun;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "Hammer", menuName = "Item/Melee/Hammer")]
 public class Hammer : MeleeItem
@@ -26,7 +24,7 @@ public class Hammer : MeleeItem
             PlayerMover mover = collider.gameObject.GetComponent<PlayerMover>();
             if (mover == null)
                 return;
-            mover.OnStun();
+            mover.photonView.RPC("OnStun", RpcTarget.AllBufferedViaServer, viewId);
             Debug.Log($"Hammer End : {mover.gameObject.name}");
         }
     }

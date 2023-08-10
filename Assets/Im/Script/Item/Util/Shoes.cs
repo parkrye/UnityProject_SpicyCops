@@ -1,7 +1,5 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Shoes", menuName = "Item/Util/Shoes")]
@@ -11,6 +9,6 @@ public class Shoes : UtilItem
     {
         PhotonView view = PhotonView.Find(viewId);
         PlayerMover mover = view.gameObject.GetComponent<PlayerMover>();
-        mover.OnSpeedUp();
+        mover.photonView.RPC("OnSpeedUp", RpcTarget.AllBufferedViaServer, viewId);
     }
 }

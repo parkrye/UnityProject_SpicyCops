@@ -1,6 +1,4 @@
 using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FrostBombBall : BallBase
@@ -11,7 +9,7 @@ public class FrostBombBall : BallBase
     protected override void ResultExplosion(Vector3 pos, Quaternion rot, float sentTime)
     {
         Instantiate(effect, pos, Quaternion.identity);
-        if (PhotonNetwork.IsMasterClient)
+        if (photonView.IsMine)
         {
             // 현재위치 기준 이펙트 및 사운드 적용
             Collider[] colliders = Physics.OverlapSphere(transform.position, overlapAreaRange);
@@ -21,7 +19,7 @@ public class FrostBombBall : BallBase
                 PlayerMover mover = collider.GetComponent<PlayerMover>();
                 if (view != null && mover != null)
                 {
-                    mover.OnSpeedDown();
+                    mover.photonView.RPC("OnSpeedDown", RpcTarget.AllBufferedViaServer, viewId);
                 }
             }
         }
