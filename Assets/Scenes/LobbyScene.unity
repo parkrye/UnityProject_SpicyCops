@@ -439,6 +439,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crazy scientist
       objectReference: {fileID: 0}
+    - target: {fileID: 6326760830822150712, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7031933953721532459, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
         type: 3}
       propertyPath: m_RootOrder
@@ -513,6 +518,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FBI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996776852075684105, guid: 34a89d04af0d3c3438b091d1d895264a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7305838183715394330, guid: 34a89d04af0d3c3438b091d1d895264a,
         type: 3}
@@ -1077,6 +1087,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Girl
       objectReference: {fileID: 0}
+    - target: {fileID: 4447908933908678650, guid: 2337ef6071b611c40b5d42ed87b99769,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2337ef6071b611c40b5d42ed87b99769, type: 3}
 --- !u!4 &448652189 stripped
@@ -1096,6 +1111,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Motorcyclist
+      objectReference: {fileID: 0}
+    - target: {fileID: 279104201349821182, guid: 6bce7cb48847f304f85f026dc3bbdd65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3856429360522232045, guid: 6bce7cb48847f304f85f026dc3bbdd65,
         type: 3}
@@ -1611,6 +1631,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mafia
       objectReference: {fileID: 0}
+    - target: {fileID: 3030949767923905666, guid: 02388f8fddbc37545b9993345e2450a1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02388f8fddbc37545b9993345e2450a1, type: 3}
 --- !u!4 &686117730 stripped
@@ -1685,6 +1710,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mafia
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030949767923905666, guid: 02388f8fddbc37545b9993345e2450a1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02388f8fddbc37545b9993345e2450a1, type: 3}
@@ -1785,6 +1815,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Motorcyclist
+      objectReference: {fileID: 0}
+    - target: {fileID: 279104201349821182, guid: 6bce7cb48847f304f85f026dc3bbdd65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3856429360522232045, guid: 6bce7cb48847f304f85f026dc3bbdd65,
         type: 3}
@@ -2051,6 +2086,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier
       objectReference: {fileID: 0}
+    - target: {fileID: 807992066100780470, guid: a2d69b97cb06e054285620e403e831bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4426415389623431077, guid: a2d69b97cb06e054285620e403e831bb,
         type: 3}
       propertyPath: m_RootOrder
@@ -2200,6 +2240,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Soldier
+      objectReference: {fileID: 0}
+    - target: {fileID: 807992066100780470, guid: a2d69b97cb06e054285620e403e831bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4426415389623431077, guid: a2d69b97cb06e054285620e403e831bb,
         type: 3}
@@ -2364,6 +2409,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Girl
       objectReference: {fileID: 0}
+    - target: {fileID: 4447908933908678650, guid: 2337ef6071b611c40b5d42ed87b99769,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2337ef6071b611c40b5d42ed87b99769, type: 3}
 --- !u!4 &911238688 stripped
@@ -2439,6 +2489,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mafia
       objectReference: {fileID: 0}
+    - target: {fileID: 3030949767923905666, guid: 02388f8fddbc37545b9993345e2450a1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02388f8fddbc37545b9993345e2450a1, type: 3}
 --- !u!4 &953071502 stripped
@@ -2458,6 +2513,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Crazy scientist
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326760830822150712, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7031933953721532459, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
         type: 3}
@@ -2533,6 +2593,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Boy
+      objectReference: {fileID: 0}
+    - target: {fileID: 952330037130876120, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4281800401248331467, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
         type: 3}
@@ -2685,6 +2750,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boy
       objectReference: {fileID: 0}
+    - target: {fileID: 952330037130876120, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4281800401248331467, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
         type: 3}
       propertyPath: m_RootOrder
@@ -2759,6 +2829,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Soldier
+      objectReference: {fileID: 0}
+    - target: {fileID: 807992066100780470, guid: a2d69b97cb06e054285620e403e831bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4426415389623431077, guid: a2d69b97cb06e054285620e403e831bb,
         type: 3}
@@ -2835,6 +2910,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier
       objectReference: {fileID: 0}
+    - target: {fileID: 807992066100780470, guid: a2d69b97cb06e054285620e403e831bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4426415389623431077, guid: a2d69b97cb06e054285620e403e831bb,
         type: 3}
       propertyPath: m_RootOrder
@@ -2910,6 +2990,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crazy scientist
       objectReference: {fileID: 0}
+    - target: {fileID: 6326760830822150712, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7031933953721532459, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
         type: 3}
       propertyPath: m_RootOrder
@@ -2984,6 +3069,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Cowboy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6798638026522900259, guid: 21a51f292d2ecd446baf58deb58b577f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7494768900983932208, guid: 21a51f292d2ecd446baf58deb58b577f,
         type: 3}
@@ -3205,6 +3295,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FBI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996776852075684105, guid: 34a89d04af0d3c3438b091d1d895264a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7305838183715394330, guid: 34a89d04af0d3c3438b091d1d895264a,
         type: 3}
@@ -3430,6 +3525,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Motorcyclist
       objectReference: {fileID: 0}
+    - target: {fileID: 279104201349821182, guid: 6bce7cb48847f304f85f026dc3bbdd65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3856429360522232045, guid: 6bce7cb48847f304f85f026dc3bbdd65,
         type: 3}
       propertyPath: m_RootOrder
@@ -3559,6 +3659,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mafia
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030949767923905666, guid: 02388f8fddbc37545b9993345e2450a1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02388f8fddbc37545b9993345e2450a1, type: 3}
@@ -3695,6 +3800,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Motorcyclist
       objectReference: {fileID: 0}
+    - target: {fileID: 279104201349821182, guid: 6bce7cb48847f304f85f026dc3bbdd65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3856429360522232045, guid: 6bce7cb48847f304f85f026dc3bbdd65,
         type: 3}
       propertyPath: m_RootOrder
@@ -3769,6 +3879,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Boy
+      objectReference: {fileID: 0}
+    - target: {fileID: 952330037130876120, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4281800401248331467, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
         type: 3}
@@ -3900,6 +4015,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Girl
       objectReference: {fileID: 0}
+    - target: {fileID: 4447908933908678650, guid: 2337ef6071b611c40b5d42ed87b99769,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2337ef6071b611c40b5d42ed87b99769, type: 3}
 --- !u!4 &1817499545 stripped
@@ -3919,6 +4039,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Boy
+      objectReference: {fileID: 0}
+    - target: {fileID: 952330037130876120, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4281800401248331467, guid: e4c7fd64ec6648a42ab0f0c2bdb74dea,
         type: 3}
@@ -4101,6 +4226,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Girl
       objectReference: {fileID: 0}
+    - target: {fileID: 4447908933908678650, guid: 2337ef6071b611c40b5d42ed87b99769,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2337ef6071b611c40b5d42ed87b99769, type: 3}
 --- !u!4 &1873462627 stripped
@@ -4120,6 +4250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FBI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996776852075684105, guid: 34a89d04af0d3c3438b091d1d895264a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7305838183715394330, guid: 34a89d04af0d3c3438b091d1d895264a,
         type: 3}
@@ -4196,6 +4331,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crazy scientist
       objectReference: {fileID: 0}
+    - target: {fileID: 6326760830822150712, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7031933953721532459, guid: 96d594069cc683d4d9e7ee9e2f0913c8,
         type: 3}
       propertyPath: m_RootOrder
@@ -4271,6 +4411,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cowboy
       objectReference: {fileID: 0}
+    - target: {fileID: 6798638026522900259, guid: 21a51f292d2ecd446baf58deb58b577f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7494768900983932208, guid: 21a51f292d2ecd446baf58deb58b577f,
         type: 3}
       propertyPath: m_RootOrder
@@ -4345,6 +4490,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FBI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996776852075684105, guid: 34a89d04af0d3c3438b091d1d895264a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7305838183715394330, guid: 34a89d04af0d3c3438b091d1d895264a,
         type: 3}
@@ -4804,6 +4954,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cowboy
       objectReference: {fileID: 0}
+    - target: {fileID: 6798638026522900259, guid: 21a51f292d2ecd446baf58deb58b577f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7494768900983932208, guid: 21a51f292d2ecd446baf58deb58b577f,
         type: 3}
       propertyPath: m_RootOrder
@@ -4878,6 +5033,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Cowboy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6798638026522900259, guid: 21a51f292d2ecd446baf58deb58b577f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7494768900983932208, guid: 21a51f292d2ecd446baf58deb58b577f,
         type: 3}

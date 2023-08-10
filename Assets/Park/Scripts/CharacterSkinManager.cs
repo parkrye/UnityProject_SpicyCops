@@ -10,7 +10,6 @@ public class CharacterSkinManager : MonoBehaviour
     void Awake()
     {
         skinMaterials = new List<Color>();
-        skinRenderer = GetComponentInChildren<Renderer>();
     }
 
     void Start()
@@ -23,6 +22,7 @@ public class CharacterSkinManager : MonoBehaviour
 
     public void SettingColor(int num)
     {
+        skinRenderer = GetComponentInChildren<Renderer>();
         colorNum = num;
         skinRenderer.materials[0].color = skinMaterials[num];
     }
