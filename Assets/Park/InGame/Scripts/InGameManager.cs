@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
+using ExitGames.Client.Photon.StructWrapping;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
@@ -159,6 +160,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
+    
     #region Start Game
     IEnumerator GameStartTimer()
     {
@@ -170,8 +172,19 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber].position, Quaternion.identity, 0);
-        igmPhotonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
+        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber-1].position, Quaternion.identity, 0);
+
+        int avatarNum = 0, colorNum = 0;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
+        {
+            avatarNum = (int) avatarValue;
+        }
+        if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_COLOR, out object colorValue))
+        {
+            colorNum = (int) colorValue;
+        }
+        
+        igmPhotonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
@@ -192,7 +205,17 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
         GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber - 1].position, Quaternion.identity, 0);
-        igmPhotonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, GameData.CurrentAvatarNum, GameData.CurrentColorNum);
+        int avatarNum = 0, colorNum = 0;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
+        {
+            avatarNum = (int)avatarValue;
+        }
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_COLOR, out object colorValue))
+        {
+            colorNum = (int)colorValue;
+        }
+
+        igmPhotonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;

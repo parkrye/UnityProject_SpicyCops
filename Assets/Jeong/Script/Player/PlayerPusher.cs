@@ -62,6 +62,7 @@ public class PlayerPusher : MonoBehaviourPun
 
     private void OnPush(InputValue value)
     {
+        
         // z키를 누르면 
         if (value.isPressed && canPush)
         {

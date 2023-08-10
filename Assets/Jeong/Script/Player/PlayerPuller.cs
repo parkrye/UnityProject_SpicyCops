@@ -79,6 +79,7 @@ public class PlayerPuller : MonoBehaviourPun
 
     private void OnPull(InputValue value)
     {
+        
         // x키를 누르면 
         if (value.isPressed && canPull)
         {
