@@ -149,6 +149,15 @@ namespace Jeon
             StopAllCoroutines();
         }
         #endregion
+        private void StartAnimator()
+        {
+            anim.SetBool("InArea", true);
+        }
+
+        private void StopAnimator()
+        {
+            anim.SetBool("InArea", false);
+        }
         IEnumerator FindPlayer()
         {
             yield return new WaitForSeconds(5f);
@@ -158,7 +167,7 @@ namespace Jeon
             while (true)
             {
                 agent.destination = playerTransform[maxAggroViewID].position;
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.15f);
             }
         }
     }

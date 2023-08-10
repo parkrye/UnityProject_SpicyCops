@@ -8,7 +8,7 @@ public class HitBox : MonoBehaviourPun
     [SerializeField] private PoliceEnemy enemy;
     [SerializeField] PhotonView myView;
     [SerializeField] InGameManager inGameManager;
-    List<int> playerViewIdList;
+    [SerializeField] List<int> playerViewIdList;
 
     private void Awake()
     {
@@ -46,10 +46,12 @@ public class HitBox : MonoBehaviourPun
         {
             if (view == playerId)
             {
-                enemy.Anim.SetTrigger("InArea");
+                enemy.Anim.SetBool("InArea", true);
+                Debug.Log(enemy.Anim.GetBool("InArea"));
                 enemy.playerTransform[view].GetComponent<PlayerDied>().DoDeath();
                 inGameManager.PlayerDead(view);
                 enemy.playerTransform[view].GetComponent<PlayerInput>().enabled = false;
+                enemy.Anim.SetBool("InArea", false);
             }
         }
     }
