@@ -8,7 +8,7 @@ namespace Jeon
 {
     public class Enemy : MonoBehaviourPun
     {
-        [SerializeField] Transform player;  
+        [SerializeField] Transform player;
 
         private NavMeshAgent agent;
         private Animator anim;
@@ -26,15 +26,12 @@ namespace Jeon
         [SerializeField] float targetFindTime;
 
         int maxAggroViewID;
-        float moveSpeed;
 
         public enum EnemyState { Idle, Follow, Angry, SemiBerserker, Berserker, End, Catch}
 
         private EnemyState curState;
-        private EnemyState lastState;
 
         [SerializeField] float curTime;            // 현재시간은 게임내에서 시간을 적용시킨다 약 : 처음 시간은 180초
-        [SerializeField] float curSpeed;
 
         [SerializeField] Material material;
 
@@ -74,7 +71,6 @@ namespace Jeon
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animator>();
             //catchZone = GameObject.Find("CatchZone").transform;
-            curSpeed = agent.speed;
             material.color = Color.white;
             playerTransform = new Dictionary<int, Transform>();
         }
@@ -107,18 +103,19 @@ namespace Jeon
             }
             StartCoroutine(FindPlayer());
         }
-
+        #region MovePattern
         private void DoFollow()
         {
             anim.SetBool("WalkTime", true);
             agent.speed = 3f;
 
             curState = EnemyState.Follow;
+            material.color = new Color(1, 1, 1);
         }
 
         private void DoAngry()
         {
-            agent.speed = 5f;
+            agent.speed = 5.5f;
             anim.SetBool("WalkTime", false);
             anim.SetBool("RunningTime", true);
 
@@ -128,7 +125,7 @@ namespace Jeon
 
         private void DoSemiBerserker()
         {
-            agent.speed = 7.5f;
+            agent.speed = 8f;
 
             curState = EnemyState.SemiBerserker;
             material.color = new Color(1, 0.45f, 0.45f);
@@ -136,7 +133,7 @@ namespace Jeon
 
         private void DoBerserker()
         {
-            agent.speed = 9.5f;
+            agent.speed = 10f;
             material.color = new Color(0.24f, 0f, 0f);
 
             curState = EnemyState.Berserker;
@@ -151,21 +148,7 @@ namespace Jeon
 
             StopAllCoroutines();
         }
-
-        /*private void DoCatch()
-        {
-            curSpeed = agent.speed;
-
-            agent.speed = 0.1f;
-        }
-        
-        private void Remove()
-        {
-            curState = EnemyState.Idle;
-            agent.speed = curSpeed;
-            curState = lastState;
-        }*/
-
+        #endregion
         IEnumerator FindPlayer()
         {
             yield return new WaitForSeconds(5f);
