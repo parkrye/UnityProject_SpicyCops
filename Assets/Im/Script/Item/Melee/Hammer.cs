@@ -24,7 +24,7 @@ public class Hammer : MeleeItem
             PlayerMover mover = collider.gameObject.GetComponent<PlayerMover>();
             if (mover == null)
                 return;
-            mover.photonView.RPC("OnStun", RpcTarget.AllBufferedViaServer, viewId);
+            mover.photonView.RPC("OnStun", RpcTarget.AllViaServer, viewId);
             Debug.Log($"Hammer End : {mover.gameObject.name}");
         }
     }

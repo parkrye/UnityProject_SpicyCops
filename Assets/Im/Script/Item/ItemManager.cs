@@ -8,9 +8,8 @@ public class ItemManager : MonoBehaviourPun
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
     public InGameManager gameManager;
 
-    public void Init()
+    private void Awake()
     {
-
         for (int i = 0; i < itemList.Length; i++)
         {
             Item item = GameManager.Resource.Load<Item>($"Item/{(Define.ItemIndex)i}");
@@ -25,6 +24,9 @@ public class ItemManager : MonoBehaviourPun
             itemSpots[i].itemManager = this;
             itemSpots[i].itemSpotIndex = i;
         }
+    }
+    public void Init()
+    {
         foreach (var item in itemSpots) 
         {
             item.Init();
@@ -35,7 +37,7 @@ public class ItemManager : MonoBehaviourPun
     public void RequestUseItem(Vector3 pos, Quaternion rot, int index, int viewId, PhotonMessageInfo info)
     {
         float sentTime = (float)info.SentServerTime;
-        photonView.RPC("ResultUseItem", RpcTarget.AllBufferedViaServer, pos, rot, sentTime, viewId, index, info.Sender);
+        photonView.RPC("ResultUseItem", RpcTarget.AllViaServer, pos, rot, sentTime, viewId, index, info.Sender);
     }
     [PunRPC]
     public void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index, Player sender)
@@ -47,7 +49,7 @@ public class ItemManager : MonoBehaviourPun
     [PunRPC]
     public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
     {
-        int randNum = UnityEngine.Random.Range(0, itemList.Length);
+        int randNum = Random.Range(0, itemList.Length);
         // int randNum = (int)Define.ItemIndex.Hammer;
         itemSpots[itemSpotIndex].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
