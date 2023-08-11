@@ -6247,7 +6247,7 @@ Transform:
   - {fileID: 484426867}
   - {fileID: 1322444016}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &160488229
 GameObject:
@@ -7048,75 +7048,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 172196767}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &173172629
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1788304346265260707, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_Name
-      value: OtherPlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 45.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0000009536743
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 49.827446
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 3353506663989207216, guid: b26f3b83c7b61fd48b03170b6ed71a86,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b26f3b83c7b61fd48b03170b6ed71a86, type: 3}
 --- !u!1 &174757505
 GameObject:
   m_ObjectHideFlags: 0
@@ -10779,9 +10710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &196072619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18238,7 +18168,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh44986
+  m_Name: pb_Mesh638442
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -20638,9 +20568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &385795578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27786,9 +27715,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &477651601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35057,9 +34985,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &656275411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36201,9 +36128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &673633571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41761,51 +41687,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736866366}
   m_Mesh: {fileID: -7514991316261419789, guid: ebba13c26b2bde34c8bfc04ec541a2ee, type: 3}
---- !u!1 &737483998
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 737484000}
-  - component: {fileID: 737483999}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &737483999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737483998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b28dd60f6abf16d4094cf0f642a043e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 0
---- !u!4 &737484000
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737483998}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &742066732
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42012,7 +41893,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh46080
+  m_Name: pb_Mesh639530
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -43671,9 +43552,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &770638340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45684,6 +45564,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 809900520, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: sceneViewId
       value: 5
@@ -50294,9 +50190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &843496570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50593,7 +50488,7 @@ PrefabInstance:
     - target: {fileID: 2526807270449311352, guid: f2c3268abd9383845a3fc195f8efda46,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2526807270449311352, guid: f2c3268abd9383845a3fc195f8efda46,
         type: 3}
@@ -63835,9 +63730,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1207131182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71820,9 +71714,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1370206138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78392,9 +78285,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1469346304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83007,9 +82899,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1560811783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83266,6 +83157,11 @@ PrefabInstance:
     - target: {fileID: 6661591664841890101, guid: 041c65270c37ec949bc28df7fcbc0660,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922084011398371744, guid: 041c65270c37ec949bc28df7fcbc0660,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7822201251051949555, guid: 041c65270c37ec949bc28df7fcbc0660,
@@ -92457,7 +92353,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh44068
+  m_Name: pb_Mesh637524
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -97486,9 +97382,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1899304937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98568,9 +98463,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1912066667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99646,9 +99540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1931211136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105669,9 +105562,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &2042202834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108417,7 +108309,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh45710
+  m_Name: pb_Mesh639166
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -108970,9 +108862,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &2118700584
 MonoBehaviour:
   m_ObjectHideFlags: 0
