@@ -12,7 +12,8 @@ public class InGameUI_TimeSlider : SceneUI
     {
         base.Initialize();
         sliders["TimeSlider"].maxValue = inGameUIController.inGameManager.TotalTime;
-        timeValue = inGameUIController.inGameManager.TotalTime - (serverTime - (float)PhotonNetwork.Time);
+        timeValue = inGameUIController.inGameManager.TotalTime - ((float)PhotonNetwork.Time - serverTime);
+        Debug.LogError($"Timer : {timeValue}");
         StartCoroutine(TimeClock());
     }
 
