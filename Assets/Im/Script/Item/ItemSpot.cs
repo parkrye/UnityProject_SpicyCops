@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ItemSpot : MonoBehaviourPun, IInteractable
 {
-    public ItemManager itemManager;
+    public InGameManager manager;
     public int itemSpotIndex;
     Animator animator;
     bool isActive;
@@ -39,6 +39,8 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     [PunRPC]
     public void ResultGiveRandomItem(int viewId, int index)
     {
+        if (!isActive)
+            return;
         isActive = false;
         animator.SetTrigger("Use");
         if (viewId != playerId)
@@ -47,7 +49,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
         PhotonView view = PhotonView.Find(viewId);
         PlayerUseItem useItem = view.gameObject.GetComponent<PlayerUseItem>();
         useItem.MyItem = index;
-        itemManager.gameManager.SetItemUI(index);
+        manager.SetItemUI(index);
         Debug.Log((Define.ItemIndex)index);
         playerId = -1;
     }
