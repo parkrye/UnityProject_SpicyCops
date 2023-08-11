@@ -238,7 +238,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         player.GetComponent<PlayerMover>().Initialize();
         if (playerActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
-            photonView.RPC("RequestCreatedPlayer", RpcTarget.AllViaServer);
+            photonView.RPC("RequestCreatedPlayer", RpcTarget.AllBufferedViaServer);
     }
     [PunRPC]
     void RequestCreatedPlayer(PhotonMessageInfo info)
