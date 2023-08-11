@@ -189,12 +189,12 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
 
+        StartCoroutine(GameSetting());
 
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            StartCoroutine(GameSetting());
         }
     }
 
@@ -215,9 +215,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
         Debug.Log("All Ready");
 
         itemManager.Init();
-        safeArea.GameStartSetting();
         enemy.Seting();
         inGameUIController.StartTimer();
+        if (PhotonNetwork.IsMasterClient)
+            safeArea.GameStartSetting();
         Debug.Log("Done Game Setting");
     }
     #endregion
