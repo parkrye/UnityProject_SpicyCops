@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -7,10 +8,11 @@ public class InGameUI_TimeSlider : SceneUI
 
     [SerializeField] float timeValue;
 
-    public override void Initialize()
+    public void Initialize(float serverTime)
     {
+        base.Initialize();
         sliders["TimeSlider"].maxValue = inGameUIController.inGameManager.TotalTime;
-        timeValue = inGameUIController.inGameManager.TotalTime;
+        timeValue = inGameUIController.inGameManager.TotalTime - (serverTime - (float)PhotonNetwork.Time);
         StartCoroutine(TimeClock());
     }
 
