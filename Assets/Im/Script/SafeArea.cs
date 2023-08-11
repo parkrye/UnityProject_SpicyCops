@@ -11,7 +11,6 @@ public class SafeArea : MonoBehaviourPun
     float time = 120;
     float rate;
     float scale;
-    float oneTick;
 
     public List<int> outAreaPlayer;
     public InGameManager gameManager;
@@ -19,24 +18,6 @@ public class SafeArea : MonoBehaviourPun
     private void Awake()
     {
         outAreaPlayer = new List<int>();
-        oneTick = 1 / 1200;
-    }
-
-    private void GrowLess(float f)
-    {
-        if (rate > 1)
-            return;
-        scale = Mathf.Lerp(maxScale, minScale, rate);
-        transform.localScale = new Vector3(scale, 8, scale);
-        rate += oneTick;
-        
-    }
-    private void OutCheck(float f)
-    {
-        foreach (int i in outAreaPlayer)
-        {
-            gameManager.ModifyPlayerAggro(i, 0.5f);
-        }
     }
         
     public void GameStartSetting()
@@ -46,8 +27,6 @@ public class SafeArea : MonoBehaviourPun
         rate = 0;
         scale = maxScale;
         outAreaPlayer = new List<int>();
-        gameManager.AddTimeEventListener(GrowLess);
-        gameManager.AddTimeEventListener(OutCheck);
         AreaEnable();
     }
     private void OnTriggerExit(Collider other)
@@ -79,6 +58,7 @@ public class SafeArea : MonoBehaviourPun
     public void AreaEnable()
     {
         StartCoroutine(GrowLess());
+        StartCoroutine(OutCheck());
     }
     IEnumerator GrowLess()
     {
@@ -92,5 +72,16 @@ public class SafeArea : MonoBehaviourPun
             yield return new WaitForEndOfFrame();
         }
         Debug.Log("End");
+    }
+    IEnumerator OutCheck()
+    {
+        while (true) 
+        {
+            foreach (int i in outAreaPlayer)
+            {
+                gameManager.ModifyPlayerAggro(i, 1);
+            }
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }
