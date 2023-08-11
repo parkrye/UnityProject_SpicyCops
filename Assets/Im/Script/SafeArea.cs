@@ -24,11 +24,12 @@ public class SafeArea : MonoBehaviourPun
 
     private void GrowLess(float f)
     {
+        if (rate > 1)
+            return;
         scale = Mathf.Lerp(maxScale, minScale, rate);
         transform.localScale = new Vector3(scale, 8, scale);
         rate += oneTick;
-        if (rate > 1)
-            gameManager.RemoveTimeEventListener(GrowLess);
+        
     }
     private void OutCheck(float f)
     {
