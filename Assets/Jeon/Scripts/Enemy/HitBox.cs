@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,6 +36,7 @@ public class HitBox : MonoBehaviourPun
     private void RequestAddPlayer(int playerId)
     {
         playerViewIdList.Add(playerId);
+        Debug.Log($"{playerId}");
         photonView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
     }
 
@@ -45,20 +47,24 @@ public class HitBox : MonoBehaviourPun
         {
             if (view == playerId)
             {
+                Debug.Log($"{playerId}");
                 enemy.Anim.SetBool("InArea", true);
-                Debug.Log(enemy.Anim.GetBool("InArea"));
+                // Debug.Log(enemy.Anim.GetBool("InArea"));
                 enemy.playerTransform[view].GetComponent<PlayerDied>().DoDeath();
                 inGameManager.PlayerDead(view);
                 enemy.playerTransform[view].GetComponent<PlayerInput>().enabled = false;
-                enemy.Anim.SetBool("InArea", false);
+                StartCoroutine(EnemyAttackStop());
             }
         }
     }
-
     [PunRPC]
     private void RequestExitPlayer(int playerId)
     {
         playerViewIdList.Remove(playerId);
     }
-
+    IEnumerator EnemyAttackStop()
+    {
+        yield return new WaitForSeconds(1f);
+        enemy.Anim.SetBool("InArea", false);
+    }
 }
