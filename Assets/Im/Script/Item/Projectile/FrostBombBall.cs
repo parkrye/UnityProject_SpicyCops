@@ -9,7 +9,7 @@ public class FrostBombBall : BallBase
     protected override void ResultExplosion(Vector3 pos, Quaternion rot, float sentTime)
     {
         Instantiate(effect, pos, Quaternion.identity);
-        if (photonView.IsMine)
+        if (PhotonNetwork.IsMasterClient)
         {
             // 현재위치 기준 이펙트 및 사운드 적용
             Collider[] colliders = Physics.OverlapSphere(transform.position, overlapAreaRange);

@@ -18,7 +18,8 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     public void Init()
     {
         isActive = false;
-        animator.SetTrigger("Use");
+        if(PhotonNetwork.IsMasterClient)
+            animator.SetTrigger("Use");
     }
 
     public void Interact(PlayerInteraction player)
