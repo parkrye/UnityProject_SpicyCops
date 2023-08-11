@@ -5,7 +5,6 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
 {
     public ItemManager itemManager;
     public int itemSpotIndex;
-    [SerializeField] float regenCoolTime;
     Animator animator;
     bool isActive;
     int playerId;
@@ -13,7 +12,6 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        isActive = true;
     }
     public void Init()
     {
@@ -27,9 +25,16 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
         PlayerUseItem useItem = player.gameObject.GetComponent<PlayerUseItem>();
         if (!isActive || useItem.MyItem > -1)
             return;
-        PhotonView view = player.GetComponent<PhotonView>();
+        PhotonView view = player.gameObject.GetComponent<PhotonView>();
         playerId = view.ViewID;
-        itemManager.photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID, itemSpotIndex);
+        photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID, itemSpotIndex);
+    }
+    [PunRPC]
+    public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
+    {
+        int randNum = Random.Range(0, (int)Define.ItemIndex.Count);
+        // int randNum = (int)Define.ItemIndex.Hammer;
+        photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
     }
     [PunRPC]
     public void ResultGiveRandomItem(int viewId, int index)

@@ -46,12 +46,6 @@ public class ItemManager : MonoBehaviourPun
         itemList[index].UseItem(pos, rot, lag, viewId, sender);
     }
 
-    [PunRPC]
-    public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
-    {
-        int randNum = Random.Range(0, itemList.Length);
-        // int randNum = (int)Define.ItemIndex.Hammer;
-        itemSpots[itemSpotIndex].photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
-    }
+    
     
 }
