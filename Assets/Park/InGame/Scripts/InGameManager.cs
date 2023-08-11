@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun.UtilityScripts;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
@@ -172,7 +173,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber-1].position, Quaternion.identity, 0);
+        // 넘버링
+        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.GetPlayerNumber()].position, Quaternion.identity, 0);
 
         int avatarNum = 0, colorNum = 0;
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
