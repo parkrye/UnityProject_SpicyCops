@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,7 +63,7 @@ public class RoomPanel : SceneUI
         avatarDictionary.Add(newPlayer, avatarDictionary.Count);
 
         PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
-        entry.Initailize(newPlayer, newPlayer.ActorNumber, newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]]);
+        entry.Initailize(newPlayer, newPlayer.GetPlayerNumber(), newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]]);
         entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(newPlayer); });
         playerEntryList.Add(entry);
         AllPlayerReadyCheck();
