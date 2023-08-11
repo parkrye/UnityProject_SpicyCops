@@ -31,20 +31,18 @@ namespace Jeon
 
         private EnemyState curState;
 
-        [SerializeField] float curTime;            // 현재시간은 게임내에서 시간을 적용시킨다 약 : 처음 시간은 180초
+        [SerializeField] float curTime = 0;            // 현재시간은 게임내에서 시간을 적용시킨다 약 : 처음 시간은 180초
 
         [SerializeField] Material material;
 
         private void SetServerTime(float time)
         {
             _photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
-
         }
 
         [PunRPC]
         protected void RequestEnemyMoveSetting(float time)    // 에이전트 스피드가 되는지 RPC Time.
         {
-            curTime = time;
             if (curTime >= 5f && curState == EnemyState.Idle)
             {
                 DoFollow();
@@ -92,7 +90,7 @@ namespace Jeon
 
         public void Seting()
         {
-            inGameManager.AddTimeEventListener(SetServerTime);
+            StartCoroutine(TimeRoutine());
 
             inGameManager.AddPlayerAggroEventListener(SetPlayerAggro);
 
@@ -168,6 +166,15 @@ namespace Jeon
             {
                 agent.destination = playerTransform[maxAggroViewID].position;
                 yield return new WaitForSeconds(0.15f);
+            }
+        }
+        IEnumerator TimeRoutine()
+        {
+            while (true)
+            {
+                curTime += Time.deltaTime;
+                SetServerTime(curTime);
+                yield return null;
             }
         }
     }

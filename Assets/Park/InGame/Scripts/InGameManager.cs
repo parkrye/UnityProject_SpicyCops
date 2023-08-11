@@ -193,7 +193,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            photonView.RPC("SetStartTime", RpcTarget.AllViaServer);
+            
             safeArea.GameStartSetting();
             inGameUIController.StartTimer();
             StartCoroutine(GameSetting());
@@ -215,7 +215,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
             colorNum = (int)colorValue;
         }
 
-        igmPhotonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
@@ -224,7 +224,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 this 참조
-            photonView.RPC("SetStartTime", RpcTarget.AllViaServer);
+            
             safeArea.GameStartSetting();
             StartCoroutine(GameSetting());
         }
@@ -237,6 +237,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
             yield return new WaitForSeconds(0.1f);
         }
         enemy.Seting();
+        photonView.RPC("SetStartTime", RpcTarget.AllViaServer);
     }
     #endregion
 
