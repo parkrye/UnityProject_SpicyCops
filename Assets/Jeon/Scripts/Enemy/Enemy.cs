@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using static Unity.VisualScripting.StickyNote;
 
 namespace Jeon
 {
@@ -13,11 +15,17 @@ namespace Jeon
         private NavMeshAgent agent;
         private Animator anim;
 
+        [SerializeField] Color color1 = new Color(1f, 1f, 1f);
+        [SerializeField] Color color2 = new Color(1f, 0.65f, 0.65f);
+        [SerializeField] Color color3 = new Color(1, 0.35f, 0.35f);
+        [SerializeField] Color color4 = new Color(0.24f, 0, 0);
+
         public Animator Anim { get { return anim; } }
         [SerializeField] InGameManager inGameManager;
 
         Dictionary<string, int> playerState = new Dictionary<string, int>();
         public Dictionary<int, Transform> playerTransform;
+        Dictionary<int, bool> exitPlayer;
 
 
         [SerializeField] Transform catchZone;
@@ -61,6 +69,13 @@ namespace Jeon
             {
                 DoEndGame();
             }
+
+            if (curTime >= inGameManager.TotalTime)
+            {
+                StopAllCoroutines();
+                anim.enabled = false;
+                gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            }
         }
 
 
@@ -90,6 +105,7 @@ namespace Jeon
 
         public void Seting()
         {
+            exitPlayer = new();
             StartCoroutine(TimeRoutine());
 
             inGameManager.AddPlayerAggroEventListener(SetPlayerAggro);
@@ -101,14 +117,38 @@ namespace Jeon
             }
             StartCoroutine(FindPlayer());
         }
+
         #region MovePattern
+        [PunRPC]
+        protected void ColorChange(int colorNum)
+        {
+            Debug.Log($"{colorNum}");
+            if (colorNum == 1)
+            {
+                material.color = color1;
+            }
+            else if(colorNum == 2)
+            {
+                material.color = color2;
+            }
+            else if (colorNum == 3)
+            {
+                material.color = color3;
+            }
+            else
+            {
+                material.color = color4;
+            }
+        }
         private void DoFollow()
         {
             anim.SetBool("WalkTime", true);
             agent.speed = 3f;
 
             curState = EnemyState.Follow;
-            material.color = new Color(1, 1, 1);
+            Debug.Log($"RequestColor");
+            photonView.RPC("ColorChange", RpcTarget.AllViaServer, 1);
+            Debug.Log($"ResultColor");
         }
 
         private void DoAngry()
@@ -118,7 +158,7 @@ namespace Jeon
             anim.SetBool("RunningTime", true);
 
             curState = EnemyState.Angry;
-            material.color = new Color(1, 0.65f, 0.65f);
+            photonView.RPC("ColorChange", RpcTarget.AllBufferedViaServer, 2);
         }
 
         private void DoSemiBerserker()
@@ -126,13 +166,13 @@ namespace Jeon
             agent.speed = 8f;
 
             curState = EnemyState.SemiBerserker;
-            material.color = new Color(1, 0.45f, 0.45f);
+            photonView.RPC("ColorChange", RpcTarget.AllBufferedViaServer, 3);
         }
 
         private void DoBerserker()
         {
             agent.speed = 10f;
-            material.color = new Color(0.24f, 0f, 0f);
+            photonView.RPC("ColorChange", RpcTarget.AllBufferedViaServer, 4);
 
             curState = EnemyState.Berserker;
         }
@@ -147,15 +187,6 @@ namespace Jeon
             StopAllCoroutines();
         }
         #endregion
-        private void StartAnimator()
-        {
-            anim.SetBool("InArea", true);
-        }
-
-        private void StopAnimator()
-        {
-            anim.SetBool("InArea", false);
-        }
         IEnumerator FindPlayer()
         {
             yield return new WaitForSeconds(5f);
@@ -177,6 +208,56 @@ namespace Jeon
                 yield return null;
             }
         }
+        #region HitBox
+        public void AddPlayer(int viewId)
+        {
+            Debug.Log($"RequestAddPlayer{viewId}");
+            photonView.RPC("RequestAddPlayer", RpcTarget.MasterClient, viewId);
+
+        }
+        public void RemovePlayer(int viewId)
+        {
+            Debug.Log($"RequestRemovePlayer{viewId}");
+            photonView.RPC("RequestExitPlayer", RpcTarget.MasterClient, viewId);
+        }
+        [PunRPC]
+        protected void RequestAddPlayer(int playerId)
+        {
+            exitPlayer[playerId] = true;
+            Debug.Log($"RequestAddPlayer{playerId}");
+            photonView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
+        }
+
+        [PunRPC]
+        protected void RequestHoldPlayer(int playerId)
+        {
+            foreach (KeyValuePair<int, bool> view in exitPlayer)
+            {
+                Debug.Log($"{view.Key}{view.Value}");
+                if (view.Key == playerId && view.Value)
+                {
+                    Debug.Log($"RequestHoldPlayer{playerId}");
+                    Anim.SetBool("InArea", true);
+                    Debug.Log(Anim.GetBool("InArea"));
+                    playerTransform[view.Key].GetComponent<PlayerDied>().DoDeath();
+                    inGameManager.PlayerDead(view.Key);
+                    playerTransform[view.Key].GetComponent<PlayerInput>().enabled = false;
+                    StartCoroutine(EnemyAttackStop());
+                }
+            }
+        }
+        [PunRPC]
+        protected void RequestExitPlayer(int playerId)
+        {
+            exitPlayer[playerId] = false;
+            Debug.Log($"RequestExitPlayer{playerId}");
+        }
+        IEnumerator EnemyAttackStop()
+        {
+            yield return new WaitForSeconds(1f);
+            Anim.SetBool("InArea", false);
+        }
+        #endregion
     }
 
 }

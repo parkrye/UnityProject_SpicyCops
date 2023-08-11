@@ -246,8 +246,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  point: {fileID: 4560064169685170678}
   range: 4
+
+  point: {fileID: 4560064169685170678}
+
 --- !u!114 &7610103459090945494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,22 +383,22 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: IsMoved
   - Type: 4
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsPulled
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsPicked
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsPushed
   - Type: 4
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsDied
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsStun
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsHammer
   m_SynchronizeLayers:
   - SynchronizeType: 2

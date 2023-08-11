@@ -18,11 +18,14 @@ public class RoomPanel : SceneUI
     [SerializeField] RenderTexture[] avatarTextures;
     [SerializeField] GameObject[] avatarRoots;
 
+    [SerializeField] Queue<int> entryNumQueue;
+
     protected override void Awake()
 	{
         base.Awake();
 		playerEntryList = new List<PlayerEntry>();
         avatarDictionary = new Dictionary<Player, int>();
+        entryNumQueue = new Queue<int>();
     }
 
     private void OnEnable()
@@ -45,6 +48,11 @@ public class RoomPanel : SceneUI
         PhotonNetwork.AutomaticallySyncScene = true;
         roomPanel.SetActive(true);
         shopPanel.SetActive(false);
+
+        entryNumQueue.Enqueue(0);
+        entryNumQueue.Enqueue(1);
+        entryNumQueue.Enqueue(2);
+        entryNumQueue.Enqueue(3);
     }
 
     private void OnDisable()
@@ -63,7 +71,7 @@ public class RoomPanel : SceneUI
         avatarDictionary.Add(newPlayer, avatarDictionary.Count);
 
         PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
-        entry.Initailize(newPlayer, newPlayer.GetPlayerNumber(), newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]]);
+        entry.Initailize(newPlayer, entryNumQueue.Dequeue(), newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]]);
         entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(newPlayer); });
         playerEntryList.Add(entry);
         AllPlayerReadyCheck();
@@ -78,6 +86,7 @@ public class RoomPanel : SceneUI
         {
             if (playerEntryList[i].player.Equals(leftPlayer))
             {
+                entryNumQueue.Enqueue(playerEntryList[i].EntryNum);
                 Destroy(playerEntryList[i].gameObject);
                 playerEntryList.RemoveAt(i);
                 break;
@@ -181,7 +190,6 @@ public class RoomPanel : SceneUI
                 playerEntryList[i].player.SetReady(false);
                 AllPlayerReadyCheck();
 
-                roomPanel.SetActive(false);
                 shopPanel.SetActive(true);
                 return;
             }

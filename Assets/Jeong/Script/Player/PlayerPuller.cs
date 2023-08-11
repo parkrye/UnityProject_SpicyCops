@@ -24,6 +24,7 @@ public class PlayerPuller : MonoBehaviourPun
     [SerializeField] private GameObject currentPullTarget;
     [SerializeField] private GameObject targetPlayer;
 
+    
     private PlayerInput playerInput;
     private Animator anim;
 
@@ -74,11 +75,11 @@ public class PlayerPuller : MonoBehaviourPun
         }
     }
 
+   
   
 
     private void OnPull(InputValue value)
-    {
-        
+    { 
         // x키를 누르면 
         if (value.isPressed && canPull)
         {
@@ -167,6 +168,10 @@ public class PlayerPuller : MonoBehaviourPun
         // 잡아당기는 Player와 잡히는 Player는 속도가 느려진다.
         // float slowDownFactor = 0.5f;
         // player.GetComponent<PlayerMover>().SetMoveSpeed(player.GetComponent<PlayerMover>().moveSpeed * slowDownFactor);
+        
+        PlayerMover mover = GetComponent<PlayerMover>();
+        mover.photonView.RPC("Annoy", RpcTarget.AllViaServer, player);
+
     }
 
     public void SetPullTarget(GameObject target)

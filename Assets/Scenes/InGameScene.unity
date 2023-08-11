@@ -10710,9 +10710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &196072619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20569,9 +20568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &385795578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27717,9 +27715,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &477651601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34988,9 +34985,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &656275411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36132,9 +36128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &673633571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41692,51 +41687,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736866366}
   m_Mesh: {fileID: -7514991316261419789, guid: ebba13c26b2bde34c8bfc04ec541a2ee, type: 3}
---- !u!1 &737483998
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 737484000}
-  - component: {fileID: 737483999}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &737483999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737483998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b28dd60f6abf16d4094cf0f642a043e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 0
---- !u!4 &737484000
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737483998}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &742066732
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43602,9 +43552,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &770638340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45617,19 +45566,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 809900520, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: sceneViewId
@@ -45717,6 +45666,11 @@ PrefabInstance:
       objectReference: {fileID: 848810279}
     - target: {fileID: 8439823348349665223, guid: 57016265a6e024c4ebcaeba4fd37cac4,
         type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 809900513}
+    - target: {fileID: 8439823348349665223, guid: 57016265a6e024c4ebcaeba4fd37cac4,
+        type: 3}
       propertyPath: inGameManager
       value: 
       objectReference: {fileID: 848810279}
@@ -45735,7 +45689,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: c9392e4217d2c844a8ead4eb5ef18fa4, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 39951017699482117, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
 --- !u!114 &809900513 stripped
 MonoBehaviour:
@@ -50241,9 +50196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &843496570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63782,9 +63736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1207131182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71767,9 +71720,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1370206138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78339,9 +78291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1469346304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82954,9 +82905,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1560811783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97438,9 +97388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1899304937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98520,9 +98469,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1912066667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99598,9 +99546,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &1931211136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105621,9 +105568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &2042202834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108922,9 +108868,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!114 &2118700584
 MonoBehaviour:
   m_ObjectHideFlags: 0

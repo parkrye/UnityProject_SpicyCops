@@ -9,19 +9,18 @@ public class PlayerEntry : SceneUI
 	[SerializeField] public Player player;
 	[SerializeField] public Button playerNameButton;
 
-    [SerializeField] int avatarNum, avatarColorNum;
+    [SerializeField] int avatarNum, avatarColorNum, entryNum;
     [SerializeField] Camera avatarCamera;
     [SerializeField] RenderTexture avatarTexture;
     [SerializeField] RawImage avatarImage;
     [SerializeField] CharacterSkinManager[] characterSkinManagers;
-
-    public int ownerId;
+    public int EntryNum { get { return entryNum; } }
 
 	public void Initailize(Player _player, int id, string name, Camera _avatarCamera, RenderTexture _avatarTexture, GameObject avatarRoot)
     {
         player = _player;
-        ownerId = id;
-        if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
+        entryNum = id;
+        if (PhotonNetwork.LocalPlayer.ActorNumber != player.ActorNumber)
         {
             buttons["PlayerReadyButton"].gameObject.SetActive(false);
             buttons["LeftAvatarButton"].gameObject.SetActive(false);
@@ -64,8 +63,6 @@ public class PlayerEntry : SceneUI
 
 	public void OnReadyButtonClicked()
     {
-        if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
-            return;
         bool isPlayerReady = !CustomProperty.GetReady(player);
         CustomProperty.SetReady(player, isPlayerReady);
 
@@ -97,7 +94,6 @@ public class PlayerEntry : SceneUI
         }
     }
 
-    // 루프 발생
     public void OnAvatarButtonClicked(bool isLeft)
     {
         if (isLeft)

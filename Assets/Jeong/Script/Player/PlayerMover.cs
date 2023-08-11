@@ -50,6 +50,8 @@ public class PlayerMover : MonoBehaviourPun
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
+        puller = GetComponent<PlayerPuller>();
+        pusher = GetComponent<PlayerPusher>();
     }
 
     void Start()

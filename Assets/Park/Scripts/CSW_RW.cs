@@ -40,7 +40,7 @@ public static class CSV_RW
             userData.avaters = new Dictionary<string, bool>();
 
             for (int j = 2; j < line.Length - 1; j += 2)
-                userData.avaters.Add(line[j], line[j] == "True");
+                userData.avaters.Add(line[j], line[j+1] == "True");
             answer.Add(userData.id, userData);
         }
 

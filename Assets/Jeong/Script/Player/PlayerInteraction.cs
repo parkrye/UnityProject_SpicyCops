@@ -7,46 +7,82 @@ public class PlayerInteraction : MonoBehaviour
 {
     // Player 상호작용
     [SerializeField] bool debug;
-
-    [SerializeField] Transform point;
+    private bool canInteract = true; 
     [SerializeField] float range;
 
-    private bool canInteract = false;
-
+    [SerializeField] private Transform point;
+   
     private Animator anim;
-
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
+        anim = transform.gameObject.GetComponent<Animator>();
     }
 
 
-    // 상호작용 오브젝트 탐색
-    public void FindInteract()
-    {
-        
-    }
 
     // 상호작용
-    public void Interact()
+   /* public void Interact()
     {
-        Collider[] colliders = Physics.OverlapSphere(point.position, range);
-        foreach (Collider collider in colliders)
+        if (canInteract)
         {
-            anim.SetBool("IsPicked", true);
-            IInteractable interactable = collider.GetComponent<IInteractable>();
-            interactable?.Interact(this);
+            Collider[] colliders = Physics.OverlapSphere(point.position, range);
+            foreach (Collider collider in colliders)
+            {
+                IInteractable interactable = collider.GetComponent<IInteractable>();
+                interactable?.Interact(this);
+                anim.SetBool("IsPicked", true);
+
+            }
+            Debug.Log("Player Interact");
             anim.SetBool("IsPicked", false);
         }
-        Debug.Log("Player Interact");
+
+    }*/
+    public void Interact()
+    {
+        StartCoroutine(InteractDelay());
+        Collider[] colliders = Physics.OverlapSphere(point.position, range);
+        List<IInteractable> interactables = new List<IInteractable>();
+        foreach (Collider collider in colliders)
+        {
+            IInteractable inter = collider.GetComponent<IInteractable>();
+            if(inter != null)
+                interactables.Add(inter);
+        }
+
+        Debug.Log($"{interactables.Count}");
+        
+        if (interactables.Count < 1)
+            return;
+        foreach(IInteractable interactable in interactables)
+        {
+            Debug.Log($"");
+            
+            interactable?.Interact(this);
+        }
+        StartCoroutine(PickAnim());
+        interactables.Clear();
+    }
+    IEnumerator PickAnim()
+    {
+        anim.SetBool("IsPicked", true);
+        yield return new WaitForSeconds(0.2f);
+        anim.SetBool("IsPicked", false);
     }
 
     private void OnInteract(InputValue value)
     {
-   
+       if(!canInteract) 
+            return;
         Interact();
-        
+    }
+
+    IEnumerator InteractDelay()
+    {
+        canInteract = false;
+        yield return new WaitForSeconds(1f);
+        canInteract = true;
     }
 
     private void OnDrawGizmosSelected()
