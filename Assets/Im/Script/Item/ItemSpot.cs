@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class ItemSpot : MonoBehaviourPun, IInteractable
@@ -30,7 +31,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
         photonView.RPC("RequestGiveRandomItem", RpcTarget.MasterClient, view.ViewID, itemSpotIndex);
     }
     [PunRPC]
-    public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
+    public void RequestGiveRandomItem(int playerId, int spotIndex)
     {
         if (!photonView.IsMine)
             return;
@@ -43,8 +44,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     {
         if (!isActive)
             return;
-        if (index != itemSpotIndex)
-            return;
+
         isActive = false;
         animator.SetTrigger("Use");
         if (viewId != playerId)
