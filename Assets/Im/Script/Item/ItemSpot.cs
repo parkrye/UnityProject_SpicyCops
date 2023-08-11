@@ -33,8 +33,6 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     [PunRPC]
     public void RequestGiveRandomItem(int playerId, int spotIndex)
     {
-        if (!photonView.IsMine)
-            return;
         int randNum = Random.Range(0, (int)Define.ItemIndex.Count);
         // int randNum = (int)Define.ItemIndex.Hammer;
         photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
