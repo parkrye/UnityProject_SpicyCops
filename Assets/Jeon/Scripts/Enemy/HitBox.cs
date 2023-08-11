@@ -22,13 +22,6 @@ public class HitBox : MonoBehaviourPun
             enemy.AddPlayer(other.GetComponent<PhotonView>().ViewID);
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == 3)
-        {
-            enemy.RemovePlayer(other.GetComponent<PhotonView>().ViewID);
-        }
 
-    }
     
 }

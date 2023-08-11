@@ -25,7 +25,6 @@ namespace Jeon
 
         Dictionary<string, int> playerState = new Dictionary<string, int>();
         public Dictionary<int, Transform> playerTransform;
-        Dictionary<int, bool> exitPlayer;
 
 
         [SerializeField] Transform catchZone;
@@ -94,18 +93,20 @@ namespace Jeon
             float highAggro = -1;
             foreach (KeyValuePair<int, float> keyValuePair in playerAggro)
             {
+                if (!inGameManager.PlayerAliveDictionary[keyValuePair.Key])
+                    continue;
                 if (highAggro < keyValuePair.Value)
                 {
                     highAggro = keyValuePair.Value;
                     ViewID = keyValuePair.Key;
                 }
+                
             }
             maxAggroViewID = ViewID;
         }
 
         public void Seting()
         {
-            exitPlayer = new();
             StartCoroutine(TimeRoutine());
 
             inGameManager.AddPlayerAggroEventListener(SetPlayerAggro);
@@ -196,7 +197,7 @@ namespace Jeon
             while (true)
             {
                 agent.destination = playerTransform[maxAggroViewID].position;
-                yield return new WaitForSeconds(0.15f);
+                yield return null;
             }
         }
         IEnumerator TimeRoutine()
@@ -223,7 +224,6 @@ namespace Jeon
         [PunRPC]
         protected void RequestAddPlayer(int playerId)
         {
-            exitPlayer[playerId] = true;
             Debug.Log($"RequestAddPlayer{playerId}");
             photonView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
         }
@@ -231,26 +231,14 @@ namespace Jeon
         [PunRPC]
         protected void RequestHoldPlayer(int playerId)
         {
-            foreach (KeyValuePair<int, bool> view in exitPlayer)
-            {
-                Debug.Log($"{view.Key}{view.Value}");
-                if (view.Key == playerId && view.Value)
-                {
-                    Debug.Log($"RequestHoldPlayer{playerId}");
-                    Anim.SetBool("InArea", true);
-                    Debug.Log(Anim.GetBool("InArea"));
-                    playerTransform[view.Key].GetComponent<PlayerDied>().DoDeath();
-                    inGameManager.PlayerDead(view.Key);
-                    playerTransform[view.Key].GetComponent<PlayerInput>().enabled = false;
-                    StartCoroutine(EnemyAttackStop());
-                }
-            }
-        }
-        [PunRPC]
-        protected void RequestExitPlayer(int playerId)
-        {
-            exitPlayer[playerId] = false;
-            Debug.Log($"RequestExitPlayer{playerId}");
+            Debug.Log($"RequestHoldPlayer{playerId}");
+            Anim.SetBool("InArea", true);
+            Debug.Log(Anim.GetBool("InArea"));
+            playerTransform[playerId].GetComponent<PlayerDied>().DoDeath();
+            inGameManager.PlayerDead(playerId);
+            playerTransform[playerId].GetComponent<PlayerInput>().enabled = false;
+            StartCoroutine(EnemyAttackStop());
+            SetPlayerAggro(inGameManager.PlayerAggroDictionary);
         }
         IEnumerator EnemyAttackStop()
         {
