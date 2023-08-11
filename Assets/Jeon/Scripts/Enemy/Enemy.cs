@@ -61,6 +61,13 @@ namespace Jeon
             {
                 DoEndGame();
             }
+
+            if (curTime >= inGameManager.TotalTime)
+            {
+                StopAllCoroutines();
+                anim.enabled = false;
+                gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            }
         }
 
 
