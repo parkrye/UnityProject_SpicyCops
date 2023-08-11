@@ -13,7 +13,6 @@ public class PlayerMover : MonoBehaviourPun
 
 
     [SerializeField] public float speedIncrease; // 이동속도 증가율
-    [SerializeField] public float speedDecrease; // 이동속도 감소율
     [SerializeField] public float speedChangeDuration; // 이동속도 변경 시간
 
     [SerializeField] private float startSpeedChangeTIme; // 이동속도 증가 시작 시간
@@ -185,6 +184,7 @@ public class PlayerMover : MonoBehaviourPun
             haveControll = true;
             isStun = false;
         }
+
     }
 
     [PunRPC]
@@ -217,23 +217,27 @@ public class PlayerMover : MonoBehaviourPun
         StartCoroutine(speedChangerRoutine());
     }
 
-    /*[PunRPC]
+    [PunRPC]
     public void Annoy(int viewID)
     {
-        if(photonView.ViewID != viewID)
+        if (photonView.ViewID != viewID)
         {
             if (puller.isPulling)
             {
-                moveSpeed = moveSpeed * 0.5f; // speedIncrease만큼 배속을 나눔 적용한다.
-                moveSpeed = originSpeed; //speedIncrease로 곱적용하여 원본으로 돌아간다.
-                isSpeedDown = false;
+                if (photonView.ViewID != viewID)
+                    return;
+                isSpeedDown = true;
+                startSpeedChangeTIme = Time.time;
+                StartCoroutine(speedChangerRoutine());
             }
 
             if (pusher.isPushing)
             {
-
+                if (photonView.ViewID != viewID)
+                    return;
+               
             }
         }
-       
-    }*/
+
+    }
 }
