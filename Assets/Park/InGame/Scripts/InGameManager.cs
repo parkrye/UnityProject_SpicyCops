@@ -163,8 +163,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForEndOfFrame();
         GameStart();
+
     }
 
+    [PunRPC]
     void GameStart()
     {
         // 캐릭터 생성
@@ -187,12 +189,12 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
 
+        StartCoroutine(GameSetting());
 
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            StartCoroutine(GameSetting());
         }
     }
 
@@ -203,14 +205,21 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     IEnumerator GameSetting()
     {
-        while(readyPlayerCount < PhotonNetwork.PlayerList.Length)
+        /*while(readyPlayerCount < PhotonNetwork.PlayerList.Length)
         {
             yield return new WaitForSeconds(0.1f);
-        }
+        }*/
+
+        Debug.Log("Wait Game Setting");
+        yield return new WaitUntil(() => { return readyPlayerCount == PhotonNetwork.PlayerList.Length; });
+        Debug.Log("All Ready");
+
         itemManager.Init();
-        safeArea.GameStartSetting();
         enemy.Seting();
         inGameUIController.StartTimer();
+        if (PhotonNetwork.IsMasterClient)
+            safeArea.GameStartSetting();
+        Debug.Log("Done Game Setting");
     }
     #endregion
 
@@ -218,6 +227,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RequestAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
+        Debug.Log($"{photonView.Owner} request add Player");
         ResultAddPlayer(playerActorNumber, photonViewID, avatarNum, colorNum);
     }
 
@@ -237,13 +247,17 @@ public class InGameManager : MonoBehaviourPunCallbacks
         ModifyPlayerAggro(photonViewID, 0f);
 
         player.GetComponent<PlayerMover>().Initialize();
+        Debug.Log($"{photonView.Owner} request create Player");
         if (playerActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
             photonView.RPC("RequestCreatedPlayer", RpcTarget.AllBufferedViaServer);
+        }
     }
     [PunRPC]
     void RequestCreatedPlayer(PhotonMessageInfo info)
     {
         readyPlayerCount++;
+        Debug.LogError(readyPlayerCount);
     }
 
     #endregion
