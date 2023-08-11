@@ -187,42 +187,18 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
 
+
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            safeArea.GameStartSetting();
             StartCoroutine(GameSetting());
         }
     }
 
     private void DebugGameStart()
     {
-        // 캐릭터 생성
-        // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber - 1].position, Quaternion.identity, 0);
-        int avatarNum = 0, colorNum = 0;
-        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
-        {
-            avatarNum = (int)avatarValue;
-        }
-        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_COLOR, out object colorValue))
-        {
-            colorNum = (int)colorValue;
-        }
-
-        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
-        inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
-        playerCamera.Follow = player.transform;
-        playerCamera.LookAt = player.transform;
-
-        // 방장 작업
-        if (PhotonNetwork.IsMasterClient)
-        {
-            // 에너미가 this 참조
-            safeArea.GameStartSetting();
-            StartCoroutine(GameSetting());
-        }
+        GameStart();
     } 
 
     IEnumerator GameSetting()
@@ -231,16 +207,9 @@ public class InGameManager : MonoBehaviourPunCallbacks
         {
             yield return new WaitForSeconds(0.1f);
         }
-        enemy.Seting();
-        photonView.RPC("SetStartTime", RpcTarget.AllViaServer);
-    }
-    #endregion
-
-    #region Timer
-    [PunRPC]
-    void SetStartTime()
-    {
         itemManager.Init();
+        safeArea.GameStartSetting();
+        enemy.Seting();
         inGameUIController.StartTimer();
     }
     #endregion
@@ -269,7 +238,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         player.GetComponent<PlayerMover>().Initialize();
         if (playerActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
-            photonView.RPC("RequestCreatedPlayer", RpcTarget.MasterClient);
+            photonView.RPC("RequestCreatedPlayer", RpcTarget.AllViaServer);
     }
     [PunRPC]
     void RequestCreatedPlayer(PhotonMessageInfo info)
