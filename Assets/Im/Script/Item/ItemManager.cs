@@ -21,7 +21,7 @@ public class ItemManager : MonoBehaviourPun
         }
         for (int i = 0; i < itemSpots.Length; i++)
         {
-            itemSpots[i].itemManager = this;
+            itemSpots[i].manager = gameManager;
             itemSpots[i].itemSpotIndex = i;
         }
     }
