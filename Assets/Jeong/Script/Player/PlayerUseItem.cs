@@ -39,9 +39,7 @@ public class PlayerUseItem : MonoBehaviourPun
             //hammer.transform.position = new Vector3(0, 0.008f, 0f);
             //hammer.transform.localEulerAngles = new Vector3(0, 90, 0);
 
-            anim.SetBool("IsHammer", true);
-            StartCoroutine(HammerRoutine());
-            anim.SetBool("IsHammer", false);
+            StartCoroutine(HammerAnimRoutine());
         }
         MyItem = -1;
         itemManager.gameManager.SetItemUI(myItem);
@@ -57,6 +55,13 @@ public class PlayerUseItem : MonoBehaviourPun
         yield return new WaitForSeconds(1.5f);
         for (int i = 0; i < hammers.Count; i++)
             hammers[i].gameObject.SetActive(false);
+    }
+    public IEnumerator HammerAnimRoutine()
+    {
+        anim.SetBool("IsHammer", true);
+        StartCoroutine(HammerRoutine());
+        yield return new WaitForSeconds(0.2f);
+        anim.SetBool("IsHammer", false);
     }
         
 }
