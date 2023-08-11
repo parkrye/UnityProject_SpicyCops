@@ -16,7 +16,7 @@ public class InGameUI_TimeSlider : SceneUI
 
     IEnumerator TimeClock()
     {
-        while(timeValue < inGameUIController.inGameManager.TotalTime)
+        while(timeValue > 0f)
         {
             timeValue -= 0.1f;
             sliders["TimeSlider"].value = timeValue;
