@@ -19,7 +19,7 @@ public class PlayerPuller : MonoBehaviourPun
     // ******************************************************************
 
     
-    [SerializeField] private bool isPulling = false;
+    [SerializeField] public bool isPulling = false;
 
     [SerializeField] private GameObject currentPullTarget;
     [SerializeField] private GameObject targetPlayer;
