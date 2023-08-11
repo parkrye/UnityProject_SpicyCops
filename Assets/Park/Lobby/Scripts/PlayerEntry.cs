@@ -97,6 +97,7 @@ public class PlayerEntry : SceneUI
         }
     }
 
+    // 루프 발생
     public void OnAvatarButtonClicked(bool isLeft)
     {
         if (isLeft)
