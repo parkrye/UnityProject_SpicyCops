@@ -15,38 +15,49 @@ public class PlayerInteraction : MonoBehaviour
 
     private Animator anim;
 
+    [SerializeField] private Transform playerInteraction;
+
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+
+        playerInteraction.transform.position = other.transform.position;
+        canInteract = true;
+    }
 
     // 상호작용 오브젝트 탐색
     public void FindInteract()
     {
-        
+
     }
 
     // 상호작용
     public void Interact()
     {
-        Collider[] colliders = Physics.OverlapSphere(point.position, range);
-        foreach (Collider collider in colliders)
+        if (canInteract)
         {
-            anim.SetBool("IsPicked", true);
-            IInteractable interactable = collider.GetComponent<IInteractable>();
-            interactable?.Interact(this);
+            Collider[] colliders = Physics.OverlapSphere(point.position, range);
+            foreach (Collider collider in colliders)
+            {
+                IInteractable interactable = collider.GetComponent<IInteractable>();
+                interactable?.Interact(this);
+                anim.SetBool("IsPicked", true);
+
+            }
+            Debug.Log("Player Interact");
             anim.SetBool("IsPicked", false);
         }
-        Debug.Log("Player Interact");
+
     }
 
     private void OnInteract(InputValue value)
     {
-   
         Interact();
-        
     }
 
     private void OnDrawGizmosSelected()
