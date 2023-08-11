@@ -45564,6 +45564,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeLayers.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 809900520, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
       propertyPath: sceneViewId
       value: 3

@@ -231,6 +231,8 @@ namespace Jeon
         [PunRPC]
         protected void RequestHoldPlayer(int playerId)
         {
+            if (!inGameManager.PlayerAliveDictionary[playerId])
+                return;
             Debug.Log($"RequestHoldPlayer{playerId}");
             Anim.SetBool("InArea", true);
             Debug.Log(Anim.GetBool("InArea"));
