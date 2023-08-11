@@ -35,7 +35,7 @@ public class ItemManager : MonoBehaviourPun
     public void RequestUseItem(Vector3 pos, Quaternion rot, int index, int viewId, PhotonMessageInfo info)
     {
         float sentTime = (float)info.SentServerTime;
-        photonView.RPC("ResultUseItem", RpcTarget.AllBufferedViaServer, pos, rot, sentTime, viewId, index, info.Sender);
+        photonView.RPC("ResultUseItem", RpcTarget.AllViaServer, pos, rot, sentTime, viewId, index, info.Sender);
     }
     [PunRPC]
     public void ResultUseItem(Vector3 pos, Quaternion rot, float sentTime, int viewId, int index, Player sender)

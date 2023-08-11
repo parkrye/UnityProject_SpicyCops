@@ -9,6 +9,6 @@ public class Shoes : UtilItem
     {
         PhotonView view = PhotonView.Find(viewId);
         PlayerMover mover = view.gameObject.GetComponent<PlayerMover>();
-        mover.photonView.RPC("OnSpeedUp", RpcTarget.AllBufferedViaServer, viewId);
+        mover.photonView.RPC("OnSpeedUp", RpcTarget.AllViaServer, viewId);
     }
 }
