@@ -49,33 +49,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "SpeedUp",
-                    "type": "Button",
-                    "id": "8648b294-02be-4c8c-a53a-eefbe8a34380",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SpeedDown",
-                    "type": "Button",
-                    "id": "fdf66ee7-a183-4b1f-9d2f-f0eeeb1bd2f5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Stun",
-                    "type": "Button",
-                    "id": "7ecba805-cec3-40ba-b1e1-32e98abaec50",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -175,39 +148,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Item",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fe99ea2f-5589-4c4b-ac32-f353a739d5df",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SpeedUp",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "27c8362f-9fb7-4c8b-a992-8e103319b758",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SpeedDown",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a9afb750-5884-42b5-b091-9d5ad5124325",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Stun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

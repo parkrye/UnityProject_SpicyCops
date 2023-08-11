@@ -40,13 +40,16 @@ public class PlayerMover : MonoBehaviourPun
     private bool isStun = false;
     bool haveControll = false;
 
-    void Start()
+    void Awake()
     {
         anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
+    }
 
+    void Start()
+    {
         if (!photonView.IsMine)
             Destroy(playerInput);
 

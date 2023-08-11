@@ -249,7 +249,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         while (NowTime < TotalTime)
         {
             yield return new WaitForSeconds(0.1f);
-            igmPhotonView.RPC("RequestTimer", RpcTarget.AllViaServer, 0.1f);
+            // ¼öÁ¤ 1
+            igmPhotonView.RPC("RequestTimer", RpcTarget.MasterClient, 0.1f);
         }
     }
 
