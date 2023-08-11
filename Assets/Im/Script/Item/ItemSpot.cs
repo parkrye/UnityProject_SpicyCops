@@ -17,8 +17,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     public void Init()
     {
         isActive = false;
-        if(PhotonNetwork.IsMasterClient)
-            animator.SetTrigger("Use");
+        animator.SetTrigger("Use");
     }
 
     public void Interact(PlayerInteraction player)
@@ -33,6 +32,8 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     [PunRPC]
     public void RequestGiveRandomItem(int playerId, int itemSpotIndex)
     {
+        if (!photonView.IsMine)
+            return;
         int randNum = Random.Range(0, (int)Define.ItemIndex.Count);
         // int randNum = (int)Define.ItemIndex.Hammer;
         photonView.RPC("ResultGiveRandomItem", RpcTarget.AllViaServer, playerId, randNum);
@@ -41,6 +42,8 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     public void ResultGiveRandomItem(int viewId, int index)
     {
         if (!isActive)
+            return;
+        if (index != itemSpotIndex)
             return;
         isActive = false;
         animator.SetTrigger("Use");
