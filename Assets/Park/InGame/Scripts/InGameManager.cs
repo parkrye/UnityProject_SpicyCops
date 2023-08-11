@@ -41,7 +41,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] ItemManager itemManager;
     public ItemManager ItemManager { get {  return itemManager; } }
-    [SerializeField] bool started;
+    [SerializeField] bool started = false;
 
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
@@ -320,7 +320,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankStack.Peek());
         
-        if(started && rankStack.Count >= readyPlayerCount - 1)
+        if(rankStack.Count >= readyPlayerCount - 1)
         {
             GameEnd();
         }
@@ -350,7 +350,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region End Game Manager
     public void GameEnd()
     {
-        if (inGameUIController.IsPlaying)
+        if (started && inGameUIController.IsPlaying)
         {
             photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
         }
