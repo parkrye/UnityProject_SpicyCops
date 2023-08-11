@@ -33,9 +33,9 @@ public class InGameUIController : MonoBehaviour
         optionUI.SetActive(false);
     }
 
-    public void StartTimer()
+    public void StartTimer(float serverTime)
     {
-        inGameUI_TimeSlider.Initialize();
+        inGameUI_TimeSlider.Initialize(serverTime);
     }
 
     public void SetPlayerPhotonView(PhotonView player)

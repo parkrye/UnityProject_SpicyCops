@@ -206,18 +206,13 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     IEnumerator GameSetting()
     {
-        /*while(readyPlayerCount < PhotonNetwork.PlayerList.Length)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }*/
-
         Debug.Log("Wait Game Setting");
         yield return new WaitUntil(() => { return readyPlayerCount == PhotonNetwork.PlayerList.Length; });
         Debug.Log("All Ready");
 
         itemManager.Init();
         enemy.Seting();
-        inGameUIController.StartTimer();
+        inGameUIController.StartTimer((float)PhotonNetwork.Time);
         if (PhotonNetwork.IsMasterClient)
             safeArea.GameStartSetting();
         started = true;
@@ -259,7 +254,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     void RequestCreatedPlayer(PhotonMessageInfo info)
     {
         readyPlayerCount++;
-        Debug.LogError(readyPlayerCount);
+        Debug.Log(readyPlayerCount);
     }
 
     #endregion
@@ -304,6 +299,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region Rank(Dead) Manager
     public void PlayerDead(int targetPlayerPhotonViewID)
     {
+        Debug.LogError($"Requset Player Dead {targetPlayerPhotonViewID}");
         photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
     }
 
@@ -315,8 +311,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void ResultPlayerDead(int targetPlayerPhotonViewID)
     {
+        Debug.LogError($"Result Player Dead {targetPlayerPhotonViewID}");
         playerAliveDictionary[targetPlayerPhotonViewID] = false;
-        rankStack.Push((rankStack.Count + 1, targetPlayerPhotonViewID));
+        rankStack.Push((readyPlayerCount - rankStack.Count + 1, targetPlayerPhotonViewID));
+        Debug.LogError($"Rank Stack {rankStack.Peek()}");
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankStack.Peek());
         
@@ -364,8 +362,14 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void ResultGameEnd()
     {
-        // 플레이어 정지
-        // 애너미 정지
+        foreach (KeyValuePair<int, bool> pair in playerAliveDictionary)
+        {
+            if (pair.Value)
+            {
+                rankStack.Push((1, pair.Key));
+                playerDeadEvent?.Invoke(rankStack.Peek());
+            }
+        }
         inGameUIController.EndGameUI();
     }
     #endregion
