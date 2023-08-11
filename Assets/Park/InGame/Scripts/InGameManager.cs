@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
-using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun.UtilityScripts;
 
 public class InGameManager : MonoBehaviourPunCallbacks
@@ -37,12 +36,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] CinemachineVirtualCamera playerCamera;
 
-    [SerializeField] Queue<(int, int)> rankQueue;
-    public Queue<(int, int)> RankQueue { get { return rankQueue; } }
+    [SerializeField] Stack<(int, int)> rankStack;
+    public Stack<(int, int)> RankStack { get { return rankStack; } }
 
     [SerializeField] ItemManager itemManager;
     public ItemManager ItemManager { get {  return itemManager; } }
-    [SerializeField] PhotonView igmPhotonView;
 
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
@@ -56,7 +54,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAggroDictionary = new Dictionary<int, float>();
         playerAliveDictionary = new Dictionary<int, bool>();
         playerIDDictonary = new Dictionary<int, int>();
-        rankQueue = new Queue<(int, int)> ();
+        rankStack = new Stack<(int, int)> ();
         playerDeadEvent = new UnityEvent<(int, int)> ();
         inGameUIController.Initialize();
 
@@ -193,9 +191,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            
             safeArea.GameStartSetting();
-            inGameUIController.StartTimer();
             StartCoroutine(GameSetting());
         }
     }
@@ -224,7 +220,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 this 참조
-            
             safeArea.GameStartSetting();
             StartCoroutine(GameSetting());
         }
@@ -246,6 +241,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     void SetStartTime()
     {
         itemManager.Init();
+        inGameUIController.StartTimer();
     }
     #endregion
 
@@ -270,9 +266,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAvatarManager.Initialize(avatarNum, colorNum);
         // 플레이어가 this 참조
         ModifyPlayerAggro(photonViewID, 0f);
-        igmPhotonView.RPC("RequestCreatedPlayer", RpcTarget.MasterClient);
 
         player.GetComponent<PlayerMover>().Initialize();
+        if (playerActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+            photonView.RPC("RequestCreatedPlayer", RpcTarget.MasterClient);
     }
     [PunRPC]
     void RequestCreatedPlayer(PhotonMessageInfo info)
@@ -334,11 +331,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
     void ResultPlayerDead(int targetPlayerPhotonViewID)
     {
         playerAliveDictionary[targetPlayerPhotonViewID] = false;
-        rankQueue.Enqueue((rankQueue.Count + 1, targetPlayerPhotonViewID));
+        rankStack.Push((rankStack.Count + 1, targetPlayerPhotonViewID));
         playerAliveEvent?.Invoke(playerAliveDictionary);
-        playerDeadEvent?.Invoke(rankQueue.Peek());
+        playerDeadEvent?.Invoke(rankStack.Peek());
         
-        if(rankQueue.Count >= readyPlayerCount - 1)
+        if(rankStack.Count >= readyPlayerCount - 1)
         {
             GameEnd();
         }
