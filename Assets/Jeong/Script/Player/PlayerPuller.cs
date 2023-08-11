@@ -165,8 +165,8 @@ public class PlayerPuller : MonoBehaviourPun
         transform.LookAt(player.transform.position, Vector3.up);
 
         // 잡아당기는 Player와 잡히는 Player는 속도가 느려진다.
-        float slowDownFactor = 0.5f;
-        player.GetComponent<PlayerMover>().SetMoveSpeed(player.GetComponent<PlayerMover>().moveSpeed * slowDownFactor);
+        // float slowDownFactor = 0.5f;
+        // player.GetComponent<PlayerMover>().SetMoveSpeed(player.GetComponent<PlayerMover>().moveSpeed * slowDownFactor);
     }
 
     public void SetPullTarget(GameObject target)

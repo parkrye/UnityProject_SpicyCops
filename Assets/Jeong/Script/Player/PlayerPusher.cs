@@ -129,7 +129,7 @@ public class PlayerPusher : MonoBehaviourPun
     }
 
     // 밀기
-    private void Push(GameObject player)
+    public void Push(GameObject player)
     {
         // 현재 Player 오브젝트와 미려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
         Vector3 directionToTarget = (player.transform.position - transform.position).normalized;
