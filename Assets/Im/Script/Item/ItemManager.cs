@@ -8,9 +8,8 @@ public class ItemManager : MonoBehaviourPun
     public Item[] itemList = new Item[(int)Define.ItemIndex.Count];
     public InGameManager gameManager;
 
-    public void Init()
+    private void Awake()
     {
-
         for (int i = 0; i < itemList.Length; i++)
         {
             Item item = GameManager.Resource.Load<Item>($"Item/{(Define.ItemIndex)i}");
@@ -25,6 +24,9 @@ public class ItemManager : MonoBehaviourPun
             itemSpots[i].itemManager = this;
             itemSpots[i].itemSpotIndex = i;
         }
+    }
+    public void Init()
+    {
         foreach (var item in itemSpots) 
         {
             item.Init();
