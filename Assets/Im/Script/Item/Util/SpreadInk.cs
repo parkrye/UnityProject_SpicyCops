@@ -10,6 +10,7 @@ public class SpreadInk : UtilItem
 {
     protected override void GetUtilEffect(int viewId, Player sender)
     {
-        gameManager.DrawEffect(sender.ActorNumber);
+        if(PhotonNetwork.IsMasterClient)
+            gameManager.DrawEffect(sender.ActorNumber);
     }
 }

@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun.UtilityScripts;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
@@ -172,7 +173,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         // 캐릭터 생성
         // UI에 플레이어 정보 저장
-        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.ActorNumber-1].position, Quaternion.identity, 0);
+        // 넘버링
+        GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.GetPlayerNumber()].position, Quaternion.identity, 0);
 
         int avatarNum = 0, colorNum = 0;
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
@@ -183,8 +185,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         {
             colorNum = (int) colorValue;
         }
-        
-        igmPhotonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
+
+        photonView.RPC("RequestAddPlayer", RpcTarget.AllBufferedViaServer, PhotonNetwork.LocalPlayer.ActorNumber, player.GetComponent<PhotonView>().ViewID, avatarNum, colorNum);
         inGameUIController.SetPlayerPhotonView(player.GetComponent<PhotonView>());
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
@@ -247,7 +249,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         while (NowTime < TotalTime)
         {
             yield return new WaitForSeconds(0.1f);
-            igmPhotonView.RPC("RequestTimer", RpcTarget.AllViaServer, 0.1f);
+            // 수정 1
+            photonView.RPC("RequestTimer", RpcTarget.AllViaServer, 0.1f);
         }
     }
 
@@ -316,7 +319,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region Aggro Manager
     public void ModifyPlayerAggro(int targetPlayerPhotonViewID, float modifyValue)
     {
-        igmPhotonView.RPC("RequestModifyPlayerAggro", RpcTarget.AllViaServer, targetPlayerPhotonViewID, modifyValue);
+        photonView.RPC("RequestModifyPlayerAggro", RpcTarget.AllViaServer, targetPlayerPhotonViewID, modifyValue);
     }
 
     [PunRPC]
@@ -353,7 +356,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region Rank(Dead) Manager
     public void PlayerDead(int targetPlayerPhotonViewID)
     {
-        igmPhotonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
+        photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
     }
 
     [PunRPC]
@@ -401,8 +404,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         if (inGameUIController.IsPlaying)
         {
-            
-            igmPhotonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
+
+            photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
         }
     }
 
@@ -428,7 +431,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     public void DrawEffect(int usingPlayerActorNumber)
     {
-        igmPhotonView.RPC("RequestDrawEffect", RpcTarget.AllViaServer, usingPlayerActorNumber);
+        photonView.RPC("RequestDrawEffect", RpcTarget.AllViaServer, usingPlayerActorNumber);
     }
 
     [PunRPC]
