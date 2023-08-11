@@ -13,8 +13,6 @@ namespace Jeon
         private NavMeshAgent agent;
         private Animator anim;
 
-        [SerializeField] PhotonView _photonView;
-
         public Animator Anim { get { return anim; } }
         [SerializeField] InGameManager inGameManager;
 
@@ -37,7 +35,7 @@ namespace Jeon
 
         private void SetServerTime(float time)
         {
-            _photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
+            photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
         }
 
         [PunRPC]
@@ -63,7 +61,15 @@ namespace Jeon
             {
                 DoEndGame();
             }
+            photonView.RPC("RequestEnemyTime", RpcTarget.AllViaServer, time);
         }
+
+        [PunRPC]
+        private void RequestEnemyTime(float time)
+        {
+            curTime = time;
+        }
+
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();

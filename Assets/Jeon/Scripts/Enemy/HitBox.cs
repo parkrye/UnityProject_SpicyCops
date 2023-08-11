@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class HitBox : MonoBehaviourPun
 {
     [SerializeField] private PoliceEnemy enemy;
-    [SerializeField] PhotonView myView;
     [SerializeField] InGameManager inGameManager;
     [SerializeField] List<int> playerViewIdList;
 
@@ -21,14 +20,14 @@ public class HitBox : MonoBehaviourPun
         Debug.Log(other.gameObject.name + other.gameObject.layer);
         if (other.gameObject.layer == 3)
         {
-            myView.RPC("RequestAddPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
+            photonView.RPC("RequestAddPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 3)
         {
-            myView.RPC("RequestExitPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
+            photonView.RPC("RequestExitPlayer", RpcTarget.MasterClient, other.GetComponent<PhotonView>().ViewID);
         }
 
     }
@@ -36,7 +35,7 @@ public class HitBox : MonoBehaviourPun
     private void RequestAddPlayer(int playerId)
     {
         playerViewIdList.Add(playerId);
-        myView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
+        photonView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
     }
 
     [PunRPC]
