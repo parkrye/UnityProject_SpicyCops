@@ -17,7 +17,7 @@ public class PlayerPusher : MonoBehaviourPun
     private bool canPush = true; // 밀기 가능한지 여부
     // ******************************************************************
 
-    [SerializeField] private bool isPushing = false;
+    [SerializeField] public bool isPushing = false;
 
     private PlayerInput playerInput;
     private Animator anim;
