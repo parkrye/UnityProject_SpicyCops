@@ -1,5 +1,5 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class InGameUI_TimeSlider : SceneUI
 {
@@ -10,20 +10,22 @@ public class InGameUI_TimeSlider : SceneUI
     public override void Initialize()
     {
         sliders["TimeSlider"].maxValue = inGameUIController.inGameManager.TotalTime;
-        inGameUIController.inGameManager.AddTimeEventListener(TimeClock);
+        timeValue = inGameUIController.inGameManager.TotalTime;
+        StartCoroutine(TimeClock());
     }
 
-    public void TimeClock(float time)
+    IEnumerator TimeClock()
     {
-        if (timeValue > inGameUIController.inGameManager.TotalTime)
-            return;
-
-        timeValue = inGameUIController.inGameManager.TotalTime - time;
-        sliders["TimeSlider"].value = timeValue;
-
-        if(timeValue <= 30f)
+        while(timeValue < inGameUIController.inGameManager.TotalTime)
         {
-            texts["TimeText"].text = ((int)timeValue).ToString();
+            timeValue -= 0.1f;
+            sliders["TimeSlider"].value = timeValue;
+
+            if (timeValue <= 30f)
+            {
+                texts["TimeText"].text = ((int)timeValue).ToString();
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

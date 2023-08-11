@@ -44,7 +44,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
     public ItemManager ItemManager { get {  return itemManager; } }
     [SerializeField] PhotonView igmPhotonView;
 
-    UnityEvent<float> timeEvent;
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
     UnityEvent<(int, int)> playerDeadEvent;
@@ -52,7 +51,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-        timeEvent = new UnityEvent<float>();
         playerAggroEvent = new UnityEvent<Dictionary<int, float>>();
         playerAliveEvent = new UnityEvent<Dictionary<int, bool>>();
         playerAggroDictionary = new Dictionary<int, float>();
@@ -114,7 +112,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // 방장 작업 대신 수행
         if (newMasterClient.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            StartCoroutine(TimerRoutine());
+
         }
     }
 
@@ -191,13 +189,13 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
 
-        itemManager.Init();
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 이 스크립트 참조
-            StartCoroutine(TimerRoutine());
+            photonView.RPC("SetStartTime", RpcTarget.AllViaServer);
             safeArea.GameStartSetting();
+            inGameUIController.StartTimer();
             StartCoroutine(GameSetting());
         }
     }
@@ -222,12 +220,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerCamera.Follow = player.transform;
         playerCamera.LookAt = player.transform;
 
-        itemManager.Init();
         // 방장 작업
         if (PhotonNetwork.IsMasterClient)
         {
             // 에너미가 this 참조
-            StartCoroutine(TimerRoutine());
+            photonView.RPC("SetStartTime", RpcTarget.AllViaServer);
             safeArea.GameStartSetting();
             StartCoroutine(GameSetting());
         }
@@ -244,42 +241,10 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Timer
-    IEnumerator TimerRoutine()
-    {
-        while (NowTime < TotalTime)
-        {
-            yield return new WaitForSeconds(0.1f);
-            // 수정 1
-            photonView.RPC("RequestTimer", RpcTarget.AllViaServer, 0.1f);
-        }
-    }
-
     [PunRPC]
-    void RequestTimer(float time, PhotonMessageInfo info)
+    void SetStartTime()
     {
-        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
-        ResultTimer(time + lag);
-    }
-
-    public void ResultTimer(float time)
-    {
-        NowTime += time;
-        timeEvent?.Invoke(NowTime);
-
-        if(NowTime > TotalTime)
-        {
-            GameEnd();
-        }
-    }
-
-    public void AddTimeEventListener(UnityAction<float> lister)
-    {
-        timeEvent.AddListener(lister);
-    }
-
-    public void RemoveTimeEventListener(UnityAction<float> lister)
-    {
-        timeEvent?.RemoveListener(lister);
+        itemManager.Init();
     }
     #endregion
 
