@@ -33,13 +33,13 @@ namespace Jeon
 
         [SerializeField] Material material;
 
-        private void SetServerTime(float time)
+        private void SetTime()
         {
-            photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient, time);
+            if (PhotonNetwork.IsMasterClient)
+                RequestEnemyMoveSetting();
         }
 
-        [PunRPC]
-        protected void RequestEnemyMoveSetting(float time)    // 에이전트 스피드가 되는지 RPC Time.
+        private void RequestEnemyMoveSetting()    // 에이전트 스피드가 되는지 RPC Time.
         {
             if (curTime >= 5f && curState == EnemyState.Idle)
             {
@@ -61,14 +61,8 @@ namespace Jeon
             {
                 DoEndGame();
             }
-            photonView.RPC("RequestEnemyTime", RpcTarget.AllViaServer, time);
         }
 
-        [PunRPC]
-        private void RequestEnemyTime(float time)
-        {
-            curTime = time;
-        }
 
         private void Awake()
         {
@@ -179,7 +173,7 @@ namespace Jeon
             while (true)
             {
                 curTime += Time.deltaTime;
-                SetServerTime(curTime);
+                SetTime();
                 yield return null;
             }
         }
