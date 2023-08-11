@@ -41,6 +41,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] ItemManager itemManager;
     public ItemManager ItemManager { get {  return itemManager; } }
+    [SerializeField] bool started;
 
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
@@ -219,6 +220,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         inGameUIController.StartTimer();
         if (PhotonNetwork.IsMasterClient)
             safeArea.GameStartSetting();
+        started = true;
         Debug.Log("Done Game Setting");
     }
     #endregion
@@ -318,7 +320,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankStack.Peek());
         
-        if(rankStack.Count >= readyPlayerCount - 1)
+        if(started && rankStack.Count >= readyPlayerCount - 1)
         {
             GameEnd();
         }
@@ -350,7 +352,6 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         if (inGameUIController.IsPlaying)
         {
-
             photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
         }
     }
