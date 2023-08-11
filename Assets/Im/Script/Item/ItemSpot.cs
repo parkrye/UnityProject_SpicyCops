@@ -12,6 +12,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        manager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
     }
     public void Init()
     {
