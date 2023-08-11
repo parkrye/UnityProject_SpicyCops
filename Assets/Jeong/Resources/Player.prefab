@@ -247,7 +247,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 1
   range: 4
+
   point: {fileID: 4560064169685170678}
+
 --- !u!114 &7610103459090945494
 MonoBehaviour:
   m_ObjectHideFlags: 0
