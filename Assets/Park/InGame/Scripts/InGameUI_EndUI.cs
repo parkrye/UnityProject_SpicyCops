@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InGameUI_EndUI : SceneUI
 {
@@ -56,5 +57,11 @@ public class InGameUI_EndUI : SceneUI
         InGameUI_RankEntry rankEntry = GameManager.Resource.Instantiate<InGameUI_RankEntry>("UI/RankEntry", rankEntryParent);
         rankEntry.SetInitializeReady(rank, name);
         Debug.Log($"Created Object {rankEntry.name}");
+    }
+
+    public void OnEndUIButtonClicked()
+    {
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("LobbyScene");
     }
 }
