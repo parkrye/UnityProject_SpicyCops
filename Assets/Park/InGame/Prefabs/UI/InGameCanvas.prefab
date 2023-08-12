@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 3640626239922655667}
   - component: {fileID: 6449561408519953378}
   m_Layer: 5
-  m_Name: WinText
+  m_Name: LoseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2924,8 +2924,8 @@ MonoBehaviour:
   inGameUI_EndUI: {fileID: 1690651930627470053}
   inGameUI_ItemIcon: {fileID: 387119569630181335}
   playingUI: {fileID: 3545181065896704940}
+  endUI: {fileID: 8476698878380120920}
   effectUI: {fileID: 6922084011398371744}
-  isPlaying: 0
 --- !u!114 &8763717939166673951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2973,6 +2973,8 @@ MonoBehaviour:
   inGameUI_RankEntry: {fileID: 5475712636445930924, guid: 1a49e2c7a4c335f4ea5798dbce9a6de7,
     type: 3}
   rankEntryParent: {fileID: 3645793314680398748}
+  winText: {fileID: 8168254758403478993}
+  loseText: {fileID: 685843464646801916}
 --- !u!1 &6792521955303321569
 GameObject:
   m_ObjectHideFlags: 0

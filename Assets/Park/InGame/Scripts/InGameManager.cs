@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Pun.UtilityScripts;
+using System.Linq;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
@@ -42,6 +43,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] ItemManager itemManager;
     public ItemManager ItemManager { get {  return itemManager; } }
     [SerializeField] bool started = false;
+    [SerializeField] bool isPlaying;
+    public bool IsPlaying { get { return isPlaying; } }
 
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
@@ -217,6 +220,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
             safeArea.GameStartSetting();
         started = true;
+        isPlaying = true;
         Debug.Log("Done Game Setting");
     }
     #endregion
@@ -355,29 +359,20 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region End Game Manager
     public void GameEnd()
     {
-        if (started)
+        if (started && IsPlaying)
         {
-            photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
-        }
-    }
+            isPlaying = false;
 
-    [PunRPC]
-    void RequestGameEnd(PhotonMessageInfo info)
-    {
-        ResultGameEnd();
-    }
-
-    void ResultGameEnd()
-    {
-        foreach (KeyValuePair<int, bool> pair in playerAliveDictionary)
-        {
-            if (pair.Value)
+            foreach (KeyValuePair<int, bool> pair in playerAliveDictionary)
             {
-                rankStack.Push((1, pair.Key));
-                playerDeadEvent?.Invoke(rankStack.Peek());
+                if (pair.Value)
+                {
+                    rankStack.Push((1, pair.Key));
+                }
             }
+            Debug.Log($"End Game {rankStack.Count}");
+            inGameUIController.EndGameUI();
         }
-        inGameUIController.EndGameUI();
     }
     #endregion
 

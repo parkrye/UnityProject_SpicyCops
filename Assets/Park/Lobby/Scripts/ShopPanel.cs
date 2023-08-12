@@ -23,7 +23,6 @@ public class ShopPanel : SceneUI
     void OnEnable()
     {
         avatarNum = 0;
-        GameData.userData.coin += 1000;
         texts["MoneyText"].text = GameData.userData.coin.ToString();
         OnModifyAvatarChanged();
     }
