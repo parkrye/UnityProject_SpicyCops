@@ -300,7 +300,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region Rank(Dead) Manager
     public void PlayerDead(int targetPlayerPhotonViewID)
     {
-        Debug.LogError($"Requset Player Dead {targetPlayerPhotonViewID}");
+        Debug.Log($"Requset Player Dead {targetPlayerPhotonViewID}");
         photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
     }
 
@@ -312,14 +312,20 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void ResultPlayerDead(int targetPlayerPhotonViewID)
     {
-        Debug.LogError($"Result Player Dead {targetPlayerPhotonViewID}");
+        Debug.Log($"Result Player Dead {playerAliveDictionary[targetPlayerPhotonViewID]}");
+        if (!started)
+            return;
+        if (!playerAliveDictionary[targetPlayerPhotonViewID])
+            return;
+        Debug.Log($"Result Player Dead {targetPlayerPhotonViewID}");
         playerAliveDictionary[targetPlayerPhotonViewID] = false;
-        rankStack.Push((readyPlayerCount - rankStack.Count + 1, targetPlayerPhotonViewID));
-        Debug.LogError($"Rank Stack {rankStack.Peek()}");
+        rankStack.Push((readyPlayerCount - rankStack.Count, targetPlayerPhotonViewID));
+        Debug.Log($"Rank Stack {rankStack.Peek()}");
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankStack.Peek());
-        
-        if(rankStack.Count >= readyPlayerCount - 1)
+
+        Debug.Log($"Rank Stack {rankStack.Count}, {readyPlayerCount - 1}");
+        if (rankStack.Count >= readyPlayerCount - 1)
         {
             GameEnd();
         }
@@ -349,7 +355,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region End Game Manager
     public void GameEnd()
     {
-        if (started && inGameUIController.IsPlaying)
+        if (started)
         {
             photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
         }

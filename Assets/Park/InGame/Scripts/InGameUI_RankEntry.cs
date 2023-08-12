@@ -1,6 +1,14 @@
 public class InGameUI_RankEntry : SceneUI
 {
-    public void Initialize(int rank, int playerViewID)
+    int rank, playerViewID;
+
+    public void SetInitializeReady(int _rank, int _playerViewID)
+    {
+        rank = _rank;
+        playerViewID = _playerViewID;
+    }
+
+    private void OnEnable()
     {
         base.Initialize();
         texts["RankText"].text = $"{rank}";

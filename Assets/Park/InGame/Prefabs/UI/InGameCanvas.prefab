@@ -2810,6 +2810,7 @@ GameObject:
   - component: {fileID: 6661591664841890056}
   - component: {fileID: -3490141839568108933}
   - component: {fileID: 8763717939166673951}
+  - component: {fileID: 1690651930627470053}
   m_Layer: 5
   m_Name: InGameCanvas
   m_TagString: Untagged
@@ -2920,7 +2921,7 @@ MonoBehaviour:
   inGameUI_PlayerAggroBar: {fileID: 1737605292580280770}
   inGameUI_otherPlayerZone: {fileID: 6071517874383766496}
   inGameUI_TimeSlider: {fileID: 1506818487719642959}
-  inGameUI_EndUI: {fileID: 4077401738944137814}
+  inGameUI_EndUI: {fileID: 1690651930627470053}
   inGameUI_ItemIcon: {fileID: 387119569630181335}
   playingUI: {fileID: 3545181065896704940}
   effectUI: {fileID: 6922084011398371744}
@@ -2956,6 +2957,22 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1690651930627470053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6661591664841890057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbafb146b4e0a3a4780d3f48429994a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inGameUIController: {fileID: -3490141839568108933}
+  inGameUI_RankEntry: {fileID: 5475712636445930924, guid: 1a49e2c7a4c335f4ea5798dbce9a6de7,
+    type: 3}
+  rankEntryParent: {fileID: 3645793314680398748}
 --- !u!1 &6792521955303321569
 GameObject:
   m_ObjectHideFlags: 0
@@ -3736,7 +3753,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6424713291620863659}
-  - component: {fileID: 4077401738944137814}
   m_Layer: 5
   m_Name: GameEndUI
   m_TagString: Untagged
@@ -3765,22 +3781,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4077401738944137814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8476698878380120920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbafb146b4e0a3a4780d3f48429994a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inGameUIController: {fileID: -3490141839568108933}
-  inGameUI_RankEntry: {fileID: 5475712636445930924, guid: 1a49e2c7a4c335f4ea5798dbce9a6de7,
-    type: 3}
-  rankEntryParent: {fileID: 3645793314680398748}
 --- !u!1 &9063355161801234151
 GameObject:
   m_ObjectHideFlags: 0

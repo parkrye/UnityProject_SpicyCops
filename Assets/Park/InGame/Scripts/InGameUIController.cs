@@ -28,6 +28,7 @@ public class InGameUIController : MonoBehaviour
     {
         inGameUI_PlayerAggroBar.Initialize();
         inGameUI_otherPlayerZone.Initialize();
+        inGameUI_EndUI.Initialize(this);
         inGameManager.AddPlayerAggroEventListener(PlayerAggroValueModified);
         inGameManager.AddPlayerAliveEventListener(PlayerAliveValueModified);
         optionUI.SetActive(false);

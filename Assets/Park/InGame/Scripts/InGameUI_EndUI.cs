@@ -17,7 +17,7 @@ public class InGameUI_EndUI : SceneUI
     {
         Debug.LogError($"InGameUI_EndUI {rankPair}");
         InGameUI_RankEntry rankEntry = GameManager.Resource.Instantiate<InGameUI_RankEntry>("UI/RankEntry", rankEntryParent);
-        rankEntry.Initialize(rankPair.Item1, rankPair.Item2);
+        rankEntry.SetInitializeReady(rankPair.Item1, rankPair.Item2);
         Debug.LogError($"Created Object {rankEntry.name}");
     }
 }
