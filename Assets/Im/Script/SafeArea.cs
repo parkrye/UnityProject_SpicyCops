@@ -36,7 +36,8 @@ public class SafeArea : MonoBehaviourPun
             return;
         if (outAreaPlayer.Contains(v.ViewID))
             return;
-        outAreaPlayer.Add(v.ViewID);
+        if(gameManager.PlayerAliveDictionary[v.ViewID])
+            outAreaPlayer.Add(v.ViewID);
         // 플레이어인지 체크하고
         // 나간 플레이어는 나간플레이어 목록에 추가하고
         // 나간 플레이어를 서버에 전송
