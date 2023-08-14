@@ -19,6 +19,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] int readyPlayerCount;
 
     [SerializeField] SafeArea safeArea;
+    [SerializeField] InGameCamera inGameCamera;
 
     [SerializeField] Dictionary<int, float> playerAggroDictionary;   // <view id, aggro>
     [SerializeField] Dictionary<int, bool> playerAliveDictionary;   // <view id, alve>
@@ -322,10 +323,20 @@ public class InGameManager : MonoBehaviourPunCallbacks
             return;
         if (!playerAliveDictionary[targetPlayerPhotonViewID])
             return;
-        //Debug.Log($"Result Player Dead {targetPlayerPhotonViewID}");
+
+        foreach (KeyValuePair<int, int> pair in PlayerIDDictionary)
+        {
+            if (pair.Value == targetPlayerPhotonViewID && pair.Key == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+                inGameCamera.ChangeCameraMode(false);
+                break;
+            }
+        }
+
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} Result Player Dead {targetPlayerPhotonViewID}");
         playerAliveDictionary[targetPlayerPhotonViewID] = false;
         rankStack.Push((readyPlayerCount - rankStack.Count, targetPlayerPhotonViewID));
-        //Debug.Log($"Rank Stack {rankStack.Peek()}");
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} Rank Stack {rankStack.Peek()}");
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankStack.Peek());
 

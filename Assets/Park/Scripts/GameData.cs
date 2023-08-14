@@ -43,7 +43,7 @@ public static class GameData
 
 	public static List<int> Reward = new()
 	{
-		50, 30, 20, 10
+		-1, 50, 30, 20, 10
 	};
 
 	public static float PullCoolTime = 5f;
