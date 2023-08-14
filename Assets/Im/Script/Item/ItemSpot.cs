@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ItemSpot : MonoBehaviourPun, IInteractable
 {
+    [SerializeField] AudioClip getItemSfx;
     public InGameManager manager;
     public int itemSpotIndex;
     Animator animator;
     bool isActive;
     int playerId;
+    AudioSource source;
 
     private void Awake()
     {
@@ -17,6 +19,9 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     }
     public void Init()
     {
+        source = GameManager.Resource.Instantiate<AudioSource>("AudioSource", transform);
+        source.transform.position = Vector3.zero;
+        source.clip = getItemSfx;
         isActive = false;
         animator.SetTrigger("Use");
     }
@@ -48,6 +53,7 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
         if (viewId != playerId)
             return;
         // 플레이어 보유 아이템을 인덱스로 설정
+        source.PlayOneShot(getItemSfx);
         PhotonView view = PhotonView.Find(viewId);
         PlayerUseItem useItem = view.gameObject.GetComponent<PlayerUseItem>();
         useItem.MyItem = index;

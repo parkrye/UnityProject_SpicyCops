@@ -1,10 +1,9 @@
 public class InGameUI_RankEntry : SceneUI
 {
-    public void Initialize(int rank, int playerViewID)
+    public void SetInitializeReady(int rank, string name)
     {
-        base.Initialize();
         texts["RankText"].text = $"{rank}";
-        texts["PlayerNameText"].text = $"{playerViewID}";
-        texts["Point"].text = $"{GameData.Reward[rank]}";
+        texts["PlayerNameText"].text = $"{name}";
+        texts["Point"].text = $"+ {GameData.Reward[rank]}P";
     }
 }

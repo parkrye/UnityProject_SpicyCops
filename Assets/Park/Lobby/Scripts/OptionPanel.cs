@@ -1,9 +1,9 @@
-using System.Collections;
 using UnityEngine;
 
 public class OptionPanel : SceneUI
 {
     [SerializeField] float prevMasterVolume, prevBgmVolume, prevSfxVolume;
+    [SerializeField] AudioSource sfxTestSound;
 
     void OnEnable()
     {
@@ -25,6 +25,7 @@ public class OptionPanel : SceneUI
     public void OnSFXolumeSliderChanged()
     {
         GameManager.Audio.SFXVolume = sliders["SFXVolumeSlider"].value;
+        sfxTestSound.Play();
     }
 
     public void OnCancelButtonClicked()

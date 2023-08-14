@@ -44,6 +44,7 @@ public class ItemManager : MonoBehaviourPun
     {
         float lag = (float)(PhotonNetwork.Time - sentTime);
         itemList[index].UseItem(pos, rot, lag, viewId, sender);
+        StartCoroutine(itemList[index].PlaySFX(pos));
     }
 
     

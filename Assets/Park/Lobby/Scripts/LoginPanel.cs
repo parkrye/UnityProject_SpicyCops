@@ -4,11 +4,18 @@ using UnityEngine;
 public class LoginPanel : SceneUI
 {
 	static string playerID = null;
+    [SerializeField] GameObject LobbyPanel;
 
     protected override void Awake()
     {
         base.Awake();
-		GameData.accounts = CSV_RW.ReadAccountsCSV();
+
+        if(GameData.userData != null)
+        {
+            LobbyPanel.SetActive(true);
+        }
+
+        GameData.accounts = CSV_RW.ReadAccountsCSV();
     }
 
 	public void OnLoginButtonClicked()

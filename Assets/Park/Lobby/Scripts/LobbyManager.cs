@@ -19,11 +19,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     void Start()
 	{
-		if (PhotonNetwork.IsConnected)
+		/*if (PhotonNetwork.IsConnected)
 		{
 			OnConnectedToMaster();
 		}
-		else if (PhotonNetwork.InRoom)
+		else */if (PhotonNetwork.InRoom)
 		{
 			OnJoinedRoom();
 		}

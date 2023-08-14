@@ -15,10 +15,12 @@ public abstract class BaseUI : MonoBehaviour
     protected Dictionary<string, Toggle> toggles;
     //[SerializeField] protected AudioSource clickAudio;
 
+    [SerializeField] protected AudioSource buttonClickSound;
+
     protected virtual void Awake()
     {
         BindingChildren();
-        //AddClickAudio();
+        AddClickAudio();
     }
 
     protected virtual void BindingChildren()
@@ -92,15 +94,15 @@ public abstract class BaseUI : MonoBehaviour
         }
     }
 
-    //protected virtual void AddClickAudio()
-    //{
-    //    AudioSource audio = GameManager.Resource.Instantiate<AudioSource>("Audio/SFX/UI");
-    //    audio.transform.parent = transform;
-    //    foreach (KeyValuePair<string, Button> button in buttons)
-    //    {
-    //        button.Value.onClick.AddListener(() => { audio.Play(); });
-    //    }
-    //}
+    protected virtual void AddClickAudio()
+    {
+        buttonClickSound = GameManager.Resource.Instantiate<AudioSource>("Audio/ButtonUISound");
+        buttonClickSound.transform.SetParent(transform, false);
+        foreach (KeyValuePair<string, Button> button in buttons)
+        {
+            button.Value.onClick.AddListener(() => { buttonClickSound.Play(); });
+        }
+    }
 
     public virtual void CloseUI()
     {
