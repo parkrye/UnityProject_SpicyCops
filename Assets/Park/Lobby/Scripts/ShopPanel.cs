@@ -23,7 +23,6 @@ public class ShopPanel : SceneUI
     void OnEnable()
     {
         avatarNum = 0;
-        GameData.userData.coin += 1000;
         texts["MoneyText"].text = GameData.userData.coin.ToString();
         OnModifyAvatarChanged();
     }
@@ -42,6 +41,7 @@ public class ShopPanel : SceneUI
         GameData.userData.avaters[GameData.AVATAR[avatarNum]] = true;
         texts["MoneyText"].text = GameData.userData.coin.ToString();
         OnModifyAvatarChanged();
+        CSV_RW.WriteAccountsCSV();
     }
 
     public void OnCancelButtonClicked()

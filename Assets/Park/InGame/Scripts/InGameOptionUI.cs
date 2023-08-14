@@ -4,6 +4,7 @@ using UnityEngine;
 public class InGameOptionUI : SceneUI
 {
     [SerializeField] float prevMasterVolume, prevBgmVolume, prevSfxVolume;
+    [SerializeField] AudioSource sfxTestSound;
 
     void OnEnable()
     {
@@ -24,6 +25,7 @@ public class InGameOptionUI : SceneUI
 
     public void OnSFXolumeSliderChanged()
     {
+        sfxTestSound.Play();
         GameManager.Audio.SFXVolume = sliders["SFXVolumeSlider"].value;
     }
 

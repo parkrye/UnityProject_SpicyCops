@@ -38,7 +38,7 @@ public class StatePanel : MonoBehaviour
 
             TMP_Text instance = Instantiate(textPrefab, content);
             instance.text = string.Format("[Photon NetworkState] {0} : {1}", System.DateTime.Now.ToString("HH:mm:ss.ff"), state.ToString());
-            Debug.Log(string.Format("[Photon NetworkState] {0}", state.ToString()));
+            //Debug.Log(string.Format("[Photon NetworkState] {0}", state.ToString()));
         }
 	}
 
@@ -60,6 +60,6 @@ public class StatePanel : MonoBehaviour
 	{
 		TMP_Text instance = Instantiate(textPrefab, content);
 		instance.text = string.Format("[Photon] {0} : {1}", System.DateTime.Now.ToString("HH:mm:ss.ff"), message);
-		Debug.Log(string.Format("[Photon] {0}", message));
+		//Debug.Log(string.Format("[Photon] {0}", message));
 	}
 }

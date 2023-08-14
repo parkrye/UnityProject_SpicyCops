@@ -35,6 +35,11 @@ public class PlayerEntry : SceneUI
         avatarImage.texture = avatarTexture;
         characterSkinManagers = avatarRoot.GetComponentsInChildren<CharacterSkinManager>();
 
+        if (CustomProperty.GetReady(player))
+        {
+            SetPlayerReady(true);
+        }
+
         if (player.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
         {
             avatarNum = (int)avatarValue;
