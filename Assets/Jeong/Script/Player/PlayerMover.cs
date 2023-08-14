@@ -198,7 +198,6 @@ public class PlayerMover : MonoBehaviourPun
     public void SetMoveSpeed(float speed)
     {
         moveSpeed = speed;
-
     }
 
     [PunRPC]
@@ -234,19 +233,19 @@ public class PlayerMover : MonoBehaviourPun
     [PunRPC]
     public void mePullingStart(int ViewID) // 내가 당겨지면 호출되는 함수(moveDir는 나를 당기는 다른 Player 위치)
     {
-        Debug.Log($"mover.isPulling -> true 호출 , viewId : {ViewID}");
+        //Debug.Log($"mover.isPulling -> true 호출 , viewId : {ViewID}");
         PhotonView view = PhotonView.Find(ViewID);
-        Debug.Log($"{view.gameObject.name}");
+        //Debug.Log($"{view.gameObject.name}");
         pullingPlayer = view.gameObject;
-        Debug.Log($"{pullingPlayer.name}");
+        //Debug.Log($"{pullingPlayer.name}");
         isPulling = true;
     }
 
     [PunRPC]
     public void mePullingFinish() // 내가 당긴후 호출되는 함수
     {
-        Debug.Log("mover.isPulling -> false 호출");
-        Debug.Log($"{PhotonNetwork.LocalPlayer.NickName}");
+        //Debug.Log("mover.isPulling -> false 호출");
+        //Debug.Log($"{PhotonNetwork.LocalPlayer.NickName}");
         pullingPlayer = null;
         isPulling = false;
         v = Vector3.zero;

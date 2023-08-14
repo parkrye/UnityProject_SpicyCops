@@ -61,7 +61,7 @@ public class PlayerPuller : MonoBehaviourPun
     {
         if (!photonView.IsMine)
             return;
-        Debug.LogError($"{value.isPressed}, {canPull}");
+        //Debug.LogError($"{value.isPressed}, {canPull}");
         if (value.isPressed && canPull)
         {
 
@@ -72,8 +72,6 @@ public class PlayerPuller : MonoBehaviourPun
                 FindTargetPlayer();
                 anim.SetBool("IsPulled", true);
                 canPull = false;
-
-                
             }
         }
         else
@@ -86,13 +84,13 @@ public class PlayerPuller : MonoBehaviourPun
 
     public void PullingEnd()
     {
-        Debug.LogError("OnPull else");
+        //Debug.LogError("OnPull else");
         currentPullTarget?.GetComponent<PlayerMover>().photonView.RPC("mePullingFinish", RpcTarget.AllViaServer);
         isPulling = false;
         anim.SetBool("IsPulled", false);
         targetPlayer = null;
-        currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
         StartCoroutine(PullCooldown());
+        currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
     }
 
     private IEnumerator PullCooldown()
@@ -156,7 +154,7 @@ public class PlayerPuller : MonoBehaviourPun
         // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
         player.transform.LookAt(transform.position, Vector3.up);*/
 
-        Debug.Log("Pull 호출");
+        //Debug.Log("Pull 호출");
         PlayerMover mover = player.GetComponent<PlayerMover>();
         mover.photonView.RPC("mePullingStart", RpcTarget.AllViaServer, photonView.ViewID);
 
