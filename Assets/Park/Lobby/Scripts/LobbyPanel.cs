@@ -75,7 +75,7 @@ public class LobbyPanel : SceneUI
 			StatePanel.Instance.AddMessage(room.CustomProperties.ToString());
             RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
 
-            if (room.RemovedFromList || !room.IsOpen || !room.IsVisible)
+            if (room.RemovedFromList || !room.IsOpen)
                 continue;
             if (entry.Equals(null))
                 continue;
