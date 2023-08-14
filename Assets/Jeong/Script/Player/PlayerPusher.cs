@@ -43,7 +43,7 @@ public class PlayerPusher : MonoBehaviourPun
             if(Time.time - pushingStartTime > pushDuration)
             {
                 isPushing = false;
-                anim.SetBool("IsPushed", false);
+               
                 targetPlayer = null;
                 // 쿨타임 시작
                 StartCoroutine(PushCooldown());
@@ -72,7 +72,7 @@ public class PlayerPusher : MonoBehaviourPun
                 isPushing = true;
                 pushingStartTime = Time.time;
                 FindTargetPlayer();
-                anim.SetBool("IsPushed",true);
+              
                 canPush = false;
             }
         }
@@ -94,6 +94,13 @@ public class PlayerPusher : MonoBehaviourPun
         yield return new WaitForSeconds(GameData.PushCoolTime);
         canPush = true; // 쿨타임 종료 후 다시 잡을 수 있도록 설정
         currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
+    }
+
+    private IEnumerator PushAnim()
+    {
+        anim.SetBool("IsPushed", true);
+        yield return new WaitForSeconds(0.5f);
+        anim.SetBool("IsPushed", false);
     }
 
     private void FindTargetPlayer() // 잡아당길 Player 탐색
@@ -132,6 +139,7 @@ public class PlayerPusher : MonoBehaviourPun
     // 밀기
     public void Push(GameObject player)
     {
+        StartCoroutine(PushAnim());
         Vector3 directionToTarget = (player.transform.position - transform.position).normalized * pushForce;
         PlayerMover mover = player.GetComponent<PlayerMover>();
         mover.photonView.RPC("mePushing", RpcTarget.AllViaServer, directionToTarget);
