@@ -5004,12 +5004,12 @@ PrefabInstance:
         type: 3}
       propertyPath: avatarRoot
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1419738828}
     - target: {fileID: 7494363862101088235, guid: 0358b25cd8f0d6a4dbe70a857b5e519f,
         type: 3}
       propertyPath: avatarCamera
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 93352216}
     - target: {fileID: 8468703758361000209, guid: 0358b25cd8f0d6a4dbe70a857b5e519f,
         type: 3}
       propertyPath: m_RootOrder
@@ -5747,7 +5747,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5945645079518354809, guid: aa9d17700908b5447a6fa3a3caddfd0b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: aa9d17700908b5447a6fa3a3caddfd0b, type: 3}
 --- !u!114 &6911375030083923470 stripped
 MonoBehaviour:

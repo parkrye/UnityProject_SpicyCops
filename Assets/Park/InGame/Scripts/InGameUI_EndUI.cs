@@ -9,6 +9,7 @@ public class InGameUI_EndUI : SceneUI
     [SerializeField] InGameUI_RankEntry inGameUI_RankEntry;
     [SerializeField] Transform rankEntryParent;
     [SerializeField] GameObject winText, loseText;
+    [SerializeField] AudioSource winAudio, loseAudio;
 
     public void Initialize(InGameUIController _inGameUIController)
     {
@@ -40,9 +41,16 @@ public class InGameUI_EndUI : SceneUI
                         GameData.userData.coin += GameData.Reward[pair.rank];
 
                         if (pair.rank == 1)
+                        {
+                            winAudio.Play();
                             loseText.SetActive(false);
+                        }
                         else
+                        {
+                            loseAudio.Play();
                             winText.SetActive(false);
+                        }
+                        CSV_RW.WriteAccountsCSV();
                     }
                     break;
                 }
@@ -53,15 +61,15 @@ public class InGameUI_EndUI : SceneUI
 
     public void AddPlayerRank(int rank, string name)
     {
-        Debug.Log($"InGameUI_EndUI {name}");
+        //Debug.Log($"InGameUI_EndUI {name}");
         InGameUI_RankEntry rankEntry = GameManager.Resource.Instantiate<InGameUI_RankEntry>("UI/RankEntry", rankEntryParent);
         rankEntry.SetInitializeReady(rank, name);
-        Debug.Log($"Created Object {rankEntry.name}");
+        //Debug.Log($"Created Object {rankEntry.name}");
     }
 
     public void OnEndUIButtonClicked()
     {
         PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("LobbyScene");
+        // PhotonNetwork.LoadLevel("LobbyScene");
     }
 }

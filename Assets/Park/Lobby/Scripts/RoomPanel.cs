@@ -35,7 +35,7 @@ public class RoomPanel : SceneUI
         {
             PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
             avatarDictionary.Add(player, avatarDictionary.Count);
-            Debug.Log($"{player.NickName} : {avatarDictionary[player]}");
+            //Debug.Log($"{player.NickName} : {avatarDictionary[player]}");
             entry.Initailize(player, player.ActorNumber, player.NickName, avatarCameras[avatarDictionary[player]], avatarTextures[avatarDictionary[player]], avatarRoots[avatarDictionary[player]]);
             playerEntryList.Add(entry);
             entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(player); });

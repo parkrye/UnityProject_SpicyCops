@@ -28,7 +28,7 @@ public class CharacterSkinManager : MonoBehaviour
             yield return null;
         skinRenderer = GetComponentInChildren<Renderer>();
         colorNum = num;
-        Debug.Log($"{num}, {skinMaterials.Count}");
+        //Debug.Log($"{num}, {skinMaterials.Count}");
         skinRenderer.materials[0].color = skinMaterials[num];
     }
 }

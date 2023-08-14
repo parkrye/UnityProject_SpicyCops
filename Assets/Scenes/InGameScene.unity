@@ -83183,6 +83183,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8476698878380120920, guid: 041c65270c37ec949bc28df7fcbc0660,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8763717939166673951, guid: 041c65270c37ec949bc28df7fcbc0660,
         type: 3}
       propertyPath: m_DefaultActionMap
