@@ -232,11 +232,10 @@ namespace Jeon
                 input.enabled = false;
             if (!PhotonNetwork.IsMasterClient)
                 return;
-            Debug.Log($"RequestHoldPlayer{playerId}");
             Anim.SetBool("InArea", true);
             PunchingaudioSource.Play();
-            Debug.Log(Anim.GetBool("InArea"));
             playerTransform[playerId].GetComponent<PlayerDied>().DoDeath();
+            playerTransform[playerId].GetComponent<Collider>().isTrigger = true;
             inGameManager.PlayerDead(playerId);
             StartCoroutine(EnemyAttackStop());
             SetPlayerAggro(inGameManager.PlayerAggroDictionary);
