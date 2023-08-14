@@ -41,9 +41,9 @@ namespace Jeon
         private void SetTime()
         {
             if (PhotonNetwork.IsMasterClient)
-                RequestEnemyMoveSetting();
+                photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient);
         }
-
+        [PunRPC]
         private void RequestEnemyMoveSetting()    // 에이전트 스피드가 되는지 RPC Time.
         {
             if (curTime >= 5f && curState == EnemyState.Idle)
