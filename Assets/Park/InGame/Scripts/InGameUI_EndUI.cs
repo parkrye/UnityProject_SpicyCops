@@ -19,7 +19,8 @@ public class InGameUI_EndUI : SceneUI
 
     public void AddRankEntries()
     {
-        while(inGameUIController.inGameManager.RankStack.Count > 0)
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} AddRankEntries Start {inGameUIController.inGameManager.RankStack.Count}");
+        while (inGameUIController.inGameManager.RankStack.Count > 0)
         {
             // 현재 순위의 플레이어 view id
             (int rank, int id) pair = inGameUIController.inGameManager.RankStack.Pop();
@@ -50,25 +51,27 @@ public class InGameUI_EndUI : SceneUI
                             loseAudio.Play();
                             winText.SetActive(false);
                         }
-                        CSV_RW.WriteAccountsCSV();
                     }
                     break;
                 }
             }
+            //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} AddRankEntries {pair}, {inGameUIController.inGameManager.RankStack.Count}");
             AddPlayerRank(pair.rank, name);
         }
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} AddRankEntries End");
     }
 
     public void AddPlayerRank(int rank, string name)
     {
-        //Debug.Log($"InGameUI_EndUI {name}");
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} InGameUI_EndUI {name}");
         InGameUI_RankEntry rankEntry = GameManager.Resource.Instantiate<InGameUI_RankEntry>("UI/RankEntry", rankEntryParent);
         rankEntry.SetInitializeReady(rank, name);
-        //Debug.Log($"Created Object {rankEntry.name}");
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.ActorNumber} Created Object {rankEntry.name}");
     }
 
     public void OnEndUIButtonClicked()
     {
+        CSV_RW.WriteAccountsCSV();
         PhotonNetwork.LeaveRoom();
         // PhotonNetwork.LoadLevel("LobbyScene");
     }

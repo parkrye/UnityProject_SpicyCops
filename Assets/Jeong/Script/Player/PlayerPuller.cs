@@ -7,12 +7,12 @@ public class PlayerPuller : MonoBehaviourPun
 {
     [SerializeField] private bool debug; // Gizmo확인용
 
-    [SerializeField] private float pullForce; // 잡아당기는 힘
+    [SerializeField] private float pullForce = 1f; // 잡아당기는 힘
     [SerializeField] private float pullRange; // 잡아당기는 범위
 
     // ******************* 아래는 서버에서 받아올 항목*********************
-    [SerializeField] private float pullDuration; // 잡기 지속 시간
-    [SerializeField] private float pullCooltime; // 잡기 쿨타임
+    [SerializeField] private float pullDuration = 2f; // 잡기 지속 시간
+    [SerializeField] private float pullCooltime = 5f; // 잡기 쿨타임
 
     private float pullingStartTime; // 잡기 시작 시간
     private bool canPull = true; // 잡기 가능한지 여부
@@ -48,8 +48,6 @@ public class PlayerPuller : MonoBehaviourPun
                 isPulling = false;
                 anim.SetBool("IsPulled", false);
                 targetPlayer = null;
-                // 쿨타임 시작
-                StartCoroutine(PullCooldown());
             }
 
             else
@@ -57,20 +55,16 @@ public class PlayerPuller : MonoBehaviourPun
                 PullTarget();
             }
         }
-        else if (!canPull && Time.time - pullingStartTime < pullCooltime)
-        {
-            Debug.Log("Cooltimes: " + Mathf.Max(0, (pullingStartTime + pullCooltime - Time.time)).ToString("0") + " seconds");
-            return;
-        }
     }
 
     private void OnPull(InputValue value)
     {
-        if (!photonView.IsMine || !canPull)
+        if (!photonView.IsMine)
             return;
-
+        Debug.LogError($"{value.isPressed}, {canPull}");
         if (value.isPressed && canPull)
         {
+
             if (currentPullTarget != null)
             {
                 isPulling = true;
@@ -79,24 +73,32 @@ public class PlayerPuller : MonoBehaviourPun
                 anim.SetBool("IsPulled", true);
                 canPull = false;
 
-                // PullCooldown 코루틴 시작
-                StartCoroutine(PullCooldown());
+                
             }
         }
         else
         {
-            currentPullTarget.GetComponent<PlayerMover>().photonView.RPC("mePullingFinish", RpcTarget.AllViaServer);
-            isPulling = false;
-            anim.SetBool("IsPulled", false);
-            targetPlayer = null;
+            PullingEnd();
+
+            // PullCooldown 코루틴 시작
         }
+    }
+
+    public void PullingEnd()
+    {
+        Debug.LogError("OnPull else");
+        currentPullTarget?.GetComponent<PlayerMover>().photonView.RPC("mePullingFinish", RpcTarget.AllViaServer);
+        isPulling = false;
+        anim.SetBool("IsPulled", false);
+        targetPlayer = null;
+        currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
+        StartCoroutine(PullCooldown());
     }
 
     private IEnumerator PullCooldown()
     {
         yield return new WaitForSeconds(pullCooltime);
         canPull = true; // 쿨타임 종료 후 다시 잡을 수 있도록 설정
-        currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
     }
 
     private void PullTarget()
@@ -154,12 +156,12 @@ public class PlayerPuller : MonoBehaviourPun
         // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
         player.transform.LookAt(transform.position, Vector3.up);*/
 
-        // 잡아당기는 Player만 바라보도록 회전시킨다.
-        transform.LookAt(player.transform.position, Vector3.up);
-
-        
+        Debug.Log("Pull 호출");
         PlayerMover mover = player.GetComponent<PlayerMover>();
         mover.photonView.RPC("mePullingStart", RpcTarget.AllViaServer, photonView.ViewID);
+
+        // 잡아당기는 Player만 바라보도록 회전시킨다.
+        transform.LookAt(player.transform.position, Vector3.up);
     }
 
     public void SetPullTarget(GameObject target)
