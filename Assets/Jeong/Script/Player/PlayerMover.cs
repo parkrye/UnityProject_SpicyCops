@@ -33,6 +33,7 @@ public class PlayerMover : MonoBehaviourPun
     private Vector3 inputDir;
     Vector3 fowarVec;
     Vector3 rightVec;
+    Vector3 v;
 
 
     private float ySpeed;
@@ -95,8 +96,27 @@ public class PlayerMover : MonoBehaviourPun
         {
             if (haveControll)
             {
-                controller.Move(fowarVec * inputDir.z * moveSpeed * Time.deltaTime);
-                controller.Move(rightVec * inputDir.x * moveSpeed * Time.deltaTime);
+                if(!isPulling)
+                {
+                    controller.Move(fowarVec * inputDir.z * moveSpeed * Time.deltaTime);
+                    controller.Move(rightVec * inputDir.x * moveSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
+                    Vector3 directionToTarget = (transform.position - pullingPlayer.transform.position).normalized;
+
+                    // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
+                    v = (directionToTarget * -pullForce);
+
+                    // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
+                    transform.LookAt(pullingPlayer.transform.position, Vector3.up);
+
+                    controller.Move(fowarVec * ((inputDir.z * moveSpeed) + v.z) * Time.deltaTime);
+                    Debug.Log($" FV : {fowarVec}) iD : {inputDir}) v : {v}) mS : {moveSpeed})"  );
+                    controller.Move(rightVec * ((inputDir.x * moveSpeed) + v.x) * Time.deltaTime);
+                }
+                
             }
             controller.Move(Vector3.up * ySpeed);
             yield return new WaitForFixedUpdate();
@@ -120,17 +140,7 @@ public class PlayerMover : MonoBehaviourPun
             curSpeed = Mathf.Lerp(curSpeed, moveSpeed, 0.1f);
         }
 
-        if (isPulling)
-        {
-            // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
-            Vector3 directionToTarget = (transform.position - pullingPlayer.transform.position).normalized;
-
-            // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
-            controller.Move(directionToTarget * -pullForce);
-
-            // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
-            transform.LookAt(pullingPlayer.transform.position, Vector3.up);
-        }
+        
 
         // 회전
         transform.LookAt(transform.position + Vector3.forward * inputDir.z + Vector3.right * inputDir.x);
@@ -150,33 +160,33 @@ public class PlayerMover : MonoBehaviourPun
     {
         if (isSpeedUp)
         {
-            Debug.Log("스피드업 코루틴 시작");
+           
             moveSpeed = moveSpeed * 1.5f; // speedIncrease만큼 배속을 곱적용 한다.
             yield return new WaitForSeconds(3); // speedIncreaseDuration시간만큼 지속한다.
-            Debug.Log("스피드업 코루틴 종료");
+            
             moveSpeed = originSpeed; //speedIncrease로 나누어 원본으로 돌아간다.
             isSpeedUp = false;
         }
 
         if (isSpeedDown)
         {
-            Debug.Log("스피드다운 코루틴 시작");
+            
             moveSpeed = moveSpeed * 0.5f; // speedIncrease만큼 배속을 나눔 적용한다.
             yield return new WaitForSeconds(3); // speedIncreaseDuration시간만큼 지속한다.
-            Debug.Log("스피드다운 코루틴 종료");
+            
             moveSpeed = originSpeed; //speedIncrease로 곱적용하여 원본으로 돌아간다.
             isSpeedDown = false;
         }
 
         if (isStun)
         {
-            Debug.Log("스턴 코루틴 시작");
+            
             // moveSpeed = 0; // 스턴하여 0으로 이동속도가 고정된다.
             haveControll = false;
             anim.SetBool("IsStun", true);
             yield return new WaitForSeconds(2); // speedIncreaseDuration시간만큼 지속한다.
             anim.SetBool("IsStun", false);
-            Debug.Log("스턴 코루틴 종료");
+            
             // moveSpeed = originSpeed; //스턴이 풀리면 10으로 이동속도가 돌아온다.
             haveControll = true;
             isStun = false;
@@ -224,15 +234,22 @@ public class PlayerMover : MonoBehaviourPun
     [PunRPC]
     public void mePullingStart(int ViewID) // 내가 당겨지면 호출되는 함수(moveDir는 나를 당기는 다른 Player 위치)
     {
-        pullingPlayer = PhotonView.Find(ViewID).gameObject;
+        Debug.Log($"mover.isPulling -> true 호출 , viewId : {ViewID}");
+        PhotonView view = PhotonView.Find(ViewID);
+        Debug.Log($"{view.gameObject.name}");
+        pullingPlayer = view.gameObject;
+        Debug.Log($"{pullingPlayer.name}");
         isPulling = true;
     }
 
     [PunRPC]
     public void mePullingFinish() // 내가 당긴후 호출되는 함수
     {
+        Debug.Log("mover.isPulling -> false 호출");
+        Debug.Log($"{PhotonNetwork.LocalPlayer.NickName}");
         pullingPlayer = null;
         isPulling = false;
+        v = Vector3.zero;
     }
 
     [PunRPC]

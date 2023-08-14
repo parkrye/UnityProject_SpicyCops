@@ -180,7 +180,7 @@ MonoBehaviour:
   speedChangeDuration: 3
   startSpeedChangeTIme: 0
   gravity: -50
-  pullForce: 0
+  pullForce: 3
   pullingPlayer: {fileID: 0}
   lookRotation: {fileID: 2964013079990188807}
 --- !u!114 &6670190027492185505
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  pullForce: 0.7
+  pullForce: 3
   pullRange: 2
   pullDuration: 5
   pullCooltime: 5
@@ -384,22 +384,22 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: IsMoved
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: IsPulled
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: IsPicked
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: IsPushed
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: IsDied
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: IsStun
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: IsHammer
   m_SynchronizeLayers:
   - SynchronizeType: 2
@@ -416,6 +416,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11cf01f86f909eb42a1cc0d4850baeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxDistance: 0
+  targeting: 0
 --- !u!1 &2964013079719349516
 GameObject:
   m_ObjectHideFlags: 0

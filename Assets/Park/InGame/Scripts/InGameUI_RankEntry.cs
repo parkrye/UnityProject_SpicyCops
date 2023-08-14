@@ -4,6 +4,6 @@ public class InGameUI_RankEntry : SceneUI
     {
         texts["RankText"].text = $"{rank}";
         texts["PlayerNameText"].text = $"{name}";
-        texts["Point"].text = $"{GameData.Reward[rank]}";
+        texts["Point"].text = $"+ {GameData.Reward[rank]}P";
     }
 }
