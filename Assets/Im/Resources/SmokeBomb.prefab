@@ -155,6 +155,7 @@ MonoBehaviour:
   throwPower: 5
   speed: 1.5
   overlapAreaRange: 3
+  clip: {fileID: 8300000, guid: a3117c3b7f7543f42bfdde4fd4271a49, type: 3}
   gameManager: {fileID: 0}
   effect: {fileID: 3315540658757254800, guid: 73267e3079e02de43b32ea088d86041a, type: 3}
   explosionEff: {fileID: 2651620616266283360, guid: 45ff4fae94b1b4c45bc282e994a3f8c7,

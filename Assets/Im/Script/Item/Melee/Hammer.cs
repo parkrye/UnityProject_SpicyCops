@@ -9,6 +9,8 @@ public class Hammer : MeleeItem
         GameObject obj = GameManager.Resource.Instantiate<GameObject>("Slash", pos, rot);
         obj.transform.Rotate(new Vector3(0,40,0), Space.Self);
 
+        if (!PhotonNetwork.IsMasterClient)
+            return;
         Collider[] colliders = Physics.OverlapBox(pos + center, attackArea / 2, rot, mask);
         Debug.Log("¸ÁÄ¡");
         if (colliders == null || colliders.Length < 1)
@@ -17,8 +19,6 @@ public class Hammer : MeleeItem
         {
             Debug.Log($"Hammer start : {collider.gameObject.name}");
             PhotonView v = collider.gameObject.GetComponent<PhotonView>();
-            if (v == null)
-                return;
             if (v.ViewID == viewId)
                 return;
             PlayerMover mover = collider.gameObject.GetComponent<PlayerMover>();
