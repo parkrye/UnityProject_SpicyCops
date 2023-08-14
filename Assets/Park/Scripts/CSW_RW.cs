@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Text;
 using UnityEngine;
 
@@ -19,7 +20,19 @@ public static class CSV_RW
     {
         Dictionary<string, UserData> answer = new();       // 저장할 딕셔너리
 
-        StreamReader reader = new(Application.dataPath + $"/{GameData.ACCOUNTCSVFILE}.csv");
+        StreamReader reader;
+        try
+        {
+            reader = new(Application.persistentDataPath + $"/{GameData.ACCOUNTCSVFILE}.csv");
+        }
+        catch
+        {
+            Stream fileStream = new FileStream(Application.persistentDataPath + $"/{GameData.ACCOUNTCSVFILE}.csv", FileMode.Create, FileAccess.Write);
+            StreamWriter outStream = new StreamWriter(fileStream, Encoding.UTF8);
+            outStream.WriteLine();
+            return answer;
+        }
+
         bool endOFLine = false;
 
         while (!endOFLine)
@@ -66,7 +79,7 @@ public static class CSV_RW
             }
             sb.AppendLine();                                    // 줄바꿈을 저장하기를 반복
         }
-        Stream fileStream = new FileStream(Application.dataPath + $"/{GameData.ACCOUNTCSVFILE}.csv", FileMode.Create, FileAccess.Write);
+        Stream fileStream = new FileStream(Application.persistentDataPath + $"/{GameData.ACCOUNTCSVFILE}.csv", FileMode.Create, FileAccess.Write);
         // 저장할 주소, 파일은 쓰거나 새로 생성
         StreamWriter outStream = new(fileStream, Encoding.UTF8);// 출력 형식
         outStream.WriteLine(sb);                                // 스트링빌더를 쓰고
