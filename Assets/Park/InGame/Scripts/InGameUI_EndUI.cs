@@ -33,7 +33,7 @@ public class InGameUI_EndUI : SceneUI
                 if(pair.id == idPair.Value)
                 {
                     // 그 이름을 사용하고
-                    name = GameData.userData.id;
+                    name = PhotonView.Find(pair.id).Owner.NickName;
 
                     // 추가로 액터 넘버가 자신이라면
                     if (idPair.Key == PhotonNetwork.LocalPlayer.ActorNumber)
