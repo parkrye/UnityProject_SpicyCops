@@ -19,28 +19,26 @@ public static class CSV_RW
     {
         Dictionary<string, UserData> answer = new();       // 저장할 딕셔너리
 
-        Object readData = Resources.Load<Object>($"CSV/{GameData.ACCOUNTCSVFILE}");
+        StreamReader reader = new(Application.dataPath + $"/{GameData.ACCOUNTCSVFILE}.csv");
+        bool endOFLine = false;
 
-        if (!readData)
-            return answer;
-        TextAsset data = readData as TextAsset;
-
-        // 텍스트에셋으로 변환한 기록 파일 데이터
-        string[] texts = data.text.Split("\n");             // 데이터를 줄바꿈 단위로 분할한 문자열 배열
-
-        for (int i = 0; i < texts.Length; i++)              // 각 문자열 요소에 대하여
+        while (!endOFLine)
         {
-            if (texts[i].Length <= 1)                       // 길이가 1 이하라면 즉시 종료
-                break;                                      // (저장 방식 문제로 기록 데이터에 빈 문자열 한 줄이 추가되기 때문)
-            string[] line = texts[i].Split(delimiter);      // 반점으로 분할한 문자열들을
+            string line = reader.ReadLine();
+            if (line.Length <= 1)
+            {
+                endOFLine = true;
+                break;
+            }
+            string[] words = line.Split(delimiter);      // 반점으로 분할한 문자열들을
 
             UserData userData = new UserData();
-            userData.id = line[0];
-            userData.coin = int.Parse(line[1]);
+            userData.id = words[0];
+            userData.coin = int.Parse(words[1]);
             userData.avaters = new Dictionary<string, bool>();
 
-            for (int j = 2; j < line.Length - 1; j += 2)
-                userData.avaters.Add(line[j], line[j+1] == "True");
+            for (int j = 2; j < words.Length - 1; j += 2)
+                userData.avaters.Add(words[j], words[j + 1] == "True");
             answer.Add(userData.id, userData);
         }
 
@@ -68,7 +66,7 @@ public static class CSV_RW
             }
             sb.AppendLine();                                    // 줄바꿈을 저장하기를 반복
         }
-        Stream fileStream = new FileStream($"Assets/Resources/CSV/{GameData.ACCOUNTCSVFILE}.csv", FileMode.Create, FileAccess.Write);
+        Stream fileStream = new FileStream(Application.dataPath + $"/{GameData.ACCOUNTCSVFILE}.csv", FileMode.Create, FileAccess.Write);
         // 저장할 주소, 파일은 쓰거나 새로 생성
         StreamWriter outStream = new(fileStream, Encoding.UTF8);// 출력 형식
         outStream.WriteLine(sb);                                // 스트링빌더를 쓰고
