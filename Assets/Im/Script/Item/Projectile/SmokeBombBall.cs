@@ -14,6 +14,9 @@ public class SmokeBombBall : BallBase
     {
         Instantiate(explosionEff, pos, rot);
         Instantiate(effect, pos, Quaternion.identity);
+        AudioSource source = GameManager.Resource.Instantiate<AudioSource>("AudioSource", pos, Quaternion.identity);
+        source.PlayOneShot(clip);
+        GameManager.Resource.Destroy(source, 2f);
         if (PhotonNetwork.IsMasterClient)
         {
             // 현재위치 기준 이펙트 및 사운드 적용

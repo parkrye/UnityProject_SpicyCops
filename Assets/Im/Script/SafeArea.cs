@@ -9,8 +9,6 @@ public class SafeArea : MonoBehaviourPun
     float maxScale = 300;
     float minScale = 55;
     float time = 120;
-    float rate;
-    float scale;
 
     public List<int> outAreaPlayer;
     public InGameManager gameManager;
@@ -24,8 +22,7 @@ public class SafeArea : MonoBehaviourPun
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        rate = 0;
-        scale = maxScale;
+
         outAreaPlayer = new List<int>();
         AreaEnable();
     }

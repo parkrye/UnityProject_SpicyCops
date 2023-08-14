@@ -132,6 +132,7 @@ MonoBehaviour:
   throwPower: 5
   speed: 1.5
   overlapAreaRange: 3
+  clip: {fileID: 8300000, guid: ef1f0170ab5682c48b9cab9674e68ff1, type: 3}
   gameManager: {fileID: 0}
   effect: {fileID: 5810154232264818605, guid: 34cc0f63e6b424241bb6edc32520e729, type: 3}
 --- !u!114 &5801992060820961646
@@ -170,6 +171,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
+  m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 1

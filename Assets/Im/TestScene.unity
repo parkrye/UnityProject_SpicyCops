@@ -986,9 +986,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523169d71eea4364b826d4862be028be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 478413503}
+  getItemSfx: {fileID: 0}
+  manager: {fileID: 0}
   itemSpotIndex: 0
-  regenCoolTime: 10
 --- !u!95 &1077945132
 Animator:
   serializedVersion: 5

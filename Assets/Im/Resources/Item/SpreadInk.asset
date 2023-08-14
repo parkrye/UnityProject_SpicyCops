@@ -16,3 +16,9 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 0bcf7447d72239d4eb500dcf50e36bf9, type: 2}
   itemIndex: 4
   weaponType: 2
+  audioClipList:
+  - {fileID: 8300000, guid: 733453795f421486ab81cf4ab06963da, type: 3}
+  - {fileID: 8300000, guid: 545f5a66eb88741e7ac2836c07b2c617, type: 3}
+  - {fileID: 8300000, guid: fd5258d0e96094d23b905c04bf240de4, type: 3}
+  - {fileID: 8300000, guid: b404d5e4d03b544799a62fd71d56aca7, type: 3}
+  gameManager: {fileID: 0}
