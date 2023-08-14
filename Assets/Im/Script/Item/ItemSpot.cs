@@ -47,13 +47,12 @@ public class ItemSpot : MonoBehaviourPun, IInteractable
     {
         if (!isActive)
             return;
-
+        source.Play();
         isActive = false;
         animator.SetTrigger("Use");
         if (viewId != playerId)
             return;
         // 플레이어 보유 아이템을 인덱스로 설정
-        source.PlayOneShot(getItemSfx);
         PhotonView view = PhotonView.Find(viewId);
         PlayerUseItem useItem = view.gameObject.GetComponent<PlayerUseItem>();
         useItem.MyItem = index;
