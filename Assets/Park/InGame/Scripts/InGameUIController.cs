@@ -19,10 +19,8 @@ public class InGameUIController : MonoBehaviour
     [SerializeField] InGameUI_TimeSlider inGameUI_TimeSlider;
     [SerializeField] InGameUI_EndUI inGameUI_EndUI;
     [SerializeField] InGameUI_ItemIcon inGameUI_ItemIcon;
-    [SerializeField] GameObject playingUI;
+    [SerializeField] GameObject playingUI, endUI;
     [SerializeField] GameObject effectUI;
-    [SerializeField] bool isPlaying;
-    public bool IsPlaying { get { return isPlaying; } }
 
     public void Initialize()
     {
@@ -115,9 +113,10 @@ public class InGameUIController : MonoBehaviour
 
     public void EndGameUI()
     {
-        isPlaying = false;
         playingUI.SetActive(false);
-        inGameUI_EndUI.gameObject.SetActive(true);
+        endUI.SetActive(true);
+        inGameUI_EndUI.Initialize(this);
+        inGameUI_EndUI.AddRankEntries();
     }
 
     public void SettingItemIcon(int itemNum)
@@ -146,7 +145,7 @@ public class InGameUIController : MonoBehaviour
 
     void OnESC()
     {
-        if (isPlaying && !optionUI.activeSelf)
+        if (inGameManager.IsPlaying && !optionUI.activeSelf)
         {
             optionUI.SetActive(true);
         }

@@ -42,6 +42,9 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] ItemManager itemManager;
     public ItemManager ItemManager { get {  return itemManager; } }
     [SerializeField] bool started = false;
+    [SerializeField] bool isPlaying;
+    public bool IsPlaying { get { return isPlaying; } }
+    [SerializeField] AudioSource startAudio, endAudio, bgm;
 
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
     UnityEvent<Dictionary<int, bool>> playerAliveEvent;
@@ -96,13 +99,13 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.Log($"Disconnected : {cause}");
+        //Debug.Log($"Disconnected : {cause}");
         SceneManager.LoadScene("LobbyScene");
     }
 
     public override void OnLeftRoom()
     {
-        Debug.Log("Left Room");
+        //Debug.Log("Left Room");
         PhotonNetwork.LoadLevel("LobbyScene");
     }
 
@@ -119,7 +122,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         if (changedProps.ContainsKey(GameData.PLAYER_LOAD))
         {
-            Debug.Log($"{PlayerLoadCount() == PhotonNetwork.PlayerList.Length}");
+            //Debug.Log($"{PlayerLoadCount() == PhotonNetwork.PlayerList.Length}");
             if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
             {
                 if (PhotonNetwork.IsMasterClient)
@@ -127,7 +130,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.Log($"Wait players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}");
+                //Debug.Log($"Wait players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}");
             }
         }
     }
@@ -207,9 +210,9 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     IEnumerator GameSetting()
     {
-        Debug.Log("Wait Game Setting");
+        //Debug.Log("Wait Game Setting");
         yield return new WaitUntil(() => { return readyPlayerCount == PhotonNetwork.PlayerList.Length; });
-        Debug.Log("All Ready");
+        //Debug.Log("All Ready");
 
         itemManager.Init();
         enemy.Seting();
@@ -217,7 +220,9 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
             safeArea.GameStartSetting();
         started = true;
-        Debug.Log("Done Game Setting");
+        isPlaying = true;
+        startAudio.Play();
+        //Debug.Log("Done Game Setting");
     }
     #endregion
 
@@ -225,14 +230,14 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RequestAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
-        Debug.Log($"{photonView.Owner} request add Player");
+        //Debug.Log($"{photonView.Owner} request add Player");
         ResultAddPlayer(playerActorNumber, photonViewID, avatarNum, colorNum);
     }
 
     public void ResultAddPlayer(int playerActorNumber, int photonViewID, int avatarNum, int colorNum)
     {
         PhotonView player = PhotonView.Find(photonViewID);
-        Debug.Log(player.gameObject.name + playerActorNumber);
+        //Debug.Log(player.gameObject.name + playerActorNumber);
 
         playerAggroDictionary.Add(photonViewID, 0f);
         playerAliveDictionary.Add(photonViewID, true);
@@ -245,7 +250,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         ModifyPlayerAggro(photonViewID, 0f);
 
         player.GetComponent<PlayerMover>().Initialize();
-        Debug.Log($"{photonView.Owner} request create Player");
+        //Debug.Log($"{photonView.Owner} request create Player");
         if (playerActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
         {
             photonView.RPC("RequestCreatedPlayer", RpcTarget.AllBufferedViaServer);
@@ -255,7 +260,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     void RequestCreatedPlayer(PhotonMessageInfo info)
     {
         readyPlayerCount++;
-        Debug.Log(readyPlayerCount);
+        //Debug.Log(readyPlayerCount);
     }
 
     #endregion
@@ -300,7 +305,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region Rank(Dead) Manager
     public void PlayerDead(int targetPlayerPhotonViewID)
     {
-        Debug.LogError($"Requset Player Dead {targetPlayerPhotonViewID}");
+        //Debug.Log($"Requset Player Dead {targetPlayerPhotonViewID}");
         photonView.RPC("RequestPlayerDead", RpcTarget.AllViaServer, targetPlayerPhotonViewID);
     }
 
@@ -312,14 +317,20 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void ResultPlayerDead(int targetPlayerPhotonViewID)
     {
-        Debug.LogError($"Result Player Dead {targetPlayerPhotonViewID}");
+        //Debug.Log($"Result Player Dead {playerAliveDictionary[targetPlayerPhotonViewID]}");
+        if (!started)
+            return;
+        if (!playerAliveDictionary[targetPlayerPhotonViewID])
+            return;
+        //Debug.Log($"Result Player Dead {targetPlayerPhotonViewID}");
         playerAliveDictionary[targetPlayerPhotonViewID] = false;
-        rankStack.Push((readyPlayerCount - rankStack.Count + 1, targetPlayerPhotonViewID));
-        Debug.LogError($"Rank Stack {rankStack.Peek()}");
+        rankStack.Push((readyPlayerCount - rankStack.Count, targetPlayerPhotonViewID));
+        //Debug.Log($"Rank Stack {rankStack.Peek()}");
         playerAliveEvent?.Invoke(playerAliveDictionary);
         playerDeadEvent?.Invoke(rankStack.Peek());
-        
-        if(rankStack.Count >= readyPlayerCount - 1)
+
+        //Debug.Log($"Rank Stack {rankStack.Count}, {readyPlayerCount - 1}");
+        if (rankStack.Count >= readyPlayerCount - 1)
         {
             GameEnd();
         }
@@ -349,29 +360,22 @@ public class InGameManager : MonoBehaviourPunCallbacks
     #region End Game Manager
     public void GameEnd()
     {
-        if (started && inGameUIController.IsPlaying)
+        if (started && IsPlaying)
         {
-            photonView.RPC("RequestGameEnd", RpcTarget.AllViaServer);
-        }
-    }
+            isPlaying = false;
 
-    [PunRPC]
-    void RequestGameEnd(PhotonMessageInfo info)
-    {
-        ResultGameEnd();
-    }
-
-    void ResultGameEnd()
-    {
-        foreach (KeyValuePair<int, bool> pair in playerAliveDictionary)
-        {
-            if (pair.Value)
+            foreach (KeyValuePair<int, bool> pair in playerAliveDictionary)
             {
-                rankStack.Push((1, pair.Key));
-                playerDeadEvent?.Invoke(rankStack.Peek());
+                if (pair.Value)
+                {
+                    rankStack.Push((1, pair.Key));
+                }
             }
+            //Debug.Log($"End Game {rankStack.Count}");
+            bgm.Stop();
+            endAudio.Play();
+            inGameUIController.EndGameUI();
         }
-        inGameUIController.EndGameUI();
     }
     #endregion
 
