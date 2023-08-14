@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,15 +19,14 @@ public class PlayerMover : MonoBehaviourPun
     [SerializeField] private float startSpeedChangeTIme; // 이동속도 증가 시작 시간
     [SerializeField] private float gravity;
 
-
+    [SerializeField] private float pullForce; // 잡아당기는 힘
 
     private Animator anim;
     private CharacterController controller;
     private Rigidbody rigid;
     private PlayerInput playerInput;
-    private PlayerPuller puller;
-    private PlayerPusher pusher;
 
+    [SerializeField] GameObject pullingPlayer;
     [SerializeField] private Transform lookRotation;
 
 
@@ -34,15 +34,17 @@ public class PlayerMover : MonoBehaviourPun
     Vector3 fowarVec;
     Vector3 rightVec;
 
+
     private float ySpeed;
 
-    //private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
-    //private bool isPushing = false; // PlayerPuller 클래스로부터 전달받은 값
+    private bool isPulling = false; // PlayerPuller 클래스로부터 전달받은 값
+    // private bool isPushing = false; // PlayerPuller 클래스로부터 전달받은 값
 
     private bool isSpeedUp = false;
     private bool isSpeedDown = false;
     private bool isStun = false;
     bool haveControll = false;
+
 
     void Awake()
     {
@@ -50,8 +52,7 @@ public class PlayerMover : MonoBehaviourPun
         controller = GetComponent<CharacterController>();
         rigid = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
-        puller = GetComponent<PlayerPuller>();
-        pusher = GetComponent<PlayerPusher>();
+
     }
 
     void Start()
@@ -90,7 +91,7 @@ public class PlayerMover : MonoBehaviourPun
 
     IEnumerator FRoutine()
     {
-        while(true)
+        while (true)
         {
             if (haveControll)
             {
@@ -119,24 +120,21 @@ public class PlayerMover : MonoBehaviourPun
             curSpeed = Mathf.Lerp(curSpeed, moveSpeed, 0.1f);
         }
 
-        // 회전
+        if (isPulling)
+        {
+            // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
+            Vector3 directionToTarget = (transform.position - pullingPlayer.transform.position).normalized;
 
+            // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
+            controller.Move(directionToTarget * -pullForce);
+
+            // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
+            transform.LookAt(pullingPlayer.transform.position, Vector3.up);
+        }
+
+        // 회전
         transform.LookAt(transform.position + Vector3.forward * inputDir.z + Vector3.right * inputDir.x);
         anim.SetFloat("IsMoved", curSpeed);
-
-
-        //if (fowarVec != Vector3.zero && rightVec != Vector3.zero)
-        //{
-        //    // 이동 방향으로 회전 (잡기상태가 아닐떄)
-        //    if (!isPulling)
-        //    {/*
-        //        Quaternion lookRotation = Quaternion.Euler(rightVec.x, 0, fowarVec.z);
-        //        lookRotation.eulerAngles = new Vector3();
-        //        transform.rotation = lookRotation;*/
-
-        //        transform.LookAt(lookRotation);
-        //    }
-        //}
 
     }
 
@@ -146,14 +144,11 @@ public class PlayerMover : MonoBehaviourPun
         inputDir.z = value.Get<Vector2>().y;
     }
 
-    public void SetMoveSpeed(float speed)
-    {
-        moveSpeed = speed;
-    }
+
 
     public IEnumerator speedChangerRoutine()
     {
-        if (isSpeedUp) 
+        if (isSpeedUp)
         {
             Debug.Log("스피드업 코루틴 시작");
             moveSpeed = moveSpeed * 1.5f; // speedIncrease만큼 배속을 곱적용 한다.
@@ -190,6 +185,13 @@ public class PlayerMover : MonoBehaviourPun
     }
 
     [PunRPC]
+    public void SetMoveSpeed(float speed)
+    {
+        moveSpeed = speed;
+
+    }
+
+    [PunRPC]
     public void OnSpeedUp(int viewID) // 스피드업
     {
         if (photonView.ViewID != viewID)
@@ -220,26 +222,23 @@ public class PlayerMover : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void Annoy(int viewID)
+    public void mePullingStart(int ViewID) // 내가 당겨지면 호출되는 함수(moveDir는 나를 당기는 다른 Player 위치)
     {
-        if (photonView.ViewID != viewID)
-        {
-            if (puller.isPulling)
-            {
-                if (photonView.ViewID != viewID)
-                    return;
-                isSpeedDown = true;
-                startSpeedChangeTIme = Time.time;
-                StartCoroutine(speedChangerRoutine());
-            }
-
-            if (pusher.isPushing)
-            {
-                if (photonView.ViewID != viewID)
-                    return;
-               
-            }
-        }
-
+        pullingPlayer = PhotonView.Find(ViewID).gameObject;
+        isPulling = true;
     }
+
+    [PunRPC]
+    public void mePullingFinish() // 내가 당긴후 호출되는 함수
+    {
+        pullingPlayer = null;
+        isPulling = false;
+    }
+
+    [PunRPC]
+    public void mePushing(Vector3 moveDir) // 내가 밀린다면 호출되는 함수(moveDir는 나를 미는 다른 Player 위치)
+    {
+        controller.Move(moveDir);
+    }
+
 }
