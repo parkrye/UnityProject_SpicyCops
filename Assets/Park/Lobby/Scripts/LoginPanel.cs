@@ -45,6 +45,7 @@ public class LoginPanel : SceneUI
 				CSV_RW.WriteAccountsCSV();
             }
         }
+        GameData.userData.coin += 100;
 
         ExitGames.Client.Photon.Hashtable props = new()
         {
