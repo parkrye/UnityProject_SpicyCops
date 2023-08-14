@@ -4,14 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
-using static Unity.VisualScripting.StickyNote;
 
 namespace Jeon
 {
     public class Enemy : MonoBehaviourPun
     {
-        [SerializeField] Transform player;
-
         private NavMeshAgent agent;
         private Animator anim;
 
@@ -23,12 +20,13 @@ namespace Jeon
         public Animator Anim { get { return anim; } }
         [SerializeField] InGameManager inGameManager;
 
-        Dictionary<string, int> playerState = new Dictionary<string, int>();
         public Dictionary<int, Transform> playerTransform;
 
 
         [SerializeField] Transform catchZone;
         [SerializeField] float targetFindTime;
+
+        [SerializeField] AudioSource PunchingaudioSource;
 
         int maxAggroViewID;
 
@@ -82,7 +80,6 @@ namespace Jeon
         {
             agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animator>();
-            //catchZone = GameObject.Find("CatchZone").transform;
             material.color = Color.white;
             playerTransform = new Dictionary<int, Transform>();
         }
@@ -214,35 +211,39 @@ namespace Jeon
         {
             Debug.Log($"RequestAddPlayer{viewId}");
             photonView.RPC("RequestAddPlayer", RpcTarget.MasterClient, viewId);
-
         }
-        public void RemovePlayer(int viewId)
+        /*public void RemovePlayer(int viewId)
         {
             Debug.Log($"RequestRemovePlayer{viewId}");
             photonView.RPC("RequestExitPlayer", RpcTarget.MasterClient, viewId);
-        }
+        }*/
         [PunRPC]
         protected void RequestAddPlayer(int playerId)
         {
-            Debug.Log($"RequestAddPlayer{playerId}");
-            photonView.RPC("RequestHoldPlayer", RpcTarget.MasterClient, playerId);
+            //Debug.Log($"RequestAddPlayer{playerId}");
+            photonView.RPC("RequestHoldPlayer", RpcTarget.AllViaServer, playerId);
         }
 
         [PunRPC]
         protected void RequestHoldPlayer(int playerId)
         {
+            PlayerInput input = playerTransform[playerId].GetComponent<PlayerInput>();
+            if (input != null)
+                input.enabled = false;
+            if (!PhotonNetwork.IsMasterClient)
+                return;
             Debug.Log($"RequestHoldPlayer{playerId}");
             Anim.SetBool("InArea", true);
+            PunchingaudioSource.Play();
             Debug.Log(Anim.GetBool("InArea"));
             playerTransform[playerId].GetComponent<PlayerDied>().DoDeath();
             inGameManager.PlayerDead(playerId);
-            playerTransform[playerId].GetComponent<PlayerInput>().enabled = false;
             StartCoroutine(EnemyAttackStop());
             SetPlayerAggro(inGameManager.PlayerAggroDictionary);
         }
         IEnumerator EnemyAttackStop()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             Anim.SetBool("InArea", false);
         }
         #endregion
