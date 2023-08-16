@@ -30,7 +30,7 @@ namespace Jeon
 
         int maxAggroViewID;
 
-        public enum EnemyState { Idle, Follow, Angry, SemiBerserker, Berserker, End, Catch}
+        public enum EnemyState { Idle, Follow, Angry, SemiBerserker, Berserker, End, Catch }
 
         private EnemyState curState;
 
@@ -44,17 +44,17 @@ namespace Jeon
                 photonView.RPC("RequestEnemyMoveSetting", RpcTarget.MasterClient);
         }
         [PunRPC]
-        private void RequestEnemyMoveSetting()    // 에이전트 스피드가 되는지 RPC Time.
+        protected void RequestEnemyMoveSetting()    // 에이전트 스피드가 되는지 RPC Time.
         {
             if (curTime >= 5f && curState == EnemyState.Idle)
             {
                 DoFollow();
             }
-            else if (curTime >= inGameManager.TotalTime * 0.3f && curState == EnemyState.Follow)
+            else if (curTime >= inGameManager.TotalTime * 0.33f && curState == EnemyState.Follow)
             {
                 DoAngry();
             }
-            else if (curTime >= inGameManager.TotalTime * 0.6f && curState == EnemyState.Angry)
+            else if (curTime >= inGameManager.TotalTime * 0.66f && curState == EnemyState.Angry)
             {
                 DoSemiBerserker();
             }
@@ -69,12 +69,30 @@ namespace Jeon
 
             if (curTime >= inGameManager.TotalTime)
             {
-                StopAllCoroutines();
-                anim.enabled = false;
-                gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                photonView.RPC("StopAllAnim", RpcTarget.AllViaServer);
+                return;
+            }
+            int alivePlayerCount = 0;
+            foreach (KeyValuePair<int, bool> pair in inGameManager.PlayerAliveDictionary)
+            {
+                if (pair.Value)
+                {
+                    alivePlayerCount++;
+                }
+            }
+            if (alivePlayerCount <= 1)
+            {
+                photonView.RPC("StopAllAnim", RpcTarget.AllViaServer);
             }
         }
 
+        [PunRPC]
+        protected void StopAllAnim()
+        {
+            StopAllCoroutines();
+            anim.enabled = false;
+            gameObject.GetComponent<NavMeshAgent>().enabled = false;
+        }
 
         private void Awake()
         {
@@ -97,7 +115,7 @@ namespace Jeon
                     highAggro = keyValuePair.Value;
                     ViewID = keyValuePair.Key;
                 }
-                
+
             }
             maxAggroViewID = ViewID;
         }
@@ -120,14 +138,16 @@ namespace Jeon
         [PunRPC]
         protected void ColorChange(int colorNum)
         {
-            Debug.Log($"{colorNum}");
             if (colorNum == 1)
             {
                 material.color = color1;
+                anim.SetBool("WalkTime", true);
             }
-            else if(colorNum == 2)
+            else if (colorNum == 2)
             {
                 material.color = color2;
+                anim.SetBool("WalkTime", false);
+                anim.SetBool("RunningTime", true);
             }
             else if (colorNum == 3)
             {
@@ -140,20 +160,17 @@ namespace Jeon
         }
         private void DoFollow()
         {
-            anim.SetBool("WalkTime", true);
             agent.speed = 3f;
 
             curState = EnemyState.Follow;
-            Debug.Log($"RequestColor");
+            //Debug.Log($"RequestColor");
             photonView.RPC("ColorChange", RpcTarget.AllViaServer, 1);
-            Debug.Log($"ResultColor");
+            //Debug.Log($"ResultColor");
         }
 
         private void DoAngry()
         {
             agent.speed = 5.5f;
-            anim.SetBool("WalkTime", false);
-            anim.SetBool("RunningTime", true);
 
             curState = EnemyState.Angry;
             photonView.RPC("ColorChange", RpcTarget.AllBufferedViaServer, 2);
@@ -188,7 +205,7 @@ namespace Jeon
         IEnumerator FindPlayer()
         {
             yield return new WaitForSeconds(5f);
-            
+
             curState = EnemyState.Idle;
             yield return null;
             while (true)
@@ -209,14 +226,10 @@ namespace Jeon
         #region HitBox
         public void AddPlayer(int viewId)
         {
-            Debug.Log($"RequestAddPlayer{viewId}");
+            //Debug.Log($"RequestAddPlayer{viewId}");
             photonView.RPC("RequestAddPlayer", RpcTarget.MasterClient, viewId);
         }
-        /*public void RemovePlayer(int viewId)
-        {
-            Debug.Log($"RequestRemovePlayer{viewId}");
-            photonView.RPC("RequestExitPlayer", RpcTarget.MasterClient, viewId);
-        }*/
+
         [PunRPC]
         protected void RequestAddPlayer(int playerId)
         {
@@ -232,16 +245,25 @@ namespace Jeon
                 input.enabled = false;
             if (!PhotonNetwork.IsMasterClient)
                 return;
-            Anim.SetBool("InArea", true);
+            photonView.RPC("AnimChange", RpcTarget.AllViaServer);
             PunchingaudioSource.Play();
             playerTransform[playerId].GetComponent<PlayerDied>().DoDeath();
             playerTransform[playerId].GetComponent<Collider>().isTrigger = true;
             inGameManager.PlayerDead(playerId);
-            StartCoroutine(EnemyAttackStop());
             SetPlayerAggro(inGameManager.PlayerAggroDictionary);
         }
+
+        [PunRPC]
+        protected void AnimChange()
+        {
+            StartCoroutine(EnemyAttackStop());
+        }
+
+
         IEnumerator EnemyAttackStop()
         {
+            yield return null;
+            Anim.SetBool("InArea", true);
             yield return new WaitForSeconds(0.5f);
             Anim.SetBool("InArea", false);
         }

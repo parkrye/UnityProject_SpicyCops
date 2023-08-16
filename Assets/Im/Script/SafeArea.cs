@@ -82,4 +82,9 @@ public class SafeArea : MonoBehaviourPun
             yield return new WaitForSeconds(0.2f);
         }
     }
+
+    public void GameEnd()
+    {
+        StopAllCoroutines();
+    }
 }

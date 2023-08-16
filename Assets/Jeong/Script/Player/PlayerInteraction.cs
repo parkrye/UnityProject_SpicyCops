@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInteraction : MonoBehaviour
+public class PlayerInteraction : MonoBehaviourPun
 {
     // Player 상호작용
     [SerializeField] bool debug;
@@ -11,7 +12,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] float range;
 
     [SerializeField] private Transform point;
-   
+
     private Animator anim;
 
     private void Awake()
@@ -20,25 +21,6 @@ public class PlayerInteraction : MonoBehaviour
     }
 
 
-
-    // 상호작용
-   /* public void Interact()
-    {
-        if (canInteract)
-        {
-            Collider[] colliders = Physics.OverlapSphere(point.position, range);
-            foreach (Collider collider in colliders)
-            {
-                IInteractable interactable = collider.GetComponent<IInteractable>();
-                interactable?.Interact(this);
-                anim.SetBool("IsPicked", true);
-
-            }
-            Debug.Log("Player Interact");
-            anim.SetBool("IsPicked", false);
-        }
-
-    }*/
     public void Interact()
     {
         StartCoroutine(InteractDelay());
@@ -51,28 +33,26 @@ public class PlayerInteraction : MonoBehaviour
                 interactables.Add(inter);
         }
 
-        Debug.Log($"{interactables.Count}");
         
         if (interactables.Count < 1)
             return;
         foreach(IInteractable interactable in interactables)
         {
-            Debug.Log($"");
-            
             interactable?.Interact(this);
         }
-        StartCoroutine(PickAnim());
+        photonView.RPC("PickAnim",RpcTarget.AllViaServer);
         interactables.Clear();
     }
-    IEnumerator PickAnim()
+    [PunRPC]
+    public void PickAnim()
     {
-        anim.SetBool("IsPicked", true);
-        yield return new WaitForSeconds(0.2f);
-        anim.SetBool("IsPicked", false);
+        anim.SetTrigger("IsPicked");
+       
     }
 
     private void OnInteract(InputValue value)
     {
+
        if(!canInteract) 
             return;
         Interact();

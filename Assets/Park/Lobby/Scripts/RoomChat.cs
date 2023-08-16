@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class RoomChat : SceneUI
 {
-    [SerializeField] PhotonView photonView;
     [SerializeField] ScrollRect scrollRect;
     [SerializeField] RectTransform content;
     [SerializeField] TMP_Text chatPrefab;
@@ -36,7 +35,6 @@ public class RoomChat : SceneUI
 
     void Start()
     {
-        photonView = GetComponent<PhotonView>();
         nowChatting = false;
         inputFields["ChatInputField"].onSubmit.AddListener(SubmitChat);
 

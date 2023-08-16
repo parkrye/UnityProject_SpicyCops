@@ -21,19 +21,16 @@ public class InGameUIController : MonoBehaviour
     [SerializeField] InGameUI_ItemIcon inGameUI_ItemIcon;
     [SerializeField] GameObject playingUI, endUI;
     [SerializeField] GameObject effectUI;
+    public InGameUI_ActionIcon push, pull;
 
     public void Initialize()
     {
         inGameUI_PlayerAggroBar.Initialize();
         inGameUI_otherPlayerZone.Initialize();
+        inGameUI_TimeSlider.Initialize();
         inGameManager.AddPlayerAggroEventListener(PlayerAggroValueModified);
         inGameManager.AddPlayerAliveEventListener(PlayerAliveValueModified);
         optionUI.SetActive(false);
-    }
-
-    public void StartTimer(float serverTime)
-    {
-        inGameUI_TimeSlider.Initialize(serverTime);
     }
 
     public void SetPlayerPhotonView(PhotonView player)
@@ -113,8 +110,16 @@ public class InGameUIController : MonoBehaviour
 
     public void EndGameUI()
     {
+        StartCoroutine(EndUITermRoutine());
+    }
+
+    IEnumerator EndUITermRoutine()
+    {
         playingUI.SetActive(false);
         endUI.SetActive(true);
+
+        yield return new WaitForSeconds(1.5f);
+
         inGameUI_EndUI.Initialize(this);
         inGameUI_EndUI.AddRankEntries();
     }

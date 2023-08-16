@@ -45,6 +45,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
     [SerializeField] bool started = false;
     [SerializeField] bool isPlaying;
     public bool IsPlaying { get { return isPlaying; } }
+    public bool Started { get { return started; } }
     [SerializeField] AudioSource startAudio, endAudio, bgm;
 
     UnityEvent<Dictionary<int, float>> playerAggroEvent;
@@ -179,7 +180,8 @@ public class InGameManager : MonoBehaviourPunCallbacks
         // ³Ñ¹ö¸µ
         
         GameObject player = PhotonNetwork.Instantiate("Player", startPositions[PhotonNetwork.LocalPlayer.GetPlayerNumber()].position, Quaternion.identity, 0);
-
+        player.GetComponent<PlayerPusher>().PushCoolEvent.AddListener(inGameUIController.push.UseAction);
+        player.GetComponent<PlayerPuller>().PullCoolEvent.AddListener(inGameUIController.pull.UseAction);
         int avatarNum = 0, colorNum = 0;
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
         {
@@ -217,11 +219,11 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         itemManager.Init();
         enemy.Seting();
-        inGameUIController.StartTimer((float)PhotonNetwork.Time);
         if (PhotonNetwork.IsMasterClient)
             safeArea.GameStartSetting();
         started = true;
         isPlaying = true;
+        StartCoroutine(TimerRoutine());
         startAudio.Play();
         //Debug.Log("Done Game Setting");
     }
@@ -374,6 +376,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
         if (started && IsPlaying)
         {
             isPlaying = false;
+            safeArea.GameEnd();
 
             foreach (KeyValuePair<int, bool> pair in playerAliveDictionary)
             {
@@ -387,6 +390,19 @@ public class InGameManager : MonoBehaviourPunCallbacks
             endAudio.Play();
             inGameUIController.EndGameUI();
         }
+    }
+    #endregion
+
+    #region timer
+    IEnumerator TimerRoutine()
+    {
+        yield return new WaitUntil(() => { return started; });
+        while (isPlaying && NowTime <= TotalTime)
+        {
+            NowTime += 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        GameEnd();
     }
     #endregion
 

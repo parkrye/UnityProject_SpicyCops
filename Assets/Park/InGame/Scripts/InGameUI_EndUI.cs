@@ -41,15 +41,15 @@ public class InGameUI_EndUI : SceneUI
                         // 자신의 코인을 추가한다
                         GameData.userData.coin += GameData.Reward[pair.rank];
 
-                        if (pair.rank == 1)
+                        if (pair.rank == 0)
                         {
                             winAudio.Play();
-                            loseText.SetActive(false);
+                            winText.SetActive(true);
                         }
                         else
                         {
                             loseAudio.Play();
-                            winText.SetActive(false);
+                            loseText.SetActive(true);
                         }
                     }
                     break;

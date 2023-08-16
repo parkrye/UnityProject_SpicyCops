@@ -12,20 +12,18 @@ public class Hammer : MeleeItem
         if (!PhotonNetwork.IsMasterClient)
             return;
         Collider[] colliders = Physics.OverlapBox(pos + center, attackArea / 2, rot, mask);
-        Debug.Log("¸ÁÄ¡");
+
         if (colliders == null || colliders.Length < 1)
             return;
         foreach (Collider collider in colliders)
         {
-            Debug.Log($"Hammer start : {collider.gameObject.name}");
             PhotonView v = collider.gameObject.GetComponent<PhotonView>();
             if (v.ViewID == viewId)
-                return;
+                continue;
             PlayerMover mover = collider.gameObject.GetComponent<PlayerMover>();
             if (mover == null)
-                return;
-            mover.photonView.RPC("OnStun", RpcTarget.AllViaServer, viewId);
-            Debug.Log($"Hammer End : {mover.gameObject.name}");
+                continue;
+            mover.RequestStun(v.ViewID);
         }
     }
 }

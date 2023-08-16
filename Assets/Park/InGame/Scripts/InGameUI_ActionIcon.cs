@@ -1,46 +1,34 @@
+using System.Collections;
 using UnityEngine;
 
 public class InGameUI_ActionIcon : SceneUI
 {
-    [SerializeField] KeyCode actionKey;
+    [SerializeField] float nowCoolTime;
+    [SerializeField] int actionNum;
 
-    [SerializeField] float coolTime, nowCoolTime;
-    [SerializeField] bool isUsed;
-
-    void Update()
+    public void UseAction()
     {
-        UseAction();
-        CoolTimeStateCheck();
+        images["ActionCoolImage"].enabled = true;
+        StartCoroutine(CoolTimeStateCheck());
     }
 
-    void UseAction()
+    IEnumerator CoolTimeStateCheck()
     {
-        if (!isUsed)
-        {
-            if (Input.GetKeyDown(actionKey))
-            {
-                isUsed = true;
-                images["ActionCoolImage"].enabled = true;
-            }
-        }
-    }
+        nowCoolTime = 0f;
+        float coolTime = 0f;
+        if (actionNum == 0)
+            coolTime = GameData.PushCoolTime;
+        else
+            coolTime = GameData.PullCoolTime;
 
-    void CoolTimeStateCheck()
-    {
-        if(isUsed)
+        while (nowCoolTime <= coolTime)
         {
+            texts["ActionCoolText"].text = ((int)(coolTime - nowCoolTime) + 1).ToString();
             nowCoolTime += Time.deltaTime;
-            if(nowCoolTime >= coolTime)
-            {
-                isUsed = false;
-                nowCoolTime = 0f;
-                images["ActionCoolImage"].enabled = false;
-                texts["ActionCoolText"].text = "";
-            }
-            else
-            {
-                texts["ActionCoolText"].text = ((int)(coolTime - nowCoolTime) + 1).ToString();
-            }
+            yield return null;
         }
+        nowCoolTime = 0f;
+        images["ActionCoolImage"].enabled = false;
+        texts["ActionCoolText"].text = "";
     }
 }

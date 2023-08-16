@@ -176,13 +176,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb648066638ef20488cce47fd188fabf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  _photonView: {fileID: 0}
+  color1: {r: 1, g: 1, b: 1, a: 1}
+  color2: {r: 1, g: 0.65, b: 0.65, a: 1}
+  color3: {r: 1, g: 0.35, b: 0.35, a: 1}
+  color4: {r: 0.24, g: 0, b: 0, a: 1}
   inGameManager: {fileID: 0}
   catchZone: {fileID: 8439823348349665222}
   targetFindTime: 0
+  PunchingaudioSource: {fileID: 0}
   curTime: 0
-  curSpeed: 0
   material: {fileID: 2100000, guid: c9392e4217d2c844a8ead4eb5ef18fa4, type: 2}
 --- !u!114 &809900518
 MonoBehaviour:
@@ -472,7 +474,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  myView: {fileID: 39951017699482117}
   inGameManager: {fileID: 0}
 --- !u!114 &39951017699482117
 MonoBehaviour:
@@ -868,7 +869,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 172a19705c37efc4fbab0d4e56e7a72c, type: 2}
+  - {fileID: 2100000, guid: c9392e4217d2c844a8ead4eb5ef18fa4, type: 2}
   - {fileID: 2100000, guid: c0474e503a134084ebb0c118eb0887eb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

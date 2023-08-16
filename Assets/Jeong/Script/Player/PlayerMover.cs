@@ -2,6 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
@@ -64,12 +65,17 @@ public class PlayerMover : MonoBehaviourPun
         lookRotation.localPosition = new Vector3(0, 0, 0.2f);
         ySpeed = gravity * Time.deltaTime;
         moveSpeed = originSpeed;
+       
     }
 
     public void Initialize()
     {
+        if (!photonView.IsMine)
+            return;
         StartCoroutine(URoutine());
         StartCoroutine(FRoutine());
+        StartCoroutine(AnimMove());
+        
         ChangeControll(true);
     }
 
@@ -103,17 +109,12 @@ public class PlayerMover : MonoBehaviourPun
                 }
                 else
                 {
-                    // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
-                    Vector3 directionToTarget = (transform.position - pullingPlayer.transform.position).normalized;
-
-                    // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
-                    v = (directionToTarget * -pullForce);
 
                     // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
                     transform.LookAt(pullingPlayer.transform.position, Vector3.up);
 
                     controller.Move(fowarVec * ((inputDir.z * moveSpeed) + v.z) * Time.deltaTime);
-                    Debug.Log($" FV : {fowarVec}) iD : {inputDir}) v : {v}) mS : {moveSpeed})"  );
+                    Debug.LogError($" FV : {fowarVec}) iD : {inputDir}) v : {v}) mS : {moveSpeed})"  );
                     controller.Move(rightVec * ((inputDir.x * moveSpeed) + v.x) * Time.deltaTime);
                 }
                 
@@ -131,7 +132,7 @@ public class PlayerMover : MonoBehaviourPun
         if (inputDir.magnitude == 0)
         {
             curSpeed = Mathf.Lerp(curSpeed, 0, 0.9f);
-            anim.SetFloat("IsMoved", curSpeed);
+            // anim.SetFloat("IsMoved", curSpeed);
             return;
         }
 
@@ -140,12 +141,25 @@ public class PlayerMover : MonoBehaviourPun
             curSpeed = Mathf.Lerp(curSpeed, moveSpeed, 0.1f);
         }
 
-        
-
         // 회전
         transform.LookAt(transform.position + Vector3.forward * inputDir.z + Vector3.right * inputDir.x);
-        anim.SetFloat("IsMoved", curSpeed);
+    }
 
+    private IEnumerator AnimMove()
+    {
+        
+        while (!anim.GetBool("IsDied"))
+        {
+            photonView.RPC("AnimChangeMove", RpcTarget.AllViaServer, curSpeed);
+            yield return new WaitForSeconds(0.1f);
+        }
+            
+    }
+
+    [PunRPC]
+    public void AnimChangeMove(float getSpeed)
+    {
+        anim.SetFloat("IsMoved", getSpeed);
     }
 
     private void OnMove(InputValue value)
@@ -153,8 +167,6 @@ public class PlayerMover : MonoBehaviourPun
         inputDir.x = value.Get<Vector2>().x;
         inputDir.z = value.Get<Vector2>().y;
     }
-
-
 
     public IEnumerator speedChangerRoutine()
     {
@@ -183,9 +195,8 @@ public class PlayerMover : MonoBehaviourPun
             
             // moveSpeed = 0; // 스턴하여 0으로 이동속도가 고정된다.
             haveControll = false;
-            anim.SetBool("IsStun", true);
+            anim.SetTrigger("IsStun");
             yield return new WaitForSeconds(2); // speedIncreaseDuration시간만큼 지속한다.
-            anim.SetBool("IsStun", false);
             
             // moveSpeed = originSpeed; //스턴이 풀리면 10으로 이동속도가 돌아온다.
             haveControll = true;
@@ -213,39 +224,54 @@ public class PlayerMover : MonoBehaviourPun
     [PunRPC]
     public void OnSpeedDown(int viewID) // 스피드다운
     {
-        if (photonView.ViewID != viewID)
-            return;
         isSpeedDown = true;
         startSpeedChangeTIme = Time.time;
         StartCoroutine(speedChangerRoutine());
+    }
+    public void RequestSpeedDown(int viewId)
+    {
+        photonView.RPC("OnSpeedDown", RpcTarget.AllViaServer, viewId);
     }
 
     [PunRPC]
     public void OnStun(int viewID) // 스턴
     {
-        if (photonView.ViewID != viewID)
-            return;
         isStun = true;
         startSpeedChangeTIme = Time.time;
         StartCoroutine(speedChangerRoutine());
+    }
+    public void RequestStun(int viewId)
+    {
+        photonView.RPC("OnStun", RpcTarget.AllViaServer, viewId);
+    }
+
+    public void RequestPullStart(int viewId)
+    {
+        photonView.RPC("mePullingStart", RpcTarget.AllViaServer, viewId);
     }
 
     [PunRPC]
     public void mePullingStart(int ViewID) // 내가 당겨지면 호출되는 함수(moveDir는 나를 당기는 다른 Player 위치)
     {
-        //Debug.Log($"mover.isPulling -> true 호출 , viewId : {ViewID}");
+        //Debug.LogError($"mover.isPulling -> true 호출 , viewId : {ViewID}");
         PhotonView view = PhotonView.Find(ViewID);
-        //Debug.Log($"{view.gameObject.name}");
+        //Debug.LogError($"{view.gameObject.name}");
         pullingPlayer = view.gameObject;
-        //Debug.Log($"{pullingPlayer.name}");
+        //Debug.LogError($"{pullingPlayer.name}");
+
+        // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
+        Vector3 directionToTarget = (transform.position - pullingPlayer.transform.position).normalized;
+
+        // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
+        v = (directionToTarget * -pullForce);
         isPulling = true;
     }
 
     [PunRPC]
     public void mePullingFinish() // 내가 당긴후 호출되는 함수
     {
-        //Debug.Log("mover.isPulling -> false 호출");
-        //Debug.Log($"{PhotonNetwork.LocalPlayer.NickName}");
+        //Debug.LogError("mover.isPulling -> false 호출");
+        //Debug.LogError($"{PhotonNetwork.LocalPlayer.NickName}");
         pullingPlayer = null;
         isPulling = false;
         v = Vector3.zero;
@@ -254,7 +280,17 @@ public class PlayerMover : MonoBehaviourPun
     [PunRPC]
     public void mePushing(Vector3 moveDir) // 내가 밀린다면 호출되는 함수(moveDir는 나를 미는 다른 Player 위치)
     {
-        controller.Move(moveDir);
+        //Debug.LogError($"Pushed {moveDir}, {controller.velocity}");
+        StartCoroutine(PushMoveRoutine(moveDir));
+    }
+
+    IEnumerator PushMoveRoutine(Vector3 moveDir)
+    {
+        for(int i = 0; i < 20; i++)
+        {
+            controller.Move(moveDir * 0.05f);
+            yield return new WaitForFixedUpdate();
+        }
     }
 
 }

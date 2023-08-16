@@ -21,10 +21,10 @@ public class FrostBombBall : BallBase
                 PlayerMover mover = collider.GetComponent<PlayerMover>();
                 if (mover != null)
                 {
-                    mover.photonView.RPC("OnSpeedDown", RpcTarget.AllViaServer, viewId);
+                    mover.RequestSpeedDown(mover.photonView.ViewID);
                 }
             }
         }
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 2f);
     }
 }

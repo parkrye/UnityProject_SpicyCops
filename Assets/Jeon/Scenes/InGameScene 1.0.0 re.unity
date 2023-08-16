@@ -45768,8 +45768,7 @@ PrefabInstance:
       propertyPath: PunchingaudioSource
       value: 
       objectReference: {fileID: 809900515}
-    m_RemovedComponents:
-    - {fileID: 809900518, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57016265a6e024c4ebcaeba4fd37cac4, type: 3}
 --- !u!114 &809900513 stripped
 MonoBehaviour:

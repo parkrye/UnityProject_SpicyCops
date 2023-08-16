@@ -13,9 +13,8 @@ public class LoginPanel : SceneUI
         if(GameData.userData != null)
         {
             LobbyPanel.SetActive(true);
+            GameData.accounts = CSV_RW.ReadAccountsCSV();
         }
-
-        GameData.accounts = CSV_RW.ReadAccountsCSV();
     }
 
 	public void OnLoginButtonClicked()

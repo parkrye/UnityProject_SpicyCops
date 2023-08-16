@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerPuller : MonoBehaviourPun
@@ -23,6 +24,7 @@ public class PlayerPuller : MonoBehaviourPun
 
     [SerializeField] private GameObject currentPullTarget;
     [SerializeField] private GameObject targetPlayer;
+    public UnityEvent PullCoolEvent;
 
 
     private PlayerInput playerInput;
@@ -40,13 +42,15 @@ public class PlayerPuller : MonoBehaviourPun
 
     private void FixedUpdate()
     {
+        if (!photonView.IsMine)
+            return;
         if (isPulling)
         {
             // 현재 시간이 지속시간을 초과하면 잡기 상태 해제
             if (Time.time - pullingStartTime > pullDuration)
             {
                 isPulling = false;
-                anim.SetBool("IsPulled", false);
+                photonView.RPC("ChangePullState", RpcTarget.AllViaServer, false);
                 targetPlayer = null;
             }
 
@@ -61,7 +65,7 @@ public class PlayerPuller : MonoBehaviourPun
     {
         if (!photonView.IsMine)
             return;
-        //Debug.LogError($"{value.isPressed}, {canPull}");
+         //Debug.LogError($" isPressed : {value.isPressed}, canPull : {canPull}");
         if (value.isPressed && canPull)
         {
 
@@ -70,7 +74,7 @@ public class PlayerPuller : MonoBehaviourPun
                 isPulling = true;
                 pullingStartTime = Time.time;
                 FindTargetPlayer();
-                anim.SetBool("IsPulled", true);
+                photonView.RPC("ChangePullState", RpcTarget.AllViaServer, true);
                 canPull = false;
             }
         }
@@ -82,12 +86,19 @@ public class PlayerPuller : MonoBehaviourPun
         }
     }
 
+    [PunRPC]
+    public void ChangePullState(bool state)
+    {
+        anim.SetBool("IsPulled", state);
+
+    }
+
     public void PullingEnd()
     {
-        //Debug.LogError("OnPull else");
-        currentPullTarget?.GetComponent<PlayerMover>().photonView.RPC("mePullingFinish", RpcTarget.AllViaServer);
+        //Debug.LogError("PullingEnd");
+        currentPullTarget?.GetComponent<PlayerMover>()?.photonView.RPC("mePullingFinish", RpcTarget.AllViaServer);
         isPulling = false;
-        anim.SetBool("IsPulled", false);
+        photonView.RPC("ChangePullState", RpcTarget.AllViaServer, false);
         targetPlayer = null;
         StartCoroutine(PullCooldown());
         currentPullTarget = null; // 쿨타임이 끝나면 PullTarget 초기화
@@ -95,12 +106,14 @@ public class PlayerPuller : MonoBehaviourPun
 
     private IEnumerator PullCooldown()
     {
+        PullCoolEvent?.Invoke();
         yield return new WaitForSeconds(pullCooltime);
         canPull = true; // 쿨타임 종료 후 다시 잡을 수 있도록 설정
     }
 
     private void PullTarget()
     {
+        //Debug.LogError($"PullTarget {isPulling}, {targetPlayer}");
         // 타겟을 찾으면 잡아당긴다.
         if (isPulling && targetPlayer != null)
         {
@@ -144,19 +157,9 @@ public class PlayerPuller : MonoBehaviourPun
     // 잡아당기기 
     private void Pull(GameObject player)
     {
-        /*
-        // 현재 Player 오브젝트와 잡아당기려는 Player 오브젝트 사이의 방향 Vector를 계산 후 차이만큼 거리를 구한다.
-        Vector3 directionToTarget = (player.transform.position - transform.position).normalized;
-        
-        // 잡아당기려는 Player 오브젝트의 CharacterController 컴포넌트를 이용하여, 계산된 방향과 pullForce만큼 힘을 가해서 Player를 잡아당긴다.
-        player.GetComponent<CharacterController>().Move(directionToTarget * -pullForce);
-        
-        // 잡아당기는 Player가 잡히는 Player를 바라보도록 회전시킨다.
-        player.transform.LookAt(transform.position, Vector3.up);*/
-
-        //Debug.Log("Pull 호출");
+        //Debug.LogError("Pull 호출");
         PlayerMover mover = player.GetComponent<PlayerMover>();
-        mover.photonView.RPC("mePullingStart", RpcTarget.AllViaServer, photonView.ViewID);
+        mover.RequestPullStart(photonView.ViewID);
 
         // 잡아당기는 Player만 바라보도록 회전시킨다.
         transform.LookAt(player.transform.position, Vector3.up);

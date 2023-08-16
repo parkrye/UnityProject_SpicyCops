@@ -36,7 +36,7 @@ public class RoomPanel : SceneUI
             PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
             avatarDictionary.Add(player, avatarDictionary.Count);
             //Debug.Log($"{player.NickName} : {avatarDictionary[player]}");
-            entry.Initailize(player, player.ActorNumber, player.NickName, avatarCameras[avatarDictionary[player]], avatarTextures[avatarDictionary[player]], avatarRoots[avatarDictionary[player]]);
+            entry.Initailize(player, player.ActorNumber, player.NickName, avatarCameras[avatarDictionary[player]], avatarTextures[avatarDictionary[player]], avatarRoots[avatarDictionary[player]], player.ActorNumber);
             playerEntryList.Add(entry);
             entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(player); });
         }
@@ -71,7 +71,7 @@ public class RoomPanel : SceneUI
         avatarDictionary.Add(newPlayer, avatarDictionary.Count);
 
         PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
-        entry.Initailize(newPlayer, entryNumQueue.Dequeue(), newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]]);
+        entry.Initailize(newPlayer, entryNumQueue.Dequeue(), newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]], newPlayer.ActorNumber);
         entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(newPlayer); });
         playerEntryList.Add(entry);
         AllPlayerReadyCheck();
@@ -112,6 +112,10 @@ public class RoomPanel : SceneUI
 
     public void MasterClientSwitched(Player newMasterClient)
     {
+        foreach(PlayerEntry entry in playerEntryList)
+        {
+            entry.CheckAmIMaster();
+        }
         AllPlayerReadyCheck();
     }
 

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
@@ -14,9 +15,11 @@ public class PlayerEntry : SceneUI
     [SerializeField] RenderTexture avatarTexture;
     [SerializeField] RawImage avatarImage;
     [SerializeField] CharacterSkinManager[] characterSkinManagers;
+    [SerializeField] Image crownImage;
+    [SerializeField] int myNum;
     public int EntryNum { get { return entryNum; } }
 
-	public void Initailize(Player _player, int id, string name, Camera _avatarCamera, RenderTexture _avatarTexture, GameObject avatarRoot)
+	public void Initailize(Player _player, int id, string name, Camera _avatarCamera, RenderTexture _avatarTexture, GameObject avatarRoot, int _numbering)
     {
         player = _player;
         entryNum = id;
@@ -32,6 +35,7 @@ public class PlayerEntry : SceneUI
         texts["ReadyText"].text = "";
         avatarCamera = _avatarCamera;
         avatarTexture = _avatarTexture;
+        myNum = _numbering;
         avatarImage.texture = avatarTexture;
         characterSkinManagers = avatarRoot.GetComponentsInChildren<CharacterSkinManager>();
 
@@ -54,6 +58,11 @@ public class PlayerEntry : SceneUI
 
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
+
+        if(PhotonNetwork.MasterClient.ActorNumber == myNum)
+            crownImage.enabled = true;
+        else
+            crownImage.enabled = false;
     }
 
 	public void SetPlayerReady(bool ready)
@@ -155,13 +164,19 @@ public class PlayerEntry : SceneUI
         CustomProperty.SetAvatarColor(player, avatarColorNum);
     }
 
-    public override void Initialize()
+    public void CheckAmIMaster()
     {
-        throw new System.NotImplementedException();
+        //Debug.LogError($"{myNum}, {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
+        if (PhotonNetwork.MasterClient.ActorNumber == myNum)
+            crownImage.enabled = true;
+        else
+            crownImage.enabled = false;
     }
 
     void OnF5()
     {
-        OnReadyButtonClicked();
+        //Debug.LogError($"{myNum}, {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
+        if(myNum == PhotonNetwork.LocalPlayer.ActorNumber)
+            OnReadyButtonClicked();
     }
 }

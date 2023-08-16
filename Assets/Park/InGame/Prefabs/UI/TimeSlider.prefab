@@ -470,7 +470,7 @@ MonoBehaviour:
   buttonClickSound: {fileID: 0}
   inGameUIController: {fileID: 0}
   timeValue: 180
-  timerTickSound: {fileID: 0}
+  timerTickSound: {fileID: 8185581615027437765}
   tickStarted: 0
 --- !u!82 &8185581615027437765
 AudioSource:

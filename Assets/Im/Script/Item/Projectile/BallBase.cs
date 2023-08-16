@@ -16,10 +16,13 @@ public class BallBase : MonoBehaviourPun
     protected float curTime;
     protected Rigidbody rb;
     protected Collider col;
+    MeshRenderer renderer;
+
     protected void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+        renderer = GetComponent<MeshRenderer>();
         gameManager = GameObject.Find("InGameManager").GetComponent<InGameManager>();
         rb.mass = 0.4f;
     }
@@ -71,10 +74,11 @@ public class BallBase : MonoBehaviourPun
             return;
         Debug.Log("Fall");
         isEnded = true;
-        rb.velocity = Vector3.zero;
         col.enabled = false;
         rb.useGravity = false;
-        if(photonView.IsMine)
+        rb.velocity = Vector3.zero;
+        renderer.enabled = false;
+        if (photonView.IsMine)
             photonView.RPC("RequestExplosion", RpcTarget.MasterClient, transform.position, transform.rotation);
     }
 

@@ -23,7 +23,6 @@ public class PlayerUseItem : MonoBehaviourPun
     public int MyItem { get { return myItem; } set { myItem = value; } }
     private void OnItem()
     {
-        Debug.Log("사용시도");
         if (MyItem < 0)
             return;
         if (itemManager.itemList[myItem].WeaponType == Define.WeaponType.Projectile)
@@ -39,7 +38,7 @@ public class PlayerUseItem : MonoBehaviourPun
             //hammer.transform.position = new Vector3(0, 0.008f, 0f);
             //hammer.transform.localEulerAngles = new Vector3(0, 90, 0);
 
-            StartCoroutine(HammerAnimRoutine());
+            photonView.RPC("HammerAnim", RpcTarget.AllViaServer);
         }
         MyItem = -1;
         itemManager.gameManager.SetItemUI(myItem);
@@ -56,12 +55,11 @@ public class PlayerUseItem : MonoBehaviourPun
         for (int i = 0; i < hammers.Count; i++)
             hammers[i].gameObject.SetActive(false);
     }
-    public IEnumerator HammerAnimRoutine()
+    [PunRPC]
+    public void HammerAnim()
     {
-        anim.SetBool("IsHammer", true);
+        anim.SetTrigger("IsHammer");
         StartCoroutine(HammerRoutine());
-        yield return new WaitForSeconds(0.2f);
-        anim.SetBool("IsHammer", false);
     }
         
 }

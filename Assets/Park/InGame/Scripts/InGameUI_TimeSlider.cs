@@ -10,11 +10,11 @@ public class InGameUI_TimeSlider : SceneUI
     [SerializeField] AudioSource timerTickSound;
     [SerializeField] bool tickStarted;
 
-    public void Initialize(float serverTime)
+    public override void Initialize()
     {
         base.Initialize();
         sliders["TimeSlider"].maxValue = inGameUIController.inGameManager.TotalTime;
-        timeValue = inGameUIController.inGameManager.TotalTime - ((float)PhotonNetwork.Time - serverTime);
+        //timeValue = inGameUIController.inGameManager.TotalTime - ((float)PhotonNetwork.Time - serverTime);
         //Debug.Log($"Timer : {timeValue}");
         tickStarted = false;
         StartCoroutine(TimeClockRoutine());
@@ -22,9 +22,10 @@ public class InGameUI_TimeSlider : SceneUI
 
     IEnumerator TimeClockRoutine()
     {
-        while(timeValue > 0f)
+        yield return new WaitUntil(() => { return inGameUIController.inGameManager.Started; });
+        while (inGameUIController.inGameManager.IsPlaying)
         {
-            timeValue -= 0.1f;
+            timeValue = inGameUIController.inGameManager.TotalTime - inGameUIController.inGameManager.NowTime;
             sliders["TimeSlider"].value = timeValue;
 
             if (timeValue <= 30f)

@@ -12,21 +12,21 @@ public class TargetPlayer : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerPuller puller = other.GetComponent<PlayerPuller>();
+            PlayerPuller puller = GetComponent<PlayerPuller>();
             if (puller != null)
             {
                 targeting = true;
-                puller.SetPullTarget(gameObject); // PlayerPuller의 새 메서드 호출하여 PullTarget 설정
+                puller.SetPullTarget(other.gameObject); // PlayerPuller의 새 메서드 호출하여 PullTarget 설정
                 StartCoroutine(DistanceCheckRoutine(other.transform, puller));
             }
         }
 
         if (other.CompareTag("Player"))
         {
-            PlayerPusher pusher = other.GetComponent<PlayerPusher>();
+            PlayerPusher pusher = GetComponent<PlayerPusher>();
             if (pusher != null)
             {
-                pusher.SetPullTarget(gameObject); // PlayerPuller의 새 메서드 호출하여 PullTarget 설정
+                pusher.SetPullTarget(other.gameObject); // PlayerPuller의 새 메서드 호출하여 PullTarget 설정
             }
         }
     }
@@ -58,7 +58,7 @@ public class TargetPlayer : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            PlayerPusher pusher = other.GetComponent<PlayerPusher>();
+            PlayerPusher pusher = GetComponent<PlayerPusher>();
             if (pusher != null)
             {
                 pusher.ClearPullTarget(); // PlayerPuller의 새 메서드 호출하여 PullTarget 설정
