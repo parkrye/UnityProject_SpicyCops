@@ -1,70 +1,83 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerEntry : MonoBehaviour
+public class PlayerEntry : SceneUI
 {
 	[SerializeField] public Player player;
-	[SerializeField] TMP_Text playerName;
-	[SerializeField] TMP_Text playerReady;
-	[SerializeField] public Button playerReadyButton, playerNameButton;
-    [SerializeField] Button leftAvatarButton, rightAvatarButton, leftColorButton, rightColorButton;
+	[SerializeField] public Button playerNameButton;
 
-    [SerializeField] int avatarNum, avatarColorNum;
+    [SerializeField] int avatarNum, avatarColorNum, entryNum;
     [SerializeField] Camera avatarCamera;
     [SerializeField] RenderTexture avatarTexture;
     [SerializeField] RawImage avatarImage;
     [SerializeField] CharacterSkinManager[] characterSkinManagers;
+    [SerializeField] Image crownImage;
+    [SerializeField] int myNum;
+    public int EntryNum { get { return entryNum; } }
 
-    public int ownerId;
-
-	public void Initailize(Player _player, int id, string name, Camera _avatarCamera, RenderTexture _avatarTexture, GameObject avatarRoot)
+	public void Initailize(Player _player, int id, string name, Camera _avatarCamera, RenderTexture _avatarTexture, GameObject avatarRoot, int _numbering)
     {
         player = _player;
-        ownerId = id;
-        if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
+        entryNum = id;
+        if (PhotonNetwork.LocalPlayer.ActorNumber != player.ActorNumber)
         {
-            playerReadyButton.gameObject.SetActive(false);
-            leftAvatarButton.gameObject.SetActive(false);
-            rightAvatarButton.gameObject.SetActive(false);
-            leftColorButton.gameObject.SetActive(false);
-            rightColorButton.gameObject.SetActive(false);
+            buttons["PlayerReadyButton"].gameObject.SetActive(false);
+            buttons["LeftAvatarButton"].gameObject.SetActive(false);
+            buttons["RightAvatarButton"].gameObject.SetActive(false);
+            buttons["LefColorButton"].gameObject.SetActive(false);
+            buttons["RightColorButton"].gameObject.SetActive(false);
         }
-        playerName.text = name;
-        playerReady.text = "";
+        texts["PlayerNameText"].text = name;
+        texts["ReadyText"].text = "";
         avatarCamera = _avatarCamera;
         avatarTexture = _avatarTexture;
+        myNum = _numbering;
         avatarImage.texture = avatarTexture;
         characterSkinManagers = avatarRoot.GetComponentsInChildren<CharacterSkinManager>();
+
+        if (CustomProperty.GetReady(player))
+        {
+            SetPlayerReady(true);
+        }
+
+        if (player.CustomProperties.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
+        {
+            avatarNum = (int)avatarValue;
+            avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
+        }
+
+        if (player.CustomProperties.TryGetValue(GameData.PLAYER_COLOR, out object colorValue))
+        {
+            avatarColorNum = (int)colorValue;
+            characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+        }
+
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
-        StopAllCoroutines();
-        StartCoroutine(URoutine());
-    }
 
-	IEnumerator URoutine()
-	{
-		while (true)
-		{
-			yield return null;
-			if(Input.GetKeyDown(KeyCode.F5))
-			{
-				OnReadyButtonClicked();
-            }
-		}
-	}
+        if(PhotonNetwork.MasterClient.ActorNumber == myNum)
+            crownImage.enabled = true;
+        else
+            crownImage.enabled = false;
+    }
 
 	public void SetPlayerReady(bool ready)
 	{
-		playerReady.text = ready ? "Ready" : "";
+        texts["ReadyText"].text = ready ? "Ready" : "";
+        if (ready)
+        {
+            GameData.CurrentAvatarNum = avatarNum;
+            GameData.CurrentColorNum = avatarColorNum;
+        }
 	}
 
 	public void OnReadyButtonClicked()
-	{
-		bool isPlayerReady = !CustomProperty.GetReady(player);
+    {
+        bool isPlayerReady = !CustomProperty.GetReady(player);
         CustomProperty.SetReady(player, isPlayerReady);
 
 		SetPlayerReady(isPlayerReady);
@@ -75,11 +88,11 @@ public class PlayerEntry : MonoBehaviour
         if (property.TryGetValue(GameData.PLAYER_READY, out object readyValue))
         {
             bool ready = (bool)readyValue;
-            playerReady.text = ready ? "Ready" : "";
+            texts["ReadyText"].text = ready ? "Ready" : "";
         }
         else
         {
-            playerReady.text = "";
+            texts["ReadyText"].text = "";
         }
 
         if (property.TryGetValue(GameData.PLAYER_AVATAR, out object avatarValue))
@@ -123,6 +136,12 @@ public class PlayerEntry : MonoBehaviour
         }
         player.SetAvatarNumber(avatarNum);
         avatarCamera.transform.position = new Vector3(avatarNum * 5f, avatarCamera.transform.position.y, avatarCamera.transform.position.z);
+
+        avatarColorNum = 0;
+        player.SetAvatarColor(avatarColorNum);
+        characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+
+        CustomProperty.SetAvatarNumber(player, avatarNum);
     }
 
     public void OnColorButtonClicked(bool isLeft)
@@ -131,19 +150,33 @@ public class PlayerEntry : MonoBehaviour
         {
             avatarColorNum--;
             if(avatarColorNum < 0)
-            {
                 avatarColorNum = GameData.AVATAR_COLOR_COUNT - 1;
-            }
         }
         else
         {
             avatarColorNum++;
             if (avatarColorNum > GameData.AVATAR_COLOR_COUNT - 1)
-            {
                 avatarColorNum = 0;
-            }
         }
         player.SetAvatarColor(avatarColorNum);
         characterSkinManagers[avatarNum].SettingColor(avatarColorNum);
+
+        CustomProperty.SetAvatarColor(player, avatarColorNum);
+    }
+
+    public void CheckAmIMaster()
+    {
+        //Debug.LogError($"{myNum}, {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
+        if (PhotonNetwork.MasterClient.ActorNumber == myNum)
+            crownImage.enabled = true;
+        else
+            crownImage.enabled = false;
+    }
+
+    void OnF5()
+    {
+        //Debug.LogError($"{myNum}, {PhotonNetwork.LocalPlayer.GetPlayerNumber()}");
+        if(myNum == PhotonNetwork.LocalPlayer.ActorNumber)
+            OnReadyButtonClicked();
     }
 }

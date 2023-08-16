@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b697af0fbab41b40be72c78e5119955, type: 3}
+  m_Name: Hammer
+  m_EditorClassIdentifier: 
+  itemName: Hammer
+  itemIcon: {fileID: 21300000, guid: b0b636dca8bcdd248a8a2c89a89d533e, type: 2}
+  itemIndex: 0
+  weaponType: 1
+  audioClipList:
+  - {fileID: 8300000, guid: ffa392fe8c3e2421bbb0fc85e228a4a8, type: 3}
+  gameManager: {fileID: 0}
+  mask:
+    serializedVersion: 2
+    m_Bits: 8

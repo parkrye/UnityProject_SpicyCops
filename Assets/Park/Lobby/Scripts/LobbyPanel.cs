@@ -1,15 +1,13 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class LobbyPanel : MonoBehaviour
+public class LobbyPanel : SceneUI
 {
 	[SerializeField] RoomEntry roomEntryPrefab;
 	[SerializeField] RectTransform roomContent;
     [SerializeField] List<RoomEntry> roomEntries;
-	[SerializeField] TMP_Text userCountText;
 
 	[SerializeField] GameObject lobbyPanel;
 	[SerializeField] GameObject createRoomPanel;
@@ -17,15 +15,17 @@ public class LobbyPanel : MonoBehaviour
 	[SerializeField] EnterPrivateRoomPanel enterPrivateRoomPanel;
 
     [SerializeField] GameObject shopPanel;
+    [SerializeField] GameObject lobbyPanel_InConnect;
 
-    void Awake()
+    protected override void Awake()
 	{
+        base.Awake();
 		roomEntries = new List<RoomEntry>();
-	}
+    }
 
-	void OnEnable()
+    void OnEnable()
 	{
-		ClearRoomList();
+        PhotonNetwork.JoinLobby();
     }
 
     public void OnCreateRoomButtonClicked()
@@ -41,8 +41,9 @@ public class LobbyPanel : MonoBehaviour
     }
 
     public void OnLeaveLobbyClicked()
-	{
-		PhotonNetwork.LeaveLobby();
+    {
+        gameObject.SetActive(false);
+        lobbyPanel_InConnect.SetActive(true);
     }
 
     public void OnRandomMatchingButtonClicked()
@@ -69,12 +70,16 @@ public class LobbyPanel : MonoBehaviour
 	{
 		ClearRoomList();
 
-		// 여기서 받아온 room에 roomoption이 없음
 		foreach (RoomInfo room in roomList)
         {
 			StatePanel.Instance.AddMessage(room.CustomProperties.ToString());
             RoomEntry entry = Instantiate(roomEntryPrefab, roomContent);
-			entry.Initialize(room.Name, room.PlayerCount, room.MaxPlayers, room, enterPrivateRoomPanel);
+
+            if (room.RemovedFromList || !room.IsOpen)
+                continue;
+            if (entry.Equals(null))
+                continue;
+			entry.Initialize(room.Name, room.PlayerCount, (byte)room.MaxPlayers, room, enterPrivateRoomPanel);
             roomEntries.Add(entry);
 		}
     }
@@ -90,6 +95,6 @@ public class LobbyPanel : MonoBehaviour
 
 	public void OnLobbyCountChanged()
     {
-        userCountText.text = $"Lobby User : {PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms}";
+        texts["UserCountText"].text = $"Lobby User : {PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms}";
     }
 }

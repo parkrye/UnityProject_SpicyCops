@@ -3,6 +3,7 @@ using UnityEngine;
 public class InConnectPanel : MonoBehaviour
 {
 	[SerializeField] GameObject optionPanel;
+    [SerializeField] GameObject lobbyPanel_Rooms;
 
     void OnEnable()
     {
@@ -10,8 +11,10 @@ public class InConnectPanel : MonoBehaviour
     }
 
     public void OnLobbyButtonClicked()
-	{
-		PhotonNetwork.JoinLobby();
+    {
+        gameObject.SetActive(false);
+        lobbyPanel_Rooms.SetActive(true);
+        lobbyPanel_Rooms.GetComponent<LobbyPanel>().OnLobbyCountChanged();
     }
 
     public void OnOptionButtonClicked()

@@ -1,27 +1,25 @@
 using Photon.Pun;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class LoginPanel : MonoBehaviour
+public class LoginPanel : SceneUI
 {
 	static string playerID = null;
+    [SerializeField] GameObject LobbyPanel;
 
-	[SerializeField] TMP_InputField idInputField;
-
-    void Awake()
+    protected override void Awake()
     {
-		GameData.accounts = CSV_RW.ReadAccountsCSV();
-    }
+        base.Awake();
 
-    void OnEnable()
-	{
-		idInputField.text = "";
-	}
+        if(GameData.userData != null)
+        {
+            LobbyPanel.SetActive(true);
+            GameData.accounts = CSV_RW.ReadAccountsCSV();
+        }
+    }
 
 	public void OnLoginButtonClicked()
 	{
-		playerID = idInputField.text;
+		playerID = inputFields["IDInputField"].text;
 
         if (playerID == "")
 		{
@@ -46,6 +44,7 @@ public class LoginPanel : MonoBehaviour
 				CSV_RW.WriteAccountsCSV();
             }
         }
+        GameData.userData.coin += 100;
 
         ExitGames.Client.Photon.Hashtable props = new()
         {
@@ -56,6 +55,7 @@ public class LoginPanel : MonoBehaviour
         };
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
+        inputFields["IDInputField"].text = "";
         PhotonNetwork.LocalPlayer.NickName = playerID;
 		PhotonNetwork.ConnectUsingSettings();
 	}
@@ -64,4 +64,9 @@ public class LoginPanel : MonoBehaviour
 	{
 		Application.Quit();
 	}
+
+    void OnEnter()
+    {
+        OnLoginButtonClicked();
+    }
 }

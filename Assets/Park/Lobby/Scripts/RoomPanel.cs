@@ -1,16 +1,13 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class RoomPanel : MonoBehaviour
+public class RoomPanel : SceneUI
 {
 	[SerializeField] RectTransform playerContent;
 	[SerializeField] PlayerEntry playerEntryPrefab;
-	[SerializeField] Button startButton;
-	[SerializeField] TMP_Text roomInfoText;
 
 	[SerializeField] List<PlayerEntry> playerEntryList;
 	[SerializeField] RoomInfo roomInfo;
@@ -21,10 +18,14 @@ public class RoomPanel : MonoBehaviour
     [SerializeField] RenderTexture[] avatarTextures;
     [SerializeField] GameObject[] avatarRoots;
 
-	void Awake()
+    [SerializeField] Queue<int> entryNumQueue;
+
+    protected override void Awake()
 	{
+        base.Awake();
 		playerEntryList = new List<PlayerEntry>();
         avatarDictionary = new Dictionary<Player, int>();
+        entryNumQueue = new Queue<int>();
     }
 
     private void OnEnable()
@@ -34,8 +35,8 @@ public class RoomPanel : MonoBehaviour
         {
             PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
             avatarDictionary.Add(player, avatarDictionary.Count);
-            Debug.Log($"{player} : {avatarDictionary[player]}");
-            entry.Initailize(player, player.ActorNumber, player.NickName, avatarCameras[avatarDictionary[player]], avatarTextures[avatarDictionary[player]], avatarRoots[avatarDictionary[player]]);
+            //Debug.Log($"{player.NickName} : {avatarDictionary[player]}");
+            entry.Initailize(player, player.ActorNumber, player.NickName, avatarCameras[avatarDictionary[player]], avatarTextures[avatarDictionary[player]], avatarRoots[avatarDictionary[player]], player.ActorNumber);
             playerEntryList.Add(entry);
             entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(player); });
         }
@@ -47,6 +48,11 @@ public class RoomPanel : MonoBehaviour
         PhotonNetwork.AutomaticallySyncScene = true;
         roomPanel.SetActive(true);
         shopPanel.SetActive(false);
+
+        entryNumQueue.Enqueue(0);
+        entryNumQueue.Enqueue(1);
+        entryNumQueue.Enqueue(2);
+        entryNumQueue.Enqueue(3);
     }
 
     private void OnDisable()
@@ -65,7 +71,7 @@ public class RoomPanel : MonoBehaviour
         avatarDictionary.Add(newPlayer, avatarDictionary.Count);
 
         PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
-        entry.Initailize(newPlayer, newPlayer.ActorNumber, newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]]);
+        entry.Initailize(newPlayer, entryNumQueue.Dequeue(), newPlayer.NickName, avatarCameras[avatarDictionary[newPlayer]], avatarTextures[avatarDictionary[newPlayer]], avatarRoots[avatarDictionary[newPlayer]], newPlayer.ActorNumber);
         entry.playerNameButton.onClick.AddListener(() => { OnSwitchMasterClient(newPlayer); });
         playerEntryList.Add(entry);
         AllPlayerReadyCheck();
@@ -80,6 +86,7 @@ public class RoomPanel : MonoBehaviour
         {
             if (playerEntryList[i].player.Equals(leftPlayer))
             {
+                entryNumQueue.Enqueue(playerEntryList[i].EntryNum);
                 Destroy(playerEntryList[i].gameObject);
                 playerEntryList.RemoveAt(i);
                 break;
@@ -105,6 +112,10 @@ public class RoomPanel : MonoBehaviour
 
     public void MasterClientSwitched(Player newMasterClient)
     {
+        foreach(PlayerEntry entry in playerEntryList)
+        {
+            entry.CheckAmIMaster();
+        }
         AllPlayerReadyCheck();
     }
 
@@ -113,14 +124,14 @@ public class RoomPanel : MonoBehaviour
 		roomInfo = PhotonNetwork.CurrentRoom;
 
         roomInfo.CustomProperties.TryGetValue(GameData.ROOMTYPE, out object roomType);
-        roomInfoText.text = $"Room Name:\n  {roomInfo.Name}\n" +
+        texts["RoomInfoText"].text = $"Room Name:\n  {roomInfo.Name}\n" +
                             $"Room Tpye:\n  {(string)roomType}\n" +
                             $"Max Player:\n  {PhotonNetwork.PlayerList.Length}/{roomInfo.MaxPlayers}";
 
 		if (!PhotonNetwork.IsMasterClient)
 			return;
 
-		startButton.gameObject.SetActive(CheckPlayerReady());
+        buttons["StartButton"].gameObject.SetActive(CheckPlayerReady());
 	}
 
 	public bool CheckPlayerReady()
@@ -137,7 +148,7 @@ public class RoomPanel : MonoBehaviour
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            startButton.gameObject.SetActive(false);
+            buttons["StartButton"].gameObject.SetActive(false);
             return;
         }
 
@@ -149,9 +160,9 @@ public class RoomPanel : MonoBehaviour
         }
 
         if (readyCount == PhotonNetwork.PlayerList.Length)
-            startButton.gameObject.SetActive(true);
+            buttons["StartButton"].gameObject.SetActive(true);
         else
-            startButton.gameObject.SetActive(false);
+            buttons["StartButton"].gameObject.SetActive(false);
     }
 
     public void OnSwitchMasterClient(Player clickedPlayer)
@@ -166,13 +177,13 @@ public class RoomPanel : MonoBehaviour
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 		PhotonNetwork.CurrentRoom.IsVisible = false;
 
-		PhotonNetwork.LoadLevel("GameScene");
+		PhotonNetwork.LoadLevel("InGameScene");
 	}
 
     public void OnLeaveRoomClicked()
-	{
-		PhotonNetwork.LeaveRoom();
-	}
+    {
+        PhotonNetwork.LeaveRoom();
+    }
 
     public void OnShopButtonClicked()
     {
@@ -183,7 +194,6 @@ public class RoomPanel : MonoBehaviour
                 playerEntryList[i].player.SetReady(false);
                 AllPlayerReadyCheck();
 
-                roomPanel.SetActive(false);
                 shopPanel.SetActive(true);
                 return;
             }

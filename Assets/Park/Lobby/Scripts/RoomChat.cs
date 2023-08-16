@@ -6,14 +6,23 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 
-public class RoomChat : MonoBehaviour
+public class RoomChat : SceneUI
 {
-    [SerializeField] PhotonView photonView;
     [SerializeField] ScrollRect scrollRect;
     [SerializeField] RectTransform content;
     [SerializeField] TMP_Text chatPrefab;
-    [SerializeField] TMP_InputField inputField;
     [SerializeField] bool nowChatting;
+
+    public override void Initialize()
+    {
+
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        chatPrefab = GameManager.Resource.Load<TMP_Text>("UI/ChatText");
+    }
 
     [System.Serializable]
     public class ChatMessage
@@ -26,9 +35,8 @@ public class RoomChat : MonoBehaviour
 
     void Start()
     {
-        photonView = GetComponent<PhotonView>();
         nowChatting = false;
-        inputField.onSubmit.AddListener(SubmitChat);
+        inputFields["ChatInputField"].onSubmit.AddListener(SubmitChat);
 
         StartCoroutine(URoutine());
     }
@@ -49,7 +57,7 @@ public class RoomChat : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
                     nowChatting = true;
-                    inputField.ActivateInputField();
+                    inputFields["ChatInputField"].ActivateInputField();
                 }
             }
             else if (nowChatting)
@@ -57,7 +65,7 @@ public class RoomChat : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     nowChatting = false;
-                    inputField.DeactivateInputField();
+                    inputFields["ChatInputField"].DeactivateInputField();
                 }
             }
 
@@ -77,8 +85,8 @@ public class RoomChat : MonoBehaviour
         if (text.Replace(" ", "") != "")
         {
             //Send message
-            photonView.RPC("SendChat", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer, inputField.text);
-            inputField.text = "";
+            photonView.RPC("SendChat", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer, inputFields["ChatInputField"].text);
+            inputFields["ChatInputField"].text = "";
             nowChatting = false;
         }
     }

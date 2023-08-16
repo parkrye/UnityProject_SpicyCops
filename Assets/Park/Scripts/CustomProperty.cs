@@ -13,8 +13,10 @@ public static class CustomProperty
 
     public static void SetReady(this Player player, bool ready)
     {
-        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
-        property[GameData.PLAYER_READY] = ready;
+        ExitGames.Client.Photon.Hashtable property = new()
+        {
+            [GameData.PLAYER_READY] = ready
+        };
         player.SetCustomProperties(property);
     }
 
@@ -29,14 +31,16 @@ public static class CustomProperty
 
     public static void SetLoad(this Player player, bool ready)
     {
-        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
-        property[GameData.PLAYER_LOAD] = ready;
+        ExitGames.Client.Photon.Hashtable property = new()
+        {
+            [GameData.PLAYER_LOAD] = ready
+        };
         player.SetCustomProperties(property);
     }
 
     public static int GetAvatarNumber(this Player player)
     {
-        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
+        ExitGames.Client.Photon.Hashtable property = new();
         if (property.ContainsKey(GameData.PLAYER_AVATAR))
             return (int)property[GameData.PLAYER_AVATAR];
         else
@@ -45,14 +49,16 @@ public static class CustomProperty
 
     public static void SetAvatarNumber(this Player player, int num)
     {
-        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
-        property[GameData.PLAYER_AVATAR] = num;
+        ExitGames.Client.Photon.Hashtable property = new()
+        {
+            [GameData.PLAYER_AVATAR] = num
+        };
         player.SetCustomProperties(property);
     }
 
     public static int GetAvatarColor(this Player player)
     {
-        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
+        ExitGames.Client.Photon.Hashtable property = new();
         if (property.ContainsKey(GameData.PLAYER_COLOR))
             return (int)property[GameData.PLAYER_COLOR];
         else
@@ -61,14 +67,16 @@ public static class CustomProperty
 
     public static void SetAvatarColor(this Player player, int num)
     {
-        ExitGames.Client.Photon.Hashtable property = player.CustomProperties;
-        property[GameData.PLAYER_COLOR] = num;
+        ExitGames.Client.Photon.Hashtable property = new()
+        {
+            [GameData.PLAYER_COLOR] = num
+        };
         player.SetCustomProperties(property);
     }
 
     public static int GetLoadTime(this Room room)
     {
-        ExitGames.Client.Photon.Hashtable property = room.CustomProperties;
+        ExitGames.Client.Photon.Hashtable property = new();
         if (property.ContainsKey(GameData.LOAD_TIME))
             return (int)property[GameData.LOAD_TIME];
         else
@@ -77,8 +85,10 @@ public static class CustomProperty
 
     public static void SetLoadTime(this Room room, int time)
     {
-        ExitGames.Client.Photon.Hashtable property = room.CustomProperties;
-        property[GameData.LOAD_TIME] = time;
+        ExitGames.Client.Photon.Hashtable property = new()
+        {
+            [GameData.LOAD_TIME] = time
+        };
         room.SetCustomProperties(property);
     }
 }

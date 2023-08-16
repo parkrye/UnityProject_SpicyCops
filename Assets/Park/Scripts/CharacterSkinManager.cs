@@ -1,28 +1,34 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterSkinManager : MonoBehaviour
 {
-    [SerializeField] List<Material> skinMaterials;
+    [SerializeField] List<Color> skinMaterials;
     [SerializeField] Renderer skinRenderer;
-
-    void Awake()
-    {
-        skinMaterials = new List<Material>();
-        skinRenderer = GetComponentInChildren<Renderer>();
-    }
+    [SerializeField] protected int colorNum;
 
     void Start()
     {
-        skinMaterials.Add(skinRenderer.materials[0]);
-        for(int i = 1; i < 9; i++)
+        skinMaterials = new List<Color>();
+        for (int i = 1; i < 9; i++)
         {
-            skinMaterials.Add(Resources.Load<Material>($"Skin/Skin{i}"));
+            skinMaterials.Add(Resources.Load<Material>($"Skin/Skin{i}").color);
         }
     }
 
     public void SettingColor(int num)
     {
-        skinRenderer.materials[0].color = skinMaterials[num].color;
+        StartCoroutine(WaitRoutine(num));
+    }
+
+    IEnumerator WaitRoutine(int num)
+    {
+        while(skinMaterials.Count == 0)
+            yield return null;
+        skinRenderer = GetComponentInChildren<Renderer>();
+        colorNum = num;
+        //Debug.Log($"{num}, {skinMaterials.Count}");
+        skinRenderer.materials[0].color = skinMaterials[num];
     }
 }
